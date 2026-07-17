@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Aura 50-Day Trial — Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  body { font-family: -apple-system, sans-serif; background: #0f1724; color: #e8e8e8; margin: 0; padding: 2rem; }
+  h1 { color: #cc785c; }
+  .subtitle { color: #888; margin-bottom: 2rem; }
+  .stats-row { display: flex; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .stat-card { background: #1a2332; border-radius: 8px; padding: 1.2rem 1.5rem; min-width: 140px; }
+  .stat-value { font-size: 2rem; font-weight: bold; color: #cc785c; }
+  .stat-label { color: #999; font-size: 0.85rem; margin-top: 0.3rem; }
+  .chart-container { background: #1a2332; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
+  canvas { max-height: 350px; }
+  .updated { color: #666; font-size: 0.8rem; margin-top: 2rem; }
+</style>
+</head>
+<body>
+  <h1>Aura 50-Day Trial</h1>
+  <div class="subtitle">Daily, automated, unedited — does Ruby Alternator get measurably better?</div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-value">2</div><div class="stat-label">Benchmark sessions run</div></div>
+    <div class="stat-card"><div class="stat-value">69</div><div class="stat-label">Total episodes captured</div></div>
+    <div class="stat-card"><div class="stat-value">18</div><div class="stat-label">Ruby successes</div></div>
+    <div class="stat-card"><div class="stat-value">8</div><div class="stat-label">Ruby caught &amp; escalated</div></div>
+  </div>
+
+  <div class="chart-container">
+    <h3>Benchmark Pass Rate by Session</h3>
+    <canvas id="passRateChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <h3>Verification Catch Rate Over Time (lower = Ruby improving)</h3>
+    <canvas id="catchRateChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <h3>Ruby Competence by Task Category</h3>
+    <canvas id="competenceChart"></canvas>
+  </div>
+
+  <div class="updated">Generated 2026-07-17T20:36:45.054557</div>
+
+<script>
+new Chart(document.getElementById('passRateChart'), {
+  type: 'line',
+  data: {
+    labels: ["S2", "S8"],
+    datasets: [{ label: 'Pass rate %', data: [0.0, 30.0], borderColor: '#cc785c', fill: false, tension: 0.2 }]
+  },
+  options: { scales: { y: { min: 0, max: 100 } } }
+});
+
+new Chart(document.getElementById('catchRateChart'), {
+  type: 'line',
+  data: {
+    labels: ["2026-07-17"],
+    datasets: [{ label: 'Catch rate %', data: [30.8], borderColor: '#b5954a', fill: false, tension: 0.2 }]
+  },
+  options: { scales: { y: { min: 0, max: 100 } } }
+});
+
+new Chart(document.getElementById('competenceChart'), {
+  type: 'line',
+  data: {
+    labels: ["2026-07-17"],
+    datasets: [{"label": "implementation", "data": [75.0], "borderColor": "#cc785c", "fill": false, "tension": 0.2}, {"label": "other", "data": [68.2], "borderColor": "#5a9e6e", "fill": false, "tension": 0.2}]
+  },
+  options: { scales: { y: { min: 0, max: 100 } } }
+});
+</script>
+</body>
+</html>
