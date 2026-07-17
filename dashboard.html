@@ -22,7 +22,7 @@
   <div class="subtitle">Daily, automated, unedited — does Ruby Alternator get measurably better?</div>
 
   <div class="stats-row">
-    <div class="stat-card"><div class="stat-value">2</div><div class="stat-label">Benchmark sessions run</div></div>
+    <div class="stat-card"><div class="stat-value">3</div><div class="stat-label">Benchmark sessions run</div></div>
     <div class="stat-card"><div class="stat-value">69</div><div class="stat-label">Total episodes captured</div></div>
     <div class="stat-card"><div class="stat-value">18</div><div class="stat-label">Ruby successes</div></div>
     <div class="stat-card"><div class="stat-value">8</div><div class="stat-label">Ruby caught &amp; escalated</div></div>
@@ -43,14 +43,14 @@
     <canvas id="competenceChart"></canvas>
   </div>
 
-  <div class="updated">Generated 2026-07-17T20:36:45.054557</div>
+  <div class="updated">Generated 2026-07-18T06:36:38.682834</div>
 
 <script>
 new Chart(document.getElementById('passRateChart'), {
   type: 'line',
   data: {
-    labels: ["S2", "S8"],
-    datasets: [{ label: 'Pass rate %', data: [0.0, 30.0], borderColor: '#cc785c', fill: false, tension: 0.2 }]
+    labels: ["S2", "S8", "S9"],
+    datasets: [{ label: 'Pass rate %', data: [0.0, 30.0, 35.0], borderColor: '#cc785c', fill: false, tension: 0.2 }]
   },
   options: { scales: { y: { min: 0, max: 100 } } }
 });
@@ -58,8 +58,8 @@ new Chart(document.getElementById('passRateChart'), {
 new Chart(document.getElementById('catchRateChart'), {
   type: 'line',
   data: {
-    labels: ["2026-07-17"],
-    datasets: [{ label: 'Catch rate %', data: [30.8], borderColor: '#b5954a', fill: false, tension: 0.2 }]
+    labels: ["2026-07-17", "2026-07-18"],
+    datasets: [{ label: 'Catch rate %', data: [30.8, 30.8], borderColor: '#b5954a', fill: false, tension: 0.2 }]
   },
   options: { scales: { y: { min: 0, max: 100 } } }
 });
@@ -67,8 +67,8 @@ new Chart(document.getElementById('catchRateChart'), {
 new Chart(document.getElementById('competenceChart'), {
   type: 'line',
   data: {
-    labels: ["2026-07-17"],
-    datasets: [{"label": "implementation", "data": [75.0], "borderColor": "#cc785c", "fill": false, "tension": 0.2}, {"label": "other", "data": [68.2], "borderColor": "#5a9e6e", "fill": false, "tension": 0.2}]
+    labels: ["2026-07-17", "2026-07-18"],
+    datasets: [{"label": "implementation", "data": [75.0, 75.0], "borderColor": "#cc785c", "fill": false, "tension": 0.2}, {"label": "other", "data": [68.2, 68.2], "borderColor": "#5a9e6e", "fill": false, "tension": 0.2}]
   },
   options: { scales: { y: { min: 0, max: 100 } } }
 });
