@@ -2,75 +2,516 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Aura 50-Day Trial — Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura 50-Day Trial</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
-  body { font-family: -apple-system, sans-serif; background: #0f1724; color: #e8e8e8; margin: 0; padding: 2rem; }
-  h1 { color: #cc785c; }
-  .subtitle { color: #888; margin-bottom: 2rem; }
-  .stats-row { display: flex; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
-  .stat-card { background: #1a2332; border-radius: 8px; padding: 1.2rem 1.5rem; min-width: 140px; }
-  .stat-value { font-size: 2rem; font-weight: bold; color: #cc785c; }
-  .stat-label { color: #999; font-size: 0.85rem; margin-top: 0.3rem; }
-  .chart-container { background: #1a2332; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
-  canvas { max-height: 350px; }
-  .updated { color: #666; font-size: 0.8rem; margin-top: 2rem; }
+  :root {
+    --bg: #0f1724;
+    --panel: #1a2332;
+    --panel2: #1e2a3d;
+    --border: #2a3a52;
+    --text: #e8e8e8;
+    --muted: #7a8a9a;
+    --terracotta: #cc785c;
+    --terracotta2: #e8956e;
+    --teal: #4a9e8e;
+    --blue: #4a7fb5;
+    --green: #5a9e6e;
+    --gold: #b5954a;
+    --font: -apple-system, 'Segoe UI', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #0f1724 0%, #1a2540 50%, #0f1724 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(204,120,92,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .header-tag {
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    color: var(--terracotta);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .header h1 span { color: var(--terracotta); }
+  .header-sub {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    max-width: 600px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .meta-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--terracotta);
+    font-family: var(--mono);
+    line-height: 1;
+  }
+  .meta-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(90,158,110,0.15);
+    border: 1px solid rgba(90,158,110,0.3);
+    color: var(--green);
+    font-size: 0.72rem;
+    font-family: var(--mono);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+    width: fit-content;
+  }
+  .badge.warning {
+    background: rgba(181,149,74,0.15);
+    border-color: rgba(181,149,74,0.3);
+    color: var(--gold);
+  }
+
+  /* Main layout */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+  }
+  .card-title {
+    font-size: 0.72rem;
+    font-family: var(--mono);
+    color: var(--terracotta);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Chart grid */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .chart-full { grid-column: 1 / -1; }
+  canvas { width: 100% !important; }
+
+  /* Session table */
+  .session-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .session-table th {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    color: var(--muted);
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid var(--border);
+    font-weight: 400;
+  }
+  .session-table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid rgba(42,58,82,0.5);
+    color: var(--text);
+  }
+  .session-table tr:last-child td { border-bottom: none; }
+  .session-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .score-pill {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+  .score-high { background: rgba(90,158,110,0.2); color: var(--green); }
+  .score-mid { background: rgba(181,149,74,0.2); color: var(--gold); }
+  .score-low { background: rgba(181,80,57,0.2); color: #e05535; }
+  .mode-pill {
+    font-size: 0.68rem;
+    font-family: var(--mono);
+    color: var(--muted);
+    background: rgba(255,255,255,0.05);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+  }
+  .mode-tui { color: var(--teal); background: rgba(74,158,142,0.1); }
+
+  /* Ruby stats row */
+  .ruby-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  .ruby-stat {
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  .ruby-stat-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    font-family: var(--mono);
+    color: var(--terracotta);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .ruby-stat-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-family: var(--mono);
+    border-top: 1px solid var(--border);
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .chart-grid { grid-template-columns: 1fr; }
+    .ruby-grid { grid-template-columns: 1fr 1fr; }
+    .header h1 { font-size: 1.6rem; }
+    .meta-value { font-size: 1.4rem; }
+  }
 </style>
 </head>
 <body>
-  <h1>Aura 50-Day Trial</h1>
-  <div class="subtitle">Daily, automated, unedited — does Ruby Alternator get measurably better?</div>
 
-  <div class="stats-row">
-    <div class="stat-card"><div class="stat-value">3</div><div class="stat-label">Benchmark sessions run</div></div>
-    <div class="stat-card"><div class="stat-value">69</div><div class="stat-label">Total episodes captured</div></div>
-    <div class="stat-card"><div class="stat-value">18</div><div class="stat-label">Ruby successes</div></div>
-    <div class="stat-card"><div class="stat-value">8</div><div class="stat-label">Ruby caught &amp; escalated</div></div>
+<div class="header">
+  <div class="header-inner">
+    <div class="header-tag">▸ aura-50-day-trial / live</div>
+    <h1>Ruby Alternator<br><span>50-Day Benchmark Trial</span></h1>
+    <p class="header-sub">Daily, unedited, public proof — does Aura's local+cloud routing system get measurably better over 50 days of real use?</p>
+    <div class="header-meta">
+      <div class="meta-item">
+        <div class="meta-value">4</div>
+        <div class="meta-label">Sessions run</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-value">90.0%</div>
+        <div class="meta-label">Latest score</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-value">69</div>
+        <div class="meta-label">Episodes captured</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-value">glm-5.2</div>
+        <div class="meta-label">Last model used</div>
+      </div>
+    </div>
+    <div class="badge warning">
+      ⟳ Accumulating episodes — 18 successes / 8 failures captured
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- Ruby stats -->
+  <div class="card">
+    <div class="card-title">Ruby Alternator — episode store</div>
+    <div class="ruby-grid">
+      <div class="ruby-stat">
+        <div class="ruby-stat-value">69</div>
+        <div class="ruby-stat-label">Total episodes</div>
+      </div>
+      <div class="ruby-stat">
+        <div class="ruby-stat-value" style="color:var(--green)">18</div>
+        <div class="ruby-stat-label">Ruby successes</div>
+      </div>
+      <div class="ruby-stat">
+        <div class="ruby-stat-value" style="color:#e05535">8</div>
+        <div class="ruby-stat-label">Caught & escalated</div>
+      </div>
+      <div class="ruby-stat">
+        <div class="ruby-stat-value" style="color:var(--gold)">30.8%</div>
+        <div class="ruby-stat-label">Verification catch rate</div>
+      </div>
+    </div>
   </div>
 
-  <div class="chart-container">
-    <h3>Benchmark Pass Rate by Session</h3>
-    <canvas id="passRateChart"></canvas>
+  <!-- Charts -->
+  <div class="chart-grid">
+    <div class="card chart-full">
+      <div class="card-title">Benchmark score by session</div>
+      <canvas id="scoreChart" height="200"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">Score by tier — latest session</div>
+      <canvas id="tierChart" height="260"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">Verification catch rate over time</div>
+      <canvas id="catchChart" height="260"></canvas>
+    </div>
   </div>
 
-  <div class="chart-container">
-    <h3>Verification Catch Rate Over Time (lower = Ruby improving)</h3>
-    <canvas id="catchRateChart"></canvas>
+  <!-- Session log -->
+  <div class="card">
+    <div class="card-title">Session log</div>
+    <table class="session-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Model</th>
+          <th>Questions</th>
+          <th>Score</th>
+          <th>Mode</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td style="font-family:var(--mono);color:var(--muted)">S2</td>
+          <td style="font-family:var(--mono);font-size:0.8rem">granite4.1:3b</td>
+          <td style="font-family:var(--mono);color:var(--muted)">0/20 correct</td>
+          <td><span class="score-pill score-low">5.0%</span></td>
+          <td><span class="mode-pill ">headless</span></td>
+          <td style="color:var(--muted);font-size:0.78rem;font-family:var(--mono)">2026-07-17</td>
+        </tr>
+        <tr>
+          <td style="font-family:var(--mono);color:var(--muted)">S8</td>
+          <td style="font-family:var(--mono);font-size:0.8rem">deepseek-chat</td>
+          <td style="font-family:var(--mono);color:var(--muted)">6/20 correct</td>
+          <td><span class="score-pill score-low">35.0%</span></td>
+          <td><span class="mode-pill ">headless</span></td>
+          <td style="color:var(--muted);font-size:0.78rem;font-family:var(--mono)">2026-07-17</td>
+        </tr>
+        <tr>
+          <td style="font-family:var(--mono);color:var(--muted)">S9</td>
+          <td style="font-family:var(--mono);font-size:0.8rem">deepseek-chat</td>
+          <td style="font-family:var(--mono);color:var(--muted)">18/20 correct</td>
+          <td><span class="score-pill score-high">95.0%</span></td>
+          <td><span class="mode-pill mode-tui">tui_real_session</span></td>
+          <td style="color:var(--muted);font-size:0.78rem;font-family:var(--mono)">2026-07-18</td>
+        </tr>
+        <tr>
+          <td style="font-family:var(--mono);color:var(--muted)">S10</td>
+          <td style="font-family:var(--mono);font-size:0.8rem">glm-5.2</td>
+          <td style="font-family:var(--mono);color:var(--muted)">49/60 correct</td>
+          <td><span class="score-pill score-high">90.0%</span></td>
+          <td><span class="mode-pill mode-tui">tui_real_session</span></td>
+          <td style="color:var(--muted);font-size:0.78rem;font-family:var(--mono)">2026-07-18</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <div class="chart-container">
-    <h3>Ruby Competence by Task Category</h3>
-    <canvas id="competenceChart"></canvas>
-  </div>
+</div>
 
-  <div class="updated">Generated 2026-07-18T19:26:18.940344</div>
+<div class="footer">
+  github.com/DusanCar-sudo/aura-50-day-trial &nbsp;·&nbsp; updated 2026-07-18 12:34 UTC &nbsp;·&nbsp; aura-code v0.10.5
+</div>
 
 <script>
-new Chart(document.getElementById('passRateChart'), {
+const TERRACOTTA = '#cc785c';
+const GREEN = '#5a9e6e';
+const GOLD = '#b5954a';
+const BLUE = '#4a7fb5';
+const TEAL = '#4a9e8e';
+const MUTED = '#7a8a9a';
+
+const defaults = {
+  color: '#e8e8e8',
+  borderColor: '#2a3a52',
+  font: { family: "-apple-system, 'Segoe UI', system-ui, sans-serif" },
+};
+Chart.defaults.color = defaults.color;
+Chart.defaults.borderColor = defaults.borderColor;
+
+const gridOpts = {
+  grid: { color: 'rgba(42,58,82,0.5)' },
+  ticks: { color: MUTED, font: { size: 11 } },
+};
+
+// Score trend
+new Chart(document.getElementById('scoreChart'), {
   type: 'line',
   data: {
-    labels: ["S2", "S8", "S9"],
-    datasets: [{ label: 'Pass rate %', data: [0.0, 30.0, 0.0], borderColor: '#cc785c', fill: false, tension: 0.2 }]
+    labels: ["S2", "S8", "S9", "S10"],
+    datasets: [
+      {
+        label: 'Weighted score %',
+        data: [5.0, 35.0, 95.0, 90.0],
+        borderColor: TERRACOTTA,
+        backgroundColor: 'rgba(204,120,92,0.08)',
+        fill: true,
+        tension: 0.3,
+        pointBackgroundColor: TERRACOTTA,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        borderWidth: 2.5,
+      },
+      {
+        label: 'Correct only %',
+        data: [0.0, 30.0, 90.0, 81.7],
+        borderColor: GREEN,
+        backgroundColor: 'transparent',
+        fill: false,
+        tension: 0.3,
+        pointBackgroundColor: GREEN,
+        pointRadius: 4,
+        borderWidth: 1.5,
+        borderDash: [4, 3],
+      }
+    ]
   },
-  options: { scales: { y: { min: 0, max: 100 } } }
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top', labels: { color: MUTED, font: { size: 11 } } },
+      tooltip: { backgroundColor: '#1e2a3d', borderColor: '#2a3a52', borderWidth: 1 },
+    },
+    scales: {
+      x: gridOpts,
+      y: { ...gridOpts, min: 0, max: 100, ticks: { ...gridOpts.ticks, callback: v => v + '%' } },
+    },
+  }
 });
 
-new Chart(document.getElementById('catchRateChart'), {
+// Tier breakdown
+new Chart(document.getElementById('tierChart'), {
+  type: 'bar',
+  data: {
+    labels: ["Fundamentals", "Diagnostics", "Code Gen", "Memory", "Ruby Alternator", "Source Code", "Safety", "Synthesis"],
+    datasets: [{
+      label: 'Score %',
+      data: [100.0, 100.0, 60.0, 100.0, 100.0, 95.0, 90.0, 75.0],
+      backgroundColor: [100.0, 100.0, 60.0, 100.0, 100.0, 95.0, 90.0, 75.0].map(v =>
+        v >= 80 ? 'rgba(90,158,110,0.7)' : v >= 60 ? 'rgba(181,149,74,0.7)' : 'rgba(204,120,92,0.7)'
+      ),
+      borderColor: [100.0, 100.0, 60.0, 100.0, 100.0, 95.0, 90.0, 75.0].map(v =>
+        v >= 80 ? GREEN : v >= 60 ? GOLD : TERRACOTTA
+      ),
+      borderWidth: 1.5,
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: { backgroundColor: '#1e2a3d', borderColor: '#2a3a52', borderWidth: 1 },
+    },
+    scales: {
+      x: { ...gridOpts, ticks: { ...gridOpts.ticks, font: { size: 10 } } },
+      y: { ...gridOpts, min: 0, max: 100, ticks: { ...gridOpts.ticks, callback: v => v + '%' } },
+    },
+  }
+});
+
+// Catch rate
+new Chart(document.getElementById('catchChart'), {
   type: 'line',
   data: {
     labels: ["2026-07-17", "2026-07-18"],
-    datasets: [{ label: 'Catch rate %', data: [30.8, 30.8], borderColor: '#b5954a', fill: false, tension: 0.2 }]
+    datasets: [{
+      label: 'Verification catch rate %',
+      data: [30.8, 30.8],
+      borderColor: GOLD,
+      backgroundColor: 'rgba(181,149,74,0.08)',
+      fill: true,
+      tension: 0.3,
+      pointBackgroundColor: GOLD,
+      pointRadius: 5,
+      borderWidth: 2.5,
+    }]
   },
-  options: { scales: { y: { min: 0, max: 100 } } }
-});
-
-new Chart(document.getElementById('competenceChart'), {
-  type: 'line',
-  data: {
-    labels: ["2026-07-17", "2026-07-18"],
-    datasets: [{"label": "implementation", "data": [75.0, 75.0], "borderColor": "#cc785c", "fill": false, "tension": 0.2}, {"label": "other", "data": [68.2, 68.2], "borderColor": "#5a9e6e", "fill": false, "tension": 0.2}]
-  },
-  options: { scales: { y: { min: 0, max: 100 } } }
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1e2a3d',
+        borderColor: '#2a3a52',
+        borderWidth: 1,
+        callbacks: { afterLabel: () => '↓ lower = Ruby improving' }
+      },
+    },
+    scales: {
+      x: gridOpts,
+      y: { ...gridOpts, min: 0, max: 100, ticks: { ...gridOpts.ticks, callback: v => v + '%' } },
+    },
+  }
 });
 </script>
 </body>
