@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 
 ROOT = Path(__file__).parent.parent
 RESULTS_DIR = ROOT / "results"
-OUTPUT_FILE = ROOT / "dashboard.html"
+OUTPUT_FILE = ROOT / "index.html"
 
 TIER_LABELS = {
     1: "Fundamentals", 2: "Diagnostics", 3: "Code Gen",
