@@ -9,9 +9,14 @@ measurably better over 50 days of real use?
 Pass rate trend, verification catch rate, and Ruby competence by category —
 updated automatically every day. No download needed.
 
+## Setup
+- **Large model (cloud):** GLM-5.2 (zhipu-coding/glm-5.2) — Zhipu AI, 1M context
+- **Local model (Ruby Alternator):** Granite 4.1 3B — IBM, running via Ollama on CPU, 3.4B parameters
+- **Ruby Alternator:** local model attempts every task first, gets verified by the large model, escalates on failure or low competence
+
 ## What is this?
-Every day a systemd timer runs the full Aura benchmark suite (60 questions,
-tiers 1-8) against the current state of Ruby Alternator's accumulated
+Every day a systemd timer runs the full Aura benchmark suite (115 questions,
+tiers 1-19) against the current state of Ruby Alternator's accumulated
 episode/competence history, and commits the raw result here — good day or
 bad day, nothing is cherry-picked.
 
@@ -26,4 +31,4 @@ Real bugs, found and fixed, documented in full:
 - `results/` — raw benchmark JSON + session notes per day
 - `case-studies/` — real incidents: what broke, why, how it was fixed
 - `scripts/daily_run.sh` — the automation itself
-- `dashboard.html` — the live dashboard source (auto-regenerated daily)
+- `index.html` — the live dashboard (auto-regenerated daily)
