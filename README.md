@@ -23,7 +23,8 @@ bad day, nothing is cherry-picked.
 See [CHARTER.md](CHARTER.md) for the full architecture and success metrics.
 
 ## Case Studies
-Real bugs, found and fixed, documented in full:
+Real incidents — infrastructure failures, bugs found, fixes applied:
+- [2026-07-17 — Ollama port collision: why sessions 002 and 008 scored near zero](case-studies/2026-07-17-ollama-port-collision.md)
 - [2026-07-17 — Catching Ruby fabricating a function that doesn't exist](case-studies/2026-07-17-fabrication-catch.md)
 
 ## Structure
