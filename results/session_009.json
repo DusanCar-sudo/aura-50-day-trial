@@ -1,0 +1,118 @@
+{
+  "session": 9,
+  "model": "deepseek/deepseek-chat",
+  "mode": "tui_real_session",
+  "zero_memory": false,
+  "timestamp": "2026-07-18T03:39:30.846105+00:00",
+  "notes": "First real TUI session \u2014 Aura read tier1-4 questions directly and answered all 20 in one continuous session. Ruby Alternator active.",
+  "session_stats": {
+    "turns": 10,
+    "tool_calls": 27,
+    "input_tokens": 97976,
+    "output_tokens": 5508,
+    "total_tokens": 103484,
+    "cost_usd": 0.0042
+  },
+  "questions": [
+    {
+      "id": "t1-01",
+      "tier": 1,
+      "verdict": "correct"
+    },
+    {
+      "id": "t1-02",
+      "tier": 1,
+      "verdict": "correct"
+    },
+    {
+      "id": "t1-03",
+      "tier": 1,
+      "verdict": "correct"
+    },
+    {
+      "id": "t1-04",
+      "tier": 1,
+      "verdict": "correct"
+    },
+    {
+      "id": "t1-05",
+      "tier": 1,
+      "verdict": "correct"
+    },
+    {
+      "id": "t2-01",
+      "tier": 2,
+      "verdict": "correct"
+    },
+    {
+      "id": "t2-02",
+      "tier": 2,
+      "verdict": "correct"
+    },
+    {
+      "id": "t2-03",
+      "tier": 2,
+      "verdict": "correct"
+    },
+    {
+      "id": "t2-04",
+      "tier": 2,
+      "verdict": "partial"
+    },
+    {
+      "id": "t2-05",
+      "tier": 2,
+      "verdict": "correct"
+    },
+    {
+      "id": "t3-01",
+      "tier": 3,
+      "verdict": "correct"
+    },
+    {
+      "id": "t3-02",
+      "tier": 3,
+      "verdict": "correct"
+    },
+    {
+      "id": "t3-03",
+      "tier": 3,
+      "verdict": "correct"
+    },
+    {
+      "id": "t3-04",
+      "tier": 3,
+      "verdict": "partial"
+    },
+    {
+      "id": "t3-05",
+      "tier": 3,
+      "verdict": "correct"
+    },
+    {
+      "id": "t4-01",
+      "tier": 4,
+      "verdict": "correct"
+    },
+    {
+      "id": "t4-02",
+      "tier": 4,
+      "verdict": "correct"
+    },
+    {
+      "id": "t4-03",
+      "tier": 4,
+      "verdict": "correct"
+    },
+    {
+      "id": "t4-04",
+      "tier": 4,
+      "verdict": "correct"
+    },
+    {
+      "id": "t4-05",
+      "tier": 4,
+      "verdict": "correct"
+    }
+  ]
+}

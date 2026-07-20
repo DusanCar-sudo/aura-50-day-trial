@@ -1,0 +1,61 @@
+[
+  {
+    "id": "t12-01",
+    "tier": 12,
+    "question": "Someone proposes marking a Tier 4 memory question 'correct' if the model's answer merely mentions the right file path, even if it gets the specific fact wrong. Why would this quietly break the benchmark's credibility?",
+    "key_points": [
+      "partial credit",
+      "inflates",
+      "gaming",
+      "exact fact"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t12-02",
+    "tier": 12,
+    "question": "A session scores 95% but was run with --auto and unlimited tool calls, while Session 1's baseline used max_tool_calls: 0 on most questions. Is comparing these two sessions valid? Why or why not?",
+    "key_points": [
+      "not comparable",
+      "confound",
+      "fixed",
+      "more tools"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t12-03",
+    "tier": 12,
+    "question": "What is the argument for publishing every session's raw results \u2014 including one that scored 30% due to a broken test harness \u2014 rather than excluding it as 'not a real run'?",
+    "key_points": [
+      "no cherry-pick",
+      "transparency",
+      "anomaly",
+      "delete"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t12-04",
+    "tier": 12,
+    "question": "Someone suggests letting the model being tested also grade its own Tier 3 code generation answers. What's the single biggest problem with this?",
+    "key_points": [
+      "conflict of interest",
+      "self-grading",
+      "independent verifier"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t12-05",
+    "tier": 12,
+    "question": "If Tier 4 questions never change across 50 sessions, what is the risk that later sessions 'pass' not because of accumulated project understanding but because the model has memorized the benchmark's own expected answers from being tested repeatedly?",
+    "key_points": [
+      "contamination",
+      "leak",
+      "memorization",
+      "held-out"
+    ],
+    "max_turns": 3
+  }
+]

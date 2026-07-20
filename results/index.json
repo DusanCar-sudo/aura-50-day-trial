@@ -1,0 +1,123 @@
+[
+  {
+    "file": "session_000.json",
+    "session": 0,
+    "timestamp": "2026-07-16T14:10:31.972179",
+    "total": 5,
+    "correct": 2,
+    "partial": 1,
+    "pass_rate": 0.4,
+    "tier4_score": "0/0",
+    "avg_seconds": 92.78
+  },
+  {
+    "file": "session_001.json",
+    "session": 1,
+    "timestamp": "2026-07-16T08:04:12.090386",
+    "total": 20,
+    "correct": 1,
+    "partial": 2,
+    "pass_rate": 0.05,
+    "tier4_score": "1/5",
+    "avg_seconds": 0.76
+  },
+  {
+    "file": "session_002.json",
+    "session": 2,
+    "timestamp": "2026-07-17T05:42:35.238036",
+    "total": 20,
+    "correct": 0,
+    "partial": 2,
+    "pass_rate": 0.0,
+    "tier4_score": "0/5",
+    "avg_seconds": 17.56
+  },
+  {
+    "file": "session_003.json",
+    "session": 3,
+    "timestamp": "2026-07-17T06:46:01.408871",
+    "total": 1,
+    "correct": 0,
+    "partial": 0,
+    "pass_rate": 0.0,
+    "tier4_score": "0/0",
+    "avg_seconds": 1.38
+  },
+  {
+    "file": "session_004.json",
+    "session": 4,
+    "timestamp": "2026-07-17T07:36:22.288932",
+    "total": 1,
+    "correct": 0,
+    "partial": 0,
+    "pass_rate": 0.0,
+    "tier4_score": "0/0",
+    "avg_seconds": 46.14
+  },
+  {
+    "file": "session_005.json",
+    "session": 5,
+    "timestamp": "2026-07-17T07:42:08.546965",
+    "total": 1,
+    "correct": 1,
+    "partial": 0,
+    "pass_rate": 1.0,
+    "tier4_score": "0/0",
+    "avg_seconds": 6.55
+  },
+  {
+    "file": "session_006.json",
+    "session": 6,
+    "timestamp": "2026-07-17T07:45:43.417250",
+    "total": 20,
+    "correct": 9,
+    "partial": 4,
+    "pass_rate": 0.45,
+    "tier4_score": "2/5",
+    "avg_seconds": 20.59
+  },
+  {
+    "file": "session_007.json",
+    "session": 7,
+    "timestamp": "2026-07-17T07:54:18.477875+00:00",
+    "total": 1,
+    "correct": 0,
+    "partial": 0,
+    "pass_rate": 0.0,
+    "tier4_score": "0/0",
+    "avg_seconds": 0.02
+  },
+  {
+    "file": "session_008.json",
+    "session": 8,
+    "timestamp": "2026-07-17T12:56:18.306125",
+    "total": 20,
+    "correct": 6,
+    "partial": 2,
+    "pass_rate": 0.3,
+    "tier4_score": "3/5",
+    "avg_seconds": 121.0
+  },
+  {
+    "file": "session_009.json",
+    "session": 9,
+    "timestamp": "2026-07-18T03:39:30.846105+00:00",
+    "total": 20,
+    "correct": 0,
+    "partial": 0,
+    "pass_rate": 0.0,
+    "tier4_score": "0/5",
+    "avg_seconds": 0.0
+  },
+  {
+    "file": "session_010.json",
+    "session": 10,
+    "timestamp": "2026-07-18T12:31:18.621838+00:00",
+    "total": 60,
+    "correct": 0,
+    "partial": 0,
+    "pass_rate": 0.0,
+    "tier4_score": "0/5",
+    "avg_seconds": 0.0
+  }
+]

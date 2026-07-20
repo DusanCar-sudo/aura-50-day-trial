@@ -1,0 +1,7 @@
+[
+  {"id":"t4-01","tier":4,"question":"What is the current version of aura-code?","expected":"0.10.4","memory_required":true,"max_turns":1,"max_tool_calls":0},
+  {"id":"t4-02","tier":4,"question":"Where are Aura's API credentials stored?","expected":"~/.secrets/agents.env","memory_required":true,"max_turns":1,"max_tool_calls":0},
+  {"id":"t4-03","tier":4,"question":"What does the :provider command do in the Aura TUI?","expected":"two-level provider and model selector","memory_required":true,"max_turns":1,"max_tool_calls":0},
+  {"id":"t4-04","tier":4,"question":"What was the biggest token optimization made to aura-code this week?","expected":"ctx.tree capped at 150 lines","memory_required":true,"max_turns":1,"max_tool_calls":0},
+  {"id":"t4-05","tier":4,"question":"What is the Aura Telegram bot username?","expected":"@AuraCode369_bot","memory_required":true,"max_turns":1,"max_tool_calls":0}
+]

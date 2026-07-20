@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t10-01",
+    "tier": 10,
+    "question": "Ruby Diamond Client runs a multi-agent 'council' where N bots from different providers debate a solution. What is the simplest failure mode of this design if all N bots happen to be cheap models with similar blind spots?",
+    "key_points": [
+      "correlated failure",
+      "echo chamber",
+      "false consensus",
+      "blind spot"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t10-02",
+    "tier": 10,
+    "question": "Contrast Aura's Ruby Alternator (small model attempts, gets verified, escalates on failure) with a council-debate model (N models argue, one is picked). Which approach spends fewer tokens on a typical Tier 1 factual question, and why?",
+    "key_points": [
+      "cheaper",
+      "N models",
+      "escalat",
+      "conditional"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t10-03",
+    "tier": 10,
+    "question": "AgentMesh's lean_agent.py deliberately has no orchestrator and no multi-agent debate. What is the argument for why this simplicity is a feature rather than a missing capability?",
+    "key_points": [
+      "failure modes",
+      "token overhead",
+      "audit",
+      "baseline"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t10-04",
+    "tier": 10,
+    "question": "If you wanted to add a 'council mode' to Aura itself (not Ruby Diamond) for one hard question, what is the minimal change to the orchestration layer that would let 3 different providers answer the same question and a 4th model pick the best answer?",
+    "key_points": [
+      "complete() calls",
+      "aggregator",
+      "orchestration",
+      "provider abstraction"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t10-05",
+    "tier": 10,
+    "question": "Ruby Diamond Client's memory panel lists four types: Episodic, Semantic, Procedural, and Honcho. What conceptually distinguishes Honcho from the other three?",
+    "key_points": [
+      "theory-of-mind",
+      "user-state",
+      "third-party",
+      "persists"
+    ],
+    "max_turns": 3
+  }
+]

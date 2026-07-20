@@ -1,0 +1,29 @@
+{
+  "session": 3,
+  "model": "deepseek/deepseek-chat",
+  "zero_memory": false,
+  "timestamp": "2026-07-17T06:46:01.408871",
+  "questions": [
+    {
+      "id": "t1-01",
+      "tier": 1,
+      "question": "What is the difference between interface and type in TypeScript?",
+      "command": "aura -m deepseek/deepseek-chat --auto --readonly --max-turns 1 What is the difference between interface and type in TypeScript?",
+      "answer": "fatal: not a git repository (or any parent up to mount point /run/media/dusan)\r\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\r\n\r\n\r\n\r\n                                       \u2588\u2588\u2593\u2592\u2592                                      \r\n                                      \u2588\u2588\u2588\u2593\u2592\u2592\u2592                                     \r\n   \u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2557   \u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2588\u2588\u2588\u2557   \u2588\u2588\u2588\u2588\u2593\u2592\u2592\u2592\u2592    \u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\r\n  \u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2593\u2592\u2592\u2592\u2592\u2592  \u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u2588\u2588\u2554\u2550\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\r\n  \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2551\u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2551  \u2588\u2588\u2588\u2588\u2593\u2592\u2592\u2592\u2592   \u2588\u2588\u2551     \u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2557  \r\n  \u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2551\u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2551   \u2588\u2588\u2588\u2593\u2592\u2592\u2592    \u2588\u2588\u2551     \u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u255d  \r\n  \u2588\u2588\u2551  \u2588\u2588\u2551\u255a\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2551  \u2588\u2588\u2551    \u2588\u2588\u2593\u2592\u2592     \u255a\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u255a\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\r\n  \u255a\u2550\u255d  \u255a\u2550\u255d \u255a\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u255d  \u255a\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u255d     \u2588\u2593\u2592       \u255a\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d\r\n                                         \u2593                                        \r\n\r\n  v0.10.5 \u2014 Aura_Benchmark\r\n  DeepSeek \u00b7 deepseek/deepseek-chat \u00b7 Unknown \u00b7 auto mode \u00b7 chat 1c6f8d61-mrokqqz9\r\n  /run/media/dusan/DATA1/Aura_Benchmark\r\n  \"I don't try. I verify.\"\r\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\r\n\r\n  Task: What is the difference between interface and type in TypeScript?\r\n\r\n  \u25c6 thinking\u2026\r\r\n  \u2717  Alternation error: RangeError: Invalid count value: -4\r\n\r\n  \u26a0  Ruby Principle: enough failures accumulated \u2014 project is ready for fine-tuning.\r\n\r\n  \u2717  Alternation error: RangeError: Invalid count value: -4",
+      "stderr": "\n\r\n  v0.10.5 \u2014 Aura_Benchmark\r\n  DeepSeek \u00b7 deepseek/deepseek-chat \u00b7 Unknown \u00b7 auto mode \u00b7 chat 1c6f8d61-mrokqqz9\r\n  /run/media/dusan/DATA1/Aura_Benchmark\r\n  \"I don't try. I verify.\"\r\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\r\n\r\n  Task: What is the difference between interface and type in TypeScript?\r\n\r\n  \u25c6 thinking\u2026\r\r\n  \u2717  Alternation error: RangeError: Invalid count value: -4\r\n\r\n  \u26a0  Ruby Principle: enough failures accumulated \u2014 project is ready for fine-tuning.\r\n\r\n  \u2717  Alternation error: RangeError: Invalid count value: -4",
+      "score": {
+        "verdict": "incorrect",
+        "hits": [],
+        "missed": [
+          "declaration merging",
+          "extends vs intersection",
+          "class implements"
+        ],
+        "score": 0.0
+      },
+      "elapsed_seconds": 1.38,
+      "exit_code": 1,
+      "timestamp": "2026-07-17T06:46:02.788238"
+    }
+  ]
+}

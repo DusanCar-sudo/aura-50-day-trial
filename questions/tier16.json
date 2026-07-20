@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t16-01",
+    "tier": 16,
+    "question": "Two Aura sessions run simultaneously in different terminals on the same machine, both writing to the same session store. What can go wrong, and what's the minimal fix that doesn't require a database?",
+    "key_points": [
+      "file write collision",
+      "last-write-wins corruption",
+      "file lock or temp-then-rename",
+      "atomic write"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t16-02",
+    "tier": 16,
+    "question": "The kanban server uses WebSocket for live updates. A network hiccup drops the connection mid-session. Describe exactly what state the client and server are in, and what the agent should do when reconnecting.",
+    "key_points": [
+      "client state stale",
+      "server state correct",
+      "reconnect and re-fetch full board",
+      "idempotent card moves"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t16-03",
+    "tier": 16,
+    "question": "The Ruby Alternator fires the verification call to the large model while the local model's response is still streaming. Can this happen, and if so what's the consequence?",
+    "key_points": [
+      "no \u2014 verification runs after isNonEmptyResult",
+      "streaming completes before verification",
+      "sequential not concurrent",
+      "design is correct"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t16-04",
+    "tier": 16,
+    "question": "Ollama's /api/tags endpoint is called by resolveRubyConfig every time a session starts without an explicit modelName. On a machine with 20 Ollama models, what's the performance implication, and how would you cache this?",
+    "key_points": [
+      "one HTTP call per session start",
+      "cheap but not free",
+      "cache with TTL or on first",
+      "invalidate on :rubymodel change"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t16-05",
+    "tier": 16,
+    "question": "The systemd timer has Persistent=true. The machine is shut down for 3 days during a vacation. Describe exactly what happens when it boots, how many benchmark sessions run, and what the timestamps look like.",
+    "key_points": [
+      "one catch-up run not three",
+      "runs immediately on boot",
+      "single session with current date timestamp",
+      "does not back-fill missed days"
+    ],
+    "max_turns": 3
+  }
+]

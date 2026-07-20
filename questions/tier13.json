@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t13-01",
+    "tier": 13,
+    "question": "Tiered compaction's first level triggers at 55% context fill according to compactor.ts. If a single Tier 8 question with max_turns:5 consumes context faster than compaction can trigger between turns, what failure would you expect?",
+    "key_points": [
+      "between-turn",
+      "overflow",
+      "truncation",
+      "proactive"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t13-02",
+    "tier": 13,
+    "question": "AURA_CONTEXT_STRATEGY=tiered is opt-in and the default behaves differently. What's the risk of running the 50-day benchmark trial without setting this variable consistently across all sessions?",
+    "key_points": [
+      "inconsistent",
+      "confound",
+      "fixed variable",
+      "artifact"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t13-03",
+    "tier": 13,
+    "question": "A session's per-turn usage log shows cached tokens climbing from 1280 to 7680 by turn 4, implying the prompt cache is warming up. What happens to that cache benefit if the very next question triggers a compaction event that rewrites early history?",
+    "key_points": [
+      "invalidat",
+      "cost",
+      "cold",
+      "tradeoff"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t13-04",
+    "tier": 13,
+    "question": "ctx.tree is capped at 150 lines to save roughly 3,000 tokens per request. For a monorepo with 4,000+ files, what information is silently lost by this cap, and what's a safer alternative to a hard line cap?",
+    "key_points": [
+      "truncated",
+      "arbitrary bias",
+      "relevance",
+      "recency"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t13-05",
+    "tier": 13,
+    "question": "If a benchmark session runs all 8 tiers back-to-back in one continuous Aura session rather than restarting between questions, what confound does this introduce versus running each tier as a fresh session?",
+    "key_points": [
+      "leak",
+      "residual context",
+      "isolated",
+      "attribute"
+    ],
+    "max_turns": 3
+  }
+]

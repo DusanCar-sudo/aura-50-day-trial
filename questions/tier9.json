@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t9-01",
+    "tier": 9,
+    "question": "Given that HistoryMessage now supports an optional images field and toOpenAIMessages builds a multimodal content array with images first then text, what would happen today if you tried to run `aura -m qwen3-vl:4b --image ./screenshot.png \"describe this\"` \u2014 walk through exactly where in the pipeline it breaks.",
+    "key_points": [
+      "--image flag",
+      "arg pars",
+      "images field",
+      "provider layer"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t9-02",
+    "tier": 9,
+    "question": "Design the minimal CLI flag needed to wire a --image <path> argument into Aura so it reads a file, base64-encodes it, and attaches it to the HistoryMessage.images field before the first turn. Name the exact function or file that most likely needs to change.",
+    "key_points": [
+      "cli/index.ts",
+      "readFileSync",
+      "base64",
+      "images array"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t9-03",
+    "tier": 9,
+    "question": "If a user attaches an image to a provider/model that doesn't actually support vision (e.g. a text-only DeepSeek model), what should Aura do \u2014 silently drop the image, throw a hard error, or warn and continue text-only? Justify the choice.",
+    "key_points": [
+      "warn and continue",
+      "silent data loss",
+      "hard crash",
+      "model capability"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t9-04",
+    "tier": 9,
+    "question": "Once vision is wired end-to-end, describe one realistic coding task where attaching a screenshot would measurably outperform a text-only description of the same UI bug.",
+    "key_points": [
+      "css",
+      "visual diff",
+      "screenshot",
+      "spatial"
+    ],
+    "max_turns": 3
+  },
+  {
+    "id": "t9-05",
+    "tier": 9,
+    "question": "Ruby Alternator is currently forced read-only and text-only. If Ruby is later given qwen3-vl as its model, should Ruby's read-only restriction be loosened before or after it's allowed to receive images? Explain the risk ordering.",
+    "key_points": [
+      "orthogonal to modality",
+      "write access",
+      "gate vision",
+      "competence threshold"
+    ],
+    "max_turns": 3
+  }
+]

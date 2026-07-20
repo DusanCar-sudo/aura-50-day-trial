@@ -1,0 +1,72 @@
+[
+  {
+    "id": "t8-01",
+    "tier": 8,
+    "question": "A Ruby Alternator session has these stats: total=50, rubySuccesses=8, rubyFailures=32, largeModelInterventions=42. Calculate Ruby's actual success rate among attempts, explain whether fine-tuning is warranted, and suggest what the most likely root cause is given the ratio.",
+    "key_points": ["success rate 20%", "below threshold", "fine-tune", "competence low"],
+    "max_turns": 5
+  },
+  {
+    "id": "t8-02",
+    "tier": 8,
+    "question": "A user reports that Aura costs $0.004 per 20-question benchmark session but a debugging session cost $23. Walk through the mathematical explanation for why the same tool can vary 5000x in cost, and what the single most effective intervention would be.",
+    "key_points": ["cumulative resend", "context growth", "caching", "session length"],
+    "max_turns": 5
+  },
+  {
+    "id": "t8-03",
+    "tier": 8,
+    "question": "Design a minimal .aura.json configuration for a new developer joining the aura-code project who wants Ruby Alternator active with conservative settings (high threshold, more attempts before trusting Ruby). Write the actual JSON.",
+    "key_points": ["ruby", "enabled true", "competenceThreshold", "minAttempts", "modelName"],
+    "max_turns": 5
+  },
+  {
+    "id": "t8-04",
+    "tier": 8,
+    "question": "A 50-day benchmark trial shows session pass rates of: 30%, 80%, 75%, 82%, 78%, 85%. Identify which session is the anomaly, explain why it likely happened, and calculate the trend excluding the anomaly.",
+    "key_points": ["30%", "anomaly", "headless", "broken harness", "upward trend"],
+    "max_turns": 5
+  },
+  {
+    "id": "t8-05",
+    "tier": 8,
+    "question": "A team wants to prove their AI coding agent improves over time. List the three most important metrics to track, explain what each one proves (and what it cannot prove), and describe one way each metric could be gamed.",
+    "key_points": ["pass rate", "verification catch rate", "competence by category", "gaming"],
+    "max_turns": 5
+  },
+  {
+    "id": "t8-06",
+    "tier": 8,
+    "question": "Aura's per-turn usage data shows: turn 1: 6595 input, 1280 cached. Turn 4: 7717 input, 7680 cached. What does this pattern tell you about how the prompt cache warms up, and what would you expect turn 10 to look like?",
+    "key_points": ["cache warms", "hit rate increases", "cold start", "near 100% by later turns"],
+    "max_turns": 5
+  },
+  {
+    "id": "t8-07",
+    "tier": 8,
+    "question": "You need to run the Aura benchmark daily for 50 days automatically. The benchmark requires: Ollama running locally, a real PTY session, results committed to GitHub. List every component needed for this to work unattended, and identify the single most likely failure point.",
+    "key_points": ["systemd timer", "ollama service", "git credentials", "PTY", "network"],
+    "max_turns": 5
+  },
+  {
+    "id": "t8-08",
+    "tier": 8,
+    "question": "Given that Ruby's per-turn attempts are now forced read-only, describe a multi-step coding task where Ruby could still cause problems even without write access, and how you would detect it.",
+    "key_points": ["fabrication", "wrong advice", "confident wrong answer", "verification gate"],
+    "max_turns": 5
+  },
+  {
+    "id": "t8-09",
+    "tier": 8,
+    "question": "The aura-50-day-trial repo has sessions showing 0%, 30%, and 80% pass rates. Write a 3-sentence public update for the trial's GitHub README that is honest about the variation without making the project look broken.",
+    "key_points": ["honest", "infrastructure issues", "real baseline", "improving"],
+    "max_turns": 5
+  },
+  {
+    "id": "t8-10",
+    "tier": 8,
+    "question": "A small local model (3B parameters) consistently fails Tier 3 code generation questions but passes Tier 1 factual questions. Based on what you know about how competence gating works, what would the episode store show after 20 sessions, and what routing behavior would emerge automatically?",
+    "key_points": ["low success rate implementation", "escalates code tasks", "passes factual", "category-specific competence"],
+    "max_turns": 5
+  }
+]

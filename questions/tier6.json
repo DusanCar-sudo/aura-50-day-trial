@@ -1,0 +1,72 @@
+[
+  {
+    "id": "t6-01",
+    "tier": 6,
+    "question": "Read src/ruby/alternator.ts and explain what happens step by step when Ruby produces a non-empty response that passes the isNonEmptyResult check. What runs next before the result is accepted?",
+    "key_points": ["verifyRubyAnswer", "tool history", "VALID", "rubySucceeded"],
+    "max_turns": 5
+  },
+  {
+    "id": "t6-02",
+    "tier": 6,
+    "question": "Read src/agent/compactor.ts and explain at what context fill percentage the first compaction level triggers, and what it keeps versus summarizes.",
+    "key_points": ["0.55", "first message", "40%", "tail", "summarizes middle"],
+    "max_turns": 5
+  },
+  {
+    "id": "t6-03",
+    "tier": 6,
+    "question": "Read src/ruby/resolve-config.ts. If .aura.json sets ruby.modelName explicitly, does the resolver call Ollama's /api/tags endpoint? Cite the exact code that proves your answer.",
+    "key_points": ["no", "short-circuit", "fileRubyConfig.modelName", "zero fetch calls"],
+    "max_turns": 5
+  },
+  {
+    "id": "t6-04",
+    "tier": 6,
+    "question": "Read src/providers/openai-compatible.ts. What values are used for frequency_penalty and presence_penalty, and in which methods are they set?",
+    "key_points": ["0.3", "complete", "stream", "both methods"],
+    "max_turns": 5
+  },
+  {
+    "id": "t6-05",
+    "tier": 6,
+    "question": "Read src/agent/session-store.ts. What new fields were added to track per-turn usage, and where does the token count data come from?",
+    "key_points": ["TurnUsage", "inputTokens", "cachedTokens", "costUsd", "API response"],
+    "max_turns": 5
+  },
+  {
+    "id": "t6-06",
+    "tier": 6,
+    "question": "Read src/ruby/competence.ts. What is the formula for successRate, and what is the minimum attempt count before the rate is considered reliable?",
+    "key_points": ["rubySuccesses", "total attempts", "minAttempts", "3"],
+    "max_turns": 5
+  },
+  {
+    "id": "t6-07",
+    "tier": 6,
+    "question": "Read src/cli/index.ts and find where :rubyon and :rubyoff are handled. What variable do they mutate, and what is its initial value?",
+    "key_points": ["rubyOverride", "undefined", "boolean", "session state"],
+    "max_turns": 5
+  },
+  {
+    "id": "t6-08",
+    "tier": 6,
+    "question": "Read src/ruby/types.ts. What are the five fields of EpisodeStats, and which one indicates the dataset is ready for fine-tuning?",
+    "key_points": ["total", "rubySuccesses", "rubyFailures", "largeModelInterventions", "readyForFineTune"],
+    "max_turns": 5
+  },
+  {
+    "id": "t6-09",
+    "tier": 6,
+    "question": "Read src/agent/tiered-context.ts. What environment variable enables the tiered context strategy, and what does the default strategy do instead?",
+    "key_points": ["AURA_CONTEXT_STRATEGY", "tiered", "compactHistory", "default compacts"],
+    "max_turns": 5
+  },
+  {
+    "id": "t6-10",
+    "tier": 6,
+    "question": "Read src/ruby/alternator.ts and find the summarizeToolActivity function. What is the maximum character length for a single tool result in the summary, and why is this limit important?",
+    "key_points": ["300", "cheap", "single prompt", "verification cost"],
+    "max_turns": 5
+  }
+]
