@@ -1,0 +1,37 @@
+[
+  {
+    "id": "t25-01",
+    "tier": 25,
+    "question": "A task could be solved by a cheap local model in one attempt, or a large cloud model with certainty. The cost difference is 50x. When is it correct to spend the 50x anyway?",
+    "key_points": ["high stakes or high cost of failure", "irreversible actions", "cheap model's uncertainty too high", "cost of being wrong exceeds cost difference"],
+    "max_turns": 3
+  },
+  {
+    "id": "t25-02",
+    "tier": 25,
+    "question": "An agent must decide whether to re-read an entire large file (expensive) or trust its cached memory of the file's contents from three turns ago (risky if changed). What should determine this choice?",
+    "key_points": ["check if file could have changed since caching", "external edits invalidate cache", "cost of stale data vs cost of re-read", "when in doubt for critical operations, re-read"],
+    "max_turns": 3
+  },
+  {
+    "id": "t25-03",
+    "tier": 25,
+    "question": "A verification step doubles the cost of every agent action but catches errors 10% of the time. Under what conditions does this verification step pay for itself?",
+    "key_points": ["cost of an undetected error vs cost of verification", "high-stakes actions favor verification", "low-stakes repetitive actions may not need it", "compare expected cost of failure to verification overhead"],
+    "max_turns": 3
+  },
+  {
+    "id": "t25-04",
+    "tier": 25,
+    "question": "An agent can batch 10 similar file edits into one large tool call, or make 10 separate calls. What are the cost and risk tradeoffs of each approach?",
+    "key_points": ["batching reduces overhead/round-trips", "batching increases blast radius of one bad edit", "separate calls are easier to verify individually", "tradeoff between efficiency and granular control"],
+    "max_turns": 3
+  },
+  {
+    "id": "t25-05",
+    "tier": 25,
+    "question": "Given a fixed budget of tool calls for a task, is it better to spend early calls on exploration (reading broadly) or go straight for the most likely fix? Explain the reasoning.",
+    "key_points": ["explore first to avoid wrong assumptions", "premature fix risks working on wrong target", "small exploration cost vs large rework cost", "depends on confidence in initial diagnosis"],
+    "max_turns": 3
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "t26-01",
+    "tier": 26,
+    "question": "An agent writes a PR description that says 'fixed the bug.' What information is missing that a human reviewer needs, and what should a good PR description contain instead?",
+    "key_points": ["what the bug was", "root cause", "how it was fixed", "how it was tested/verified"],
+    "max_turns": 3
+  },
+  {
+    "id": "t26-02",
+    "tier": 26,
+    "question": "An agent adds a workaround for a flaky third-party API with no comment explaining why. Six months later another engineer removes it because it looks unnecessary, reintroducing the bug. What should the agent have done differently?",
+    "key_points": ["comment explaining why not just what", "reference the flaky behavior or issue", "prevents future removal by someone unaware", "code without context gets 'cleaned up' incorrectly"],
+    "max_turns": 3
+  },
+  {
+    "id": "t26-03",
+    "tier": 26,
+    "question": "A handoff document says 'fixed the memory leak' with no further detail. The next session needs to verify this claim. What should a good handoff document include to make claims like this verifiable rather than just asserted?",
+    "key_points": ["what was changed specifically", "how to reproduce/verify the fix", "before/after evidence or metric", "unverifiable claims waste the next session's time"],
+    "max_turns": 3
+  },
+  {
+    "id": "t26-04",
+    "tier": 26,
+    "question": "An agent's code comment says 'this is a hack, fix later' with no ticket, date, or explanation of what 'later' means. Why is this worse than no comment at all, and what should replace it?",
+    "key_points": ["hack comment with no path to resolution", "creates false sense that it's tracked", "should link to a ticket or explain the real constraint", "vague TODOs get ignored forever"],
+    "max_turns": 3
+  },
+  {
+    "id": "t26-05",
+    "tier": 26,
+    "question": "Two competing documentation styles: exhaustive detail on every function, or a short README plus self-documenting code. What determines which is appropriate for a given codebase?",
+    "key_points": ["depends on audience and complexity", "self-documenting code reduces staleness risk", "exhaustive docs can rot faster than code changes", "public APIs need more docs than internal tools"],
+    "max_turns": 3
+  }
+]
