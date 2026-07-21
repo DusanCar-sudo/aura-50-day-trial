@@ -46,7 +46,7 @@ print(f'{correct}/{total} correct, {partial}/{total} partial')
 # ── Step 2: capture Ruby competence/episode stats ────────────────────
 cd "$AURA_CODE_DIR"
 npm run build > /tmp/daily_build_${DATE}.log 2>&1
-node scripts/dump-ruby-stats.mjs > "$TRIAL_REPO/results/ruby-stats-${DATE}.json"
+node /mnt/bigdata/aura/aura-code/scripts/dump-ruby-stats.mjs --root /run/media/dusan/DATA1/Aura_Benchmark > "$TRIAL_REPO/results/ruby-stats-${DATE}.json"
 
 # ── Step 3: write the daily log entry ────────────────────────────────
 cat > "$LOG_FILE" << LOGEOF
