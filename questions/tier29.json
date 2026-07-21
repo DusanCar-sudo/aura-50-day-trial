@@ -9,7 +9,7 @@
       "garbage",
       "unproven"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t29-02",
@@ -20,7 +20,7 @@
       "tool dispatcher",
       "execution"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t29-03",
@@ -31,7 +31,7 @@
       "SSRF guard",
       "permissions"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t29-04",
@@ -41,7 +41,7 @@
       "normal",
       "PermissionSystem"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t29-05",
@@ -52,6 +52,6 @@
       "system prompt",
       "hard gate"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

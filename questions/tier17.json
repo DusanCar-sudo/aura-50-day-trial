@@ -9,7 +9,7 @@
       "slice(0, 8)",
       "namespace"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t17-02",
@@ -20,7 +20,7 @@
       "process.env.HOME",
       "defaultDir"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t17-03",
@@ -32,7 +32,7 @@
       "rename",
       "atomic"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t17-04",
@@ -44,7 +44,7 @@
       "skip",
       "readdirSync"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t17-05",
@@ -56,6 +56,6 @@
       "largeModelInterventions",
       "readyForFineTune"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

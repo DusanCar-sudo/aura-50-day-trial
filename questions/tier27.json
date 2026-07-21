@@ -7,7 +7,7 @@
       "OPENAI_API_KEY",
       "getApiKey"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t27-02",
@@ -17,7 +17,7 @@
       "fine-tune",
       "files.create"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t27-03",
@@ -31,7 +31,7 @@
       "failed",
       "cancelled"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t27-04",
@@ -41,7 +41,7 @@
       "fineTuning.jobs.retrieve",
       "job.id"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t27-05",
@@ -51,6 +51,6 @@
       "failed",
       "error: 'OPENAI_API_KEY is not set'"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

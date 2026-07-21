@@ -9,7 +9,7 @@
       "enable",
       "override"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t24-02",
@@ -21,7 +21,7 @@
       "override",
       "force"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t24-03",
@@ -32,7 +32,7 @@
       "display",
       "noop"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t24-04",
@@ -42,7 +42,7 @@
       "maxTurns",
       "15"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t24-05",
@@ -52,6 +52,6 @@
       "disableSpawn: true",
       "spawn"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

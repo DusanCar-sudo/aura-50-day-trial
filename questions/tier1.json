@@ -1,7 +1,60 @@
 [
-  {"id":"t1-01","tier":1,"question":"What is the difference between interface and type in TypeScript?","key_points":["declaration merging","extends vs intersection","class implements"],"max_turns":1,"max_tool_calls":0},
-  {"id":"t1-02","tier":1,"question":"What does git rebase -i HEAD~3 do?","key_points":["interactive","last 3 commits","squash/reword/drop"],"max_turns":1,"max_tool_calls":0},
-  {"id":"t1-03","tier":1,"question":"What is the purpose of process.execPath in Node.js?","key_points":["path to node binary","not cwd","spawn subprocess"],"max_turns":1,"max_tool_calls":0},
-  {"id":"t1-04","tier":1,"question":"Explain what a closure is in JavaScript in one sentence.","key_points":["function","lexical scope","after outer returns"],"max_turns":1,"max_tool_calls":0},
-  {"id":"t1-05","tier":1,"question":"What HTTP status code means resource created successfully?","key_points":["201"],"max_turns":1,"max_tool_calls":0}
+  {
+    "id": "t1-01",
+    "tier": 1,
+    "question": "What is the difference between interface and type in TypeScript?",
+    "key_points": [
+      "declaration merging",
+      "extends vs intersection",
+      "class implements"
+    ],
+    "max_turns": 5,
+    "max_tool_calls": 0
+  },
+  {
+    "id": "t1-02",
+    "tier": 1,
+    "question": "What does git rebase -i HEAD~3 do?",
+    "key_points": [
+      "interactive",
+      "last 3 commits",
+      "squash/reword/drop"
+    ],
+    "max_turns": 5,
+    "max_tool_calls": 0
+  },
+  {
+    "id": "t1-03",
+    "tier": 1,
+    "question": "What is the purpose of process.execPath in Node.js?",
+    "key_points": [
+      "path to node binary",
+      "not cwd",
+      "spawn subprocess"
+    ],
+    "max_turns": 5,
+    "max_tool_calls": 0
+  },
+  {
+    "id": "t1-04",
+    "tier": 1,
+    "question": "Explain what a closure is in JavaScript in one sentence.",
+    "key_points": [
+      "function",
+      "lexical scope",
+      "after outer returns"
+    ],
+    "max_turns": 5,
+    "max_tool_calls": 0
+  },
+  {
+    "id": "t1-05",
+    "tier": 1,
+    "question": "What HTTP status code means resource created successfully?",
+    "key_points": [
+      "201"
+    ],
+    "max_turns": 5,
+    "max_tool_calls": 0
+  }
 ]

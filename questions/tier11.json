@@ -8,7 +8,7 @@
       "largeModel",
       "number"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t11-02",
@@ -18,7 +18,7 @@
       "other",
       "inferTaskCategory"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t11-03",
@@ -29,7 +29,7 @@
       "parsed.timestamp",
       "number"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t11-04",
@@ -40,7 +40,7 @@
       "wall-clock",
       "milliseconds"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t11-05",
@@ -50,6 +50,6 @@
       "${id}.json",
       "episodePath"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

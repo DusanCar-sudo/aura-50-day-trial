@@ -1,7 +1,66 @@
 [
-  {"id":"t2-01","tier":2,"question":"A systemd service keeps restarting every 30 seconds. What do you check first?","key_points":["journalctl -u","ExecStart","Restart= policy","exit code"],"max_turns":2,"max_tool_calls":1},
-  {"id":"t2-02","tier":2,"question":"A Docker container exits with code 137. What happened and why?","key_points":["OOM killer","SIGKILL","memory limit"],"max_turns":2,"max_tool_calls":0},
-  {"id":"t2-03","tier":2,"question":"An API returns 401 on first call but works after you wait 2 seconds. What is the likely cause?","key_points":["token not ready","race condition","async init","propagation delay"],"max_turns":2,"max_tool_calls":0},
-  {"id":"t2-04","tier":2,"question":"Your git push is rejected with non-fast-forward. What happened and what are your options?","key_points":["remote has commits","pull first","force push risk","rebase"],"max_turns":2,"max_tool_calls":0},
-  {"id":"t2-05","tier":2,"question":"Given a function returns undefined unexpectedly, what are the 3 most likely causes?","key_points":["missing return","async without await","wrong branch","undefined variable"],"max_turns":2,"max_tool_calls":0}
+  {
+    "id": "t2-01",
+    "tier": 2,
+    "question": "A systemd service keeps restarting every 30 seconds. What do you check first?",
+    "key_points": [
+      "journalctl -u",
+      "ExecStart",
+      "Restart= policy",
+      "exit code"
+    ],
+    "max_turns": 5,
+    "max_tool_calls": 1
+  },
+  {
+    "id": "t2-02",
+    "tier": 2,
+    "question": "A Docker container exits with code 137. What happened and why?",
+    "key_points": [
+      "OOM killer",
+      "SIGKILL",
+      "memory limit"
+    ],
+    "max_turns": 5,
+    "max_tool_calls": 0
+  },
+  {
+    "id": "t2-03",
+    "tier": 2,
+    "question": "An API returns 401 on first call but works after you wait 2 seconds. What is the likely cause?",
+    "key_points": [
+      "token not ready",
+      "race condition",
+      "async init",
+      "propagation delay"
+    ],
+    "max_turns": 5,
+    "max_tool_calls": 0
+  },
+  {
+    "id": "t2-04",
+    "tier": 2,
+    "question": "Your git push is rejected with non-fast-forward. What happened and what are your options?",
+    "key_points": [
+      "remote has commits",
+      "pull first",
+      "force push risk",
+      "rebase"
+    ],
+    "max_turns": 5,
+    "max_tool_calls": 0
+  },
+  {
+    "id": "t2-05",
+    "tier": 2,
+    "question": "Given a function returns undefined unexpectedly, what are the 3 most likely causes?",
+    "key_points": [
+      "missing return",
+      "async without await",
+      "wrong branch",
+      "undefined variable"
+    ],
+    "max_turns": 5,
+    "max_tool_calls": 0
+  }
 ]

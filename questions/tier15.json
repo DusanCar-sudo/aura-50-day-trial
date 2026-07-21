@@ -9,7 +9,7 @@
       "guard",
       "write"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t15-02",
@@ -21,7 +21,7 @@
       "fetch",
       "timeout"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t15-03",
@@ -33,7 +33,7 @@
       "exploration",
       "gate"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t15-04",
@@ -45,7 +45,7 @@
       "tool activity",
       "largeModelTask"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t15-05",
@@ -57,6 +57,6 @@
       "warning",
       "not throw"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

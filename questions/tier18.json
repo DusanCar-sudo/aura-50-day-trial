@@ -9,7 +9,7 @@
       "SYSTEM",
       "snippets"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t18-02",
@@ -20,7 +20,7 @@
       "50",
       "snippets"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t18-03",
@@ -31,7 +31,7 @@
       "fineTuning.jobs.create",
       "OPENAI_API_KEY"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t18-04",
@@ -42,7 +42,7 @@
       "fineTuning.jobs.retrieve",
       "status"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t18-05",
@@ -54,6 +54,6 @@
       "completed",
       "failed"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

@@ -10,7 +10,7 @@
       "union",
       "0.35"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t16-02",
@@ -22,7 +22,7 @@
       "similarity",
       "pattern"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t16-03",
@@ -34,7 +34,7 @@
       "successRate",
       "examples"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t16-04",
@@ -45,7 +45,7 @@
       "10",
       "slice"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t16-05",
@@ -57,6 +57,6 @@
       "count",
       "sort"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

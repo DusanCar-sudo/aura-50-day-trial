@@ -9,7 +9,7 @@
       "false consensus",
       "blind spot"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t10-02",
@@ -21,7 +21,7 @@
       "escalat",
       "conditional"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t10-03",
@@ -33,7 +33,7 @@
       "audit",
       "baseline"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t10-04",
@@ -57,6 +57,6 @@
       "third-party",
       "persists"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

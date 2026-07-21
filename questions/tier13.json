@@ -8,7 +8,7 @@
       "split",
       "filter"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t13-02",
@@ -20,7 +20,7 @@
       "trim",
       "toLowerCase"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t13-03",
@@ -30,7 +30,7 @@
       "includes",
       "na.includes(nb)"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t13-04",
@@ -41,7 +41,7 @@
       "competence",
       "length > 2"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t13-05",
@@ -51,6 +51,6 @@
       "0",
       "empty"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

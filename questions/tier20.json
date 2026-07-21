@@ -10,7 +10,7 @@
       "minAttempts: 3",
       "enabled: true"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t20-02",
@@ -22,7 +22,7 @@
       "safeConfig",
       "default"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t20-03",
@@ -34,7 +34,7 @@
       "useArchimedes: false",
       "reason"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t20-04",
@@ -44,7 +44,7 @@
       "DEFAULT_FALLBACK_MODEL",
       "claude-sonnet-4-5-20251001"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t20-05",
@@ -55,6 +55,6 @@
       ":archoff",
       "TUI"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

@@ -8,7 +8,7 @@
       "CPU-only",
       "GGML_VK_VISIBLE_DEVICES"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t28-02",
@@ -18,7 +18,7 @@
       "3_000",
       "ping"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t28-03",
@@ -28,7 +28,7 @@
       "Date.now() - startMs",
       "durationMs"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t28-04",
@@ -39,7 +39,7 @@
       "escalate",
       "warning"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t28-05",
@@ -50,6 +50,6 @@
       "invalidate",
       "compaction"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

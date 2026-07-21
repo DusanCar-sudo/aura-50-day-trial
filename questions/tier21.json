@@ -9,7 +9,7 @@
       "no history",
       "not runAgentLoop"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t21-02",
@@ -20,7 +20,7 @@
       "INVALID: <reason>",
       "toUpperCase"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t21-03",
@@ -32,7 +32,7 @@
       "argsById",
       "tool_result"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t21-04",
@@ -44,7 +44,7 @@
       "escalate",
       "not trust"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t21-05",
@@ -56,6 +56,6 @@
       "tool results",
       "verifi"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

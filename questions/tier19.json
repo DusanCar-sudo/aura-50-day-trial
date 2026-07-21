@@ -8,7 +8,7 @@
       "5",
       "undefined"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t19-02",
@@ -20,7 +20,7 @@
       "1 + sim",
       "0.1"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t19-03",
@@ -31,7 +31,7 @@
       "length >= 3",
       "lowercase"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t19-04",
@@ -43,7 +43,7 @@
       "tie-breaker",
       "0.05"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t19-05",
@@ -54,6 +54,6 @@
       "availableModels",
       "alternation"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

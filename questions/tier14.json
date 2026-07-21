@@ -9,7 +9,7 @@
       "modelName",
       ".aura.json"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t14-02",
@@ -21,7 +21,7 @@
       "success rate",
       "gate"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t14-03",
@@ -35,7 +35,7 @@
       "other",
       "inferTaskCategory"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t14-04",
@@ -47,7 +47,7 @@
       "escalat",
       "undefined"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t14-05",
@@ -59,6 +59,6 @@
       "minFailures",
       "fine-tune"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

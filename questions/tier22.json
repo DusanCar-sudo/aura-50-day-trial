@@ -7,7 +7,7 @@
       "0.05",
       "probe"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t22-02",
@@ -19,7 +19,7 @@
       "large model",
       "verification"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t22-03",
@@ -30,7 +30,7 @@
       "minAttempts",
       "useArchimedes: true"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t22-04",
@@ -41,7 +41,7 @@
       "minAttempts",
       "confidence"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t22-05",
@@ -51,6 +51,6 @@
       "successRate * Math.min(1, level.attemptCount / 10)",
       "confidence"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

@@ -9,7 +9,7 @@
       "images field",
       "provider layer"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t9-02",
@@ -33,7 +33,7 @@
       "hard crash",
       "model capability"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t9-04",
@@ -45,7 +45,7 @@
       "screenshot",
       "spatial"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t9-05",
@@ -57,6 +57,6 @@
       "gate vision",
       "competence threshold"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

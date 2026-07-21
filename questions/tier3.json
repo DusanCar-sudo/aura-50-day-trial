@@ -1,7 +1,42 @@
 [
-  {"id":"t3-01","tier":3,"question":"Write a TypeScript function that reads ~/.secrets/agents.env and loads it into process.env. Skip comments and blank lines. Never override existing env vars.","eval":"compile","max_turns":2,"max_tool_calls":1},
-  {"id":"t3-02","tier":3,"question":"Write a bash one-liner that finds all .ts files modified in the last 24 hours under the current directory.","eval":"run","max_turns":1,"max_tool_calls":0},
-  {"id":"t3-03","tier":3,"question":"Write a Python function that retries an HTTP GET call up to 3 times with exponential backoff starting at 1 second.","eval":"syntax","max_turns":2,"max_tool_calls":0},
-  {"id":"t3-04","tier":3,"question":"Write a systemd user service unit file for a Node.js script at /home/dusan/app/index.js that uses EnvironmentFile=/home/dusan/.secrets/agents.env","eval":"syntax","max_turns":1,"max_tool_calls":0},
-  {"id":"t3-05","tier":3,"question":"Write a git pre-commit hook that blocks commits containing strings that look like API keys (matching pattern sk-[a-zA-Z0-9]{32,}).","eval":"run","max_turns":2,"max_tool_calls":1}
+  {
+    "id": "t3-01",
+    "tier": 3,
+    "question": "Write a TypeScript function that reads ~/.secrets/agents.env and loads it into process.env. Skip comments and blank lines. Never override existing env vars.",
+    "eval": "compile",
+    "max_turns": 5,
+    "max_tool_calls": 1
+  },
+  {
+    "id": "t3-02",
+    "tier": 3,
+    "question": "Write a bash one-liner that finds all .ts files modified in the last 24 hours under the current directory.",
+    "eval": "run",
+    "max_turns": 5,
+    "max_tool_calls": 0
+  },
+  {
+    "id": "t3-03",
+    "tier": 3,
+    "question": "Write a Python function that retries an HTTP GET call up to 3 times with exponential backoff starting at 1 second.",
+    "eval": "syntax",
+    "max_turns": 5,
+    "max_tool_calls": 0
+  },
+  {
+    "id": "t3-04",
+    "tier": 3,
+    "question": "Write a systemd user service unit file for a Node.js script at /home/dusan/app/index.js that uses EnvironmentFile=/home/dusan/.secrets/agents.env",
+    "eval": "syntax",
+    "max_turns": 5,
+    "max_tool_calls": 0
+  },
+  {
+    "id": "t3-05",
+    "tier": 3,
+    "question": "Write a git pre-commit hook that blocks commits containing strings that look like API keys (matching pattern sk-[a-zA-Z0-9]{32,}).",
+    "eval": "run",
+    "max_turns": 5,
+    "max_tool_calls": 1
+  }
 ]

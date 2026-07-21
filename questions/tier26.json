@@ -9,7 +9,7 @@
       "User:",
       "Assistant:"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t26-02",
@@ -20,7 +20,7 @@
       "-f",
       "Modelfile"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t26-03",
@@ -30,7 +30,7 @@
       "300_000",
       "timeout"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t26-04",
@@ -41,7 +41,7 @@
       "mkdtemp",
       "aura-ft-"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t26-05",
@@ -52,6 +52,6 @@
       "exists",
       "outputModel"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

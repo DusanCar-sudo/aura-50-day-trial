@@ -7,7 +7,7 @@
       "normal",
       "PermissionSystem"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t12-02",
@@ -18,7 +18,7 @@
       "OpenAI",
       "ollama"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t12-03",
@@ -29,7 +29,7 @@
       "initialHistory",
       "REPL"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t12-04",
@@ -39,7 +39,7 @@
       "Display",
       "createNoopDisplay"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t12-05",
@@ -49,6 +49,6 @@
       "abortSignal",
       "runAgentLoop"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]

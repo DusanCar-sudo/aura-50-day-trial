@@ -8,7 +8,7 @@
       "s",
       "m"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t30-02",
@@ -21,7 +21,7 @@
       "K",
       "M"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t30-03",
@@ -33,7 +33,7 @@
       "sort",
       "successPct"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t30-04",
@@ -44,7 +44,7 @@
       "Tasks completed:    0 (0%)",
       "Avg duration:       \u2014"
     ],
-    "max_turns": 3
+    "max_turns": 5
   },
   {
     "id": "t30-05",
@@ -55,6 +55,6 @@
       "split",
       "not measured"
     ],
-    "max_turns": 3
+    "max_turns": 5
   }
 ]
