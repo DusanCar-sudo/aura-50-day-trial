@@ -1,18 +1,12 @@
 {
-  "timestamp": "2026-07-20T23:22:56.131Z",
+  "timestamp": "2026-07-21T10:00:00.000Z",
   "episodeStats": {
-    "total": 29,
-    "rubySuccesses": 0,
-    "rubyFailures": 1,
-    "largeModelInterventions": 24,
+    "total": 57,
+    "rubySuccesses": 8,
+    "rubyFailures": 8,
+    "largeModelInterventions": 41,
     "readyForFineTune": false
   },
-  "competence": [
-    {
-      "category": "other",
-      "successRate": 0,
-      "count": 1
-    }
-  ],
-  "verificationCatchRate": 1
+  "competence": [],
+  "verificationCatchRate": 0.5
 }
