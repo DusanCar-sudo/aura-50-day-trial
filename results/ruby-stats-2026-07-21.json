@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-07-21T07:44:40.995Z",
+  "episodeStats": {
+    "total": 36,
+    "rubySuccesses": 5,
+    "rubyFailures": 4,
+    "largeModelInterventions": 31,
+    "readyForFineTune": false
+  },
+  "competence": [
+    {
+      "category": "other",
+      "successRate": 0.5,
+      "count": 8
+    },
+    {
+      "category": "implementation",
+      "successRate": 1,
+      "count": 1
+    }
+  ],
+  "verificationCatchRate": 0.4444444444444444
+}
