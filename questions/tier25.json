@@ -2,55 +2,60 @@
   {
     "id": "t25-01",
     "tier": 25,
-    "question": "A task could be solved by a cheap local model in one attempt, or a large cloud model with certainty. The cost difference is 50x. When is it correct to spend the 50x anyway?",
+    "question": "What metadata fields are attached to each generated TrainingExample in generateTrainingData?",
     "key_points": [
-      "high stakes",
-      "irreversible",
-      "cost of being wrong"
+      "projectRoot",
+      "taskCategory",
+      "archimedesFailureReason",
+      "timestamp"
     ],
     "max_turns": 3
   },
   {
     "id": "t25-02",
     "tier": 25,
-    "question": "An agent must decide whether to re-read an entire large file (expensive) or trust its cached memory of the file's contents from three turns ago (risky if changed). What should determine this choice?",
+    "question": "Under what conditions will an episode be skipped during training data generation in generateTrainingData?",
     "key_points": [
-      "could have changed",
-      "invalidate the cache",
-      "re-read"
+      "archimedesAttempted",
+      "archimedesSucceeded",
+      "largeModelOutput",
+      "reviewerApproved"
     ],
     "max_turns": 3
   },
   {
     "id": "t25-03",
     "tier": 25,
-    "question": "A verification step doubles the cost of every agent action but catches errors 10% of the time. Under what conditions does this verification step pay for itself?",
+    "question": "How is the instruction string for a TrainingExample constructed?",
     "key_points": [
-      "expected cost",
-      "high-stakes",
-      "low-stakes"
+      "vision",
+      "strictRules",
+      "perception"
     ],
     "max_turns": 3
   },
   {
     "id": "t25-04",
     "tier": 25,
-    "question": "An agent can batch 10 similar file edits into one large tool call, or make 10 separate calls. What are the cost and risk tradeoffs of each approach?",
+    "question": "In training-data.ts, how is the training data output written to disk to avoid corruption?",
     "key_points": [
-      "blast radius",
-      "isolate",
-      "granular"
+      ".tmp",
+      "writeFile",
+      "rename",
+      "atomic"
     ],
     "max_turns": 3
   },
   {
     "id": "t25-05",
     "tier": 25,
-    "question": "Given a fixed budget of tool calls for a task, is it better to spend early calls on exploration (reading broadly) or go straight for the most likely fix? Explain the reasoning.",
+    "question": "Explain how the user and assistant roles are structured in the JSONL file output.",
     "key_points": [
-      "explore first",
-      "wrong target",
-      "diagnostic uncertainty"
+      "messages",
+      "user",
+      "assistant",
+      "instruction",
+      "input"
     ],
     "max_turns": 3
   }

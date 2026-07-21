@@ -2,60 +2,58 @@
   {
     "id": "t20-01",
     "tier": 20,
-    "question": "You edit a file to fix a bug, but the edit introduces a syntax error. You detect this because the next tool call fails. Walk through the exact sequence of actions you should take: what do you check first, how do you undo the bad edit, and what do you do differently on the retry?",
+    "question": "In types.ts, write out the DEFAULT_ARCHIMEDES_CONFIG structure with all its default values.",
     "key_points": [
-      "read the file back to see current state",
-      "revert the bad edit (edit_file with the original content)",
-      "do not compound the error with more edits on broken state",
-      "re-analyze the root cause before re-attempting"
+      "modelName: 'qwen2.5-coder:1.5b'",
+      "ollamaBaseUrl: 'http://localhost:11434/v1'",
+      "competenceThreshold: 0.7",
+      "minAttempts: 3",
+      "enabled: true"
     ],
-    "max_turns": 5
+    "max_turns": 3
   },
   {
     "id": "t20-02",
     "tier": 20,
-    "question": "You run a shell command that deletes a file you needed. You realize the mistake immediately. What is the fastest recovery path, and what tool or command should you have used instead to avoid this risk?",
+    "question": "How are configuration values safe-guarded against invalid inputs in competence.ts's safeConfig?",
     "key_points": [
-      "check if file is in git — git checkout or git restore",
-      "check trash/recycle bin",
-      "if not versioned, recovery may be impossible",
-      "should have used rm -i or moved to trash instead of permanent delete"
+      "clamp01",
+      "Math.max",
+      "safeConfig",
+      "default"
     ],
     "max_turns": 3
   },
   {
     "id": "t20-03",
     "tier": 20,
-    "question": "You make three edits to a file, then realize the first edit was wrong. The second and third edits depend on the first. What is the correct undo strategy — revert all three and redo, or revert just the first and patch forward? Justify your choice.",
+    "question": "How does the alternator determine if Archimedes is disabled via config, and what routing decision does it make in that case?",
     "key_points": [
-      "revert all three and redo is safer",
-      "patching forward risks cascading inconsistencies",
-      "git checkout for the file, then re-apply correct edits",
-      "the cost of redoing is lower than the risk of a subtle bug from patching"
+      "!cfg.enabled",
+      "fallbackModel",
+      "useArchimedes: false",
+      "reason"
     ],
     "max_turns": 3
   },
   {
     "id": "t20-04",
     "tier": 20,
-    "question": "You commit code that passes tests locally but fails CI. You cannot reproduce the failure on your machine. What is the correct sequence of diagnostic steps before attempting any fix, and what should you never do?",
+    "question": "What is the default fallback model used when Archimedes is bypassed or disabled? Specify the exact model string in competence.ts.",
     "key_points": [
-      "read the CI log fully before touching code",
-      "check for environment differences (Node version, OS, env vars)",
-      "never push a blind fix without understanding the failure",
-      "add a CI-only debug step (echo env, print versions) if the cause is unclear"
+      "DEFAULT_FALLBACK_MODEL",
+      "claude-sonnet-4-5-20251001"
     ],
-    "max_turns": 5
+    "max_turns": 3
   },
   {
     "id": "t20-05",
     "tier": 20,
-    "question": "You are asked to refactor a function. Halfway through, you realize the refactor is unnecessary — the original code was correct and your change introduces a subtle edge-case bug. What do you do, and what should you have done before starting the refactor?",
+    "question": "How can a user override the .aura.json archimedes.enabled configuration during an active TUI session?",
     "key_points": [
-      "abort the refactor and revert all changes immediately",
-      "should have verified the refactor was needed first (read the callers, check for existing tests)",
-      "document what you learned so the same mistake isn't repeated",
-      "a reverted refactor with a note is better than a merged subtle bug"
+      ":archon",
+      ":archoff",
+      "TUI"
     ],
     "max_turns": 3
   }

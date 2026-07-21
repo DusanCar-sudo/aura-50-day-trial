@@ -2,55 +2,52 @@
   {
     "id": "t23-01",
     "tier": 23,
-    "question": "An agent needs to parse dates and considers `npm install some-random-date-lib` with 12 weekly downloads and no recent commits. What should it check before adding this dependency, and what's the safer default?",
+    "question": "What regex patterns are used in inferTaskCategory to categorize a task as 'review' versus 'research'?",
     "key_points": [
-      "maintenance activity",
-      "download counts",
-      "supply-chain"
+      "review|audit|lint|check",
+      "research|explore|find|investigate|understand"
     ],
     "max_turns": 3
   },
   {
     "id": "t23-02",
     "tier": 23,
-    "question": "A `package.json` pins a dependency with a caret range `^2.1.0`. A minor version bump introduces a breaking change upstream despite semver promises. What does this reveal about trusting semver ranges blindly, and what's the safer practice?",
+    "question": "What regex patterns categorize a task as 'refactor' versus 'implementation'?",
     "key_points": [
-      "convention",
-      "lockfile",
-      "caret"
+      "refactor|restructure|rename|migrate",
+      "implement|fix|add|write|create|build|update"
     ],
     "max_turns": 3
   },
   {
     "id": "t23-03",
     "tier": 23,
-    "question": "An agent is asked to add a new dependency to fix a small bug that could be fixed with 5 lines of custom code. What factors should weigh into the build-vs-dependency decision?",
+    "question": "If a task matches none of the regex patterns in inferTaskCategory, what category is assigned?",
     "key_points": [
-      "maintenance surface",
-      "attack surface",
-      "trivial"
+      "other",
+      "inferTaskCategory"
     ],
     "max_turns": 3
   },
   {
     "id": "t23-04",
     "tier": 23,
-    "question": "`npm audit` reports a high-severity vulnerability in a transitive dependency four levels deep, with no available fix. What are the agent's realistic options, ranked by preference?",
+    "question": "How does getCompetenceReport compute the success rate for a category?",
     "key_points": [
-      "vulnerable code path",
-      "overrides",
-      "resolutions"
+      "successes / count",
+      "archimedesAttempted",
+      "clamp01"
     ],
-    "max_turns": 5
+    "max_turns": 3
   },
   {
     "id": "t23-05",
     "tier": 23,
-    "question": "An agent commits a `package-lock.json` change that wasn't intentional \u2014 it was a side effect of running `npm install` for an unrelated task. Why does this matter, and what should the agent do?",
+    "question": "How are the categories sorted in the output array of getCompetenceReport?",
     "key_points": [
-      "lockfile diff",
-      "revert",
-      "unrelated"
+      "count",
+      "sort",
+      "descending"
     ],
     "max_turns": 3
   }

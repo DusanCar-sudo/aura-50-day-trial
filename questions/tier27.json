@@ -2,55 +2,54 @@
   {
     "id": "t27-01",
     "tier": 27,
-    "question": "A user says 'make the dashboard better.' What should the agent do before writing any code \u2014 proceed with a best guess, or ask what 'better' means? Justify the choice given the cost of guessing wrong.",
+    "question": "What environment variable is required to authenticate with OpenAI for fine-tuning?",
     "key_points": [
-      "ask what",
-      "cost of guessing wrong",
-      "obviously implied"
+      "OPENAI_API_KEY",
+      "getApiKey"
     ],
     "max_turns": 3
   },
   {
     "id": "t27-02",
     "tier": 27,
-    "question": "A user gives a very specific, unambiguous instruction: 'rename variable x to userCount in file foo.ts.' Should the agent ask clarifying questions here? Why does this case differ from a vague request?",
+    "question": "What purpose string is specified when uploading the training file to OpenAI?",
     "key_points": [
-      "no ambiguity",
-      "unnecessary friction",
-      "genuine ambiguity"
+      "fine-tune",
+      "files.create"
     ],
     "max_turns": 3
   },
   {
     "id": "t27-03",
     "tier": 27,
-    "question": "An agent is mid-task when it discovers the user's request is based on a false premise (e.g., 'fix the bug in login.ts' but the bug is actually in auth.ts). What should the agent do?",
+    "question": "In checkOpenAIJobStatus, what status values map to the job lifecycle states?",
     "key_points": [
-      "surface the discrepancy",
-      "silently",
-      "false premise"
+      "validating_files",
+      "queued",
+      "running",
+      "succeeded",
+      "failed",
+      "cancelled"
     ],
     "max_turns": 3
   },
   {
     "id": "t27-04",
     "tier": 27,
-    "question": "A request is ambiguous but only in a minor way that doesn't significantly change the implementation either way. Should the agent ask, or pick a reasonable default and proceed? Explain the general rule.",
+    "question": "What client call retrieves the remote status of a running OpenAI fine-tuning job?",
     "key_points": [
-      "reasonable default",
-      "state the assumption",
-      "high-impact ambiguity"
+      "fineTuning.jobs.retrieve",
+      "job.id"
     ],
     "max_turns": 3
   },
   {
     "id": "t27-05",
     "tier": 27,
-    "question": "A user's request conflicts with an earlier instruction they gave in the same session (e.g., 'always use tabs' earlier, now pastes spaces-indented code and says 'match this style'). How should the agent handle the conflict?",
+    "question": "If the API key is missing during fineTuneWithOpenAI, what status does the returned job object have?",
     "key_points": [
-      "surface the conflict",
-      "recency isn't authority",
-      "explicit resolution"
+      "failed",
+      "error: 'OPENAI_API_KEY is not set'"
     ],
     "max_turns": 3
   }

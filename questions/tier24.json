@@ -2,55 +2,55 @@
   {
     "id": "t24-01",
     "tier": 24,
-    "question": "A production bug only reproduces intermittently, roughly 1 in 50 requests. What logging or observability approach should the agent add to catch it, versus just re-running the code hoping to see it fail?",
+    "question": "What does the :archon command do in the TUI?",
     "key_points": [
-      "structured logging",
-      "request context",
-      "instrument"
+      ":archon",
+      "force",
+      "enable",
+      "override"
     ],
-    "max_turns": 5
+    "max_turns": 3
   },
   {
     "id": "t24-02",
     "tier": 24,
-    "question": "An agent adds `console.log` statements to debug an issue, fixes the bug, and moves on. What's wrong with leaving the console.log statements in, and what should replace them?",
+    "question": "What does the :archoff command do in the TUI?",
     "key_points": [
-      "log spam",
-      "no log-level",
-      "structured/leveled"
+      ":archoff",
+      "disable",
+      "override",
+      "force"
     ],
     "max_turns": 3
   },
   {
     "id": "t24-03",
     "tier": 24,
-    "question": "Two services communicate over HTTP. A request fails somewhere in the chain but neither service logs anything useful. What single addition would most improve debuggability of failures like this across service boundaries?",
+    "question": "How is the alternator instance configured when no display parameter is passed in AlternatorOptions?",
     "key_points": [
-      "correlation id",
-      "propagate",
-      "each hop"
+      "createNoopDisplay",
+      "display",
+      "noop"
     ],
     "max_turns": 3
   },
   {
     "id": "t24-04",
     "tier": 24,
-    "question": "An agent is asked to add monitoring to a new feature. What's the difference between logging, metrics, and tracing, and which should be used to answer 'is this feature slow for some users but not others'?",
+    "question": "In alternator.ts, what is the default maximum number of turns allowed for Archimedes in its inner agent loop?",
     "key_points": [
-      "discrete events",
-      "aggregated numbers",
-      "per-request"
+      "maxTurns",
+      "15"
     ],
     "max_turns": 3
   },
   {
     "id": "t24-05",
     "tier": 24,
-    "question": "An agent notices its own tool-call logs show it retried a failed API call 40 times in a loop before a human intervened. What should have stopped this automatically, and why is unlimited silent retry dangerous?",
+    "question": "In alternator.ts, what parameter controls whether Archimedes can spawn other agent loops?",
     "key_points": [
-      "retry limit",
-      "backoff",
-      "surface the failure"
+      "disableSpawn: true",
+      "spawn"
     ],
     "max_turns": 3
   }

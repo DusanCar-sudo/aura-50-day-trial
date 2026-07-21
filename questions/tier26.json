@@ -2,55 +2,55 @@
   {
     "id": "t26-01",
     "tier": 26,
-    "question": "An agent writes a PR description that says 'fixed the bug.' What information is missing that a human reviewer needs, and what should a good PR description contain instead?",
+    "question": "How does fineTuneWithOllama construct the custom system instructions in the Modelfile?",
     "key_points": [
-      "root cause",
-      "how it was fixed",
-      "how verified"
+      "SYSTEM",
+      "snippets",
+      "User:",
+      "Assistant:"
     ],
     "max_turns": 3
   },
   {
     "id": "t26-02",
     "tier": 26,
-    "question": "An agent adds a workaround for a flaky third-party API with no comment explaining why. Six months later another engineer removes it because it looks unnecessary, reintroducing the bug. What should the agent have done differently?",
+    "question": "What command is spawned to create the specialized local model in fine-tune.ts?",
     "key_points": [
-      "why, not just what",
-      "reference the",
-      "cleaned up"
+      "ollama create",
+      "-f",
+      "Modelfile"
     ],
     "max_turns": 3
   },
   {
     "id": "t26-03",
     "tier": 26,
-    "question": "A handoff document says 'fixed the memory leak' with no further detail. The next session needs to verify this claim. What should a good handoff document include to make claims like this verifiable rather than just asserted?",
+    "question": "What timeout limit (in milliseconds) is applied to the model creation subprocess in fineTuneWithOllama?",
     "key_points": [
-      "verifiable, not asserted",
-      "reproduce/verify",
-      "before/after"
+      "300_000",
+      "timeout"
     ],
     "max_turns": 3
   },
   {
     "id": "t26-04",
     "tier": 26,
-    "question": "An agent's code comment says 'this is a hack, fix later' with no ticket, date, or explanation of what 'later' means. Why is this worse than no comment at all, and what should replace it?",
+    "question": "Where is the temporary directory created to store the generated Modelfile?",
     "key_points": [
-      "false sense",
-      "never actionable",
-      "real ticket"
+      "os.tmpdir()",
+      "mkdtemp",
+      "aura-ft-"
     ],
     "max_turns": 3
   },
   {
     "id": "t26-05",
     "tier": 26,
-    "question": "Two competing documentation styles: exhaustive detail on every function, or a short README plus self-documenting code. What determines which is appropriate for a given codebase?",
+    "question": "How does checkOllamaJobStatus check if the specialized model creation succeeded?",
     "key_points": [
-      "audience and complexity",
-      "rot faster",
-      "public"
+      "/api/tags",
+      "exists",
+      "outputModel"
     ],
     "max_turns": 3
   }

@@ -2,60 +2,60 @@
   {
     "id": "t15-01",
     "tier": 15,
-    "question": "Aura's frequency_penalty and presence_penalty are both set to 0.3. A user complains that Aura keeps repeating the same file path in a long refactoring session. Is this a penalty tuning problem, a context problem, or something else entirely? Diagnose precisely.",
+    "question": "In alternator.ts, what happens to the permissions given to the agent loop when Archimedes is executed? Why?",
     "key_points": [
-      "planning",
-      "output token",
-      "context-window degradation",
-      "penalt"
+      "read-only",
+      "PermissionSystem",
+      "guard",
+      "write"
     ],
     "max_turns": 3
   },
   {
     "id": "t15-02",
     "tier": 15,
-    "question": "The episode store records rubyAttempted=true when Ruby tries a task. But if Ruby is skipped due to competence gating, rubyAttempted=false. Over 50 days, what happens to the competence score for a task category Ruby is never allowed to attempt?",
+    "question": "What is the purpose of isOllamaAvailable in alternator.ts, and how does it determine if the service is reachable?",
     "key_points": [
-      "frozen",
-      "self-reinforcing",
-      "never gets a chance",
-      "exploration"
+      "/v1/models",
+      "OLLAMA_PING_MS",
+      "fetch",
+      "timeout"
     ],
     "max_turns": 3
   },
   {
     "id": "t15-03",
     "tier": 15,
-    "question": "A developer fine-tunes Ruby on 200 episodes from the episode store. After fine-tuning, Ruby's verification catch rate drops from 30% to 5%. Is this good news or bad news, and what's the one thing you'd check before celebrating?",
+    "question": "Explain the 'Epsilon Probe' feature in the alternator loop. What problem does it solve, and how does it work?",
     "key_points": [
-      "overfit",
-      "held-out",
-      "verifier",
-      "audit"
+      "EPSILON_PROBE_RATE",
+      "0.05",
+      "exploration",
+      "gate"
     ],
     "max_turns": 3
   },
   {
     "id": "t15-04",
     "tier": 15,
-    "question": "Explain why running the benchmark with --auto but without --readonly gives misleading results for measuring Ruby's reasoning ability, even if you only look at text answers.",
+    "question": "If Archimedes is run and fails, how does the alternator pass this failure context to the fallback large model?",
     "key_points": [
-      "retrieval",
-      "reasoning",
-      "contaminat",
-      "--readonly"
+      "archimedesFailureContext",
+      "not to repeat",
+      "tool activity",
+      "largeModelTask"
     ],
     "max_turns": 3
   },
   {
     "id": "t15-05",
     "tier": 15,
-    "question": "The daily_run.sh script runs npm run build before capturing Ruby stats. Why is this step necessary, and what specifically breaks if you skip it?",
+    "question": "How is the final Episode object saved to disk in alternator.ts? What happens if the write fails?",
     "key_points": [
-      "dist/",
-      "stale",
-      "silently",
-      "build"
+      "saveEpisode",
+      "projectRoot",
+      "warning",
+      "not throw"
     ],
     "max_turns": 3
   }

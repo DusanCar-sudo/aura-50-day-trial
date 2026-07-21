@@ -2,60 +2,59 @@
   {
     "id": "t17-01",
     "tier": 17,
-    "question": "A session has turn 1: 6,595 input tokens, 1,280 cached. Turn 4: 7,717 input, 7,680 cached. Calculate the actual new tokens billed in each turn, explain why turn 4 costs almost nothing despite having more total tokens, and estimate what turn 10 would cost.",
+    "question": "How does episodeStore namespace the episodes for different projects? Explain the implementation of projectHash.",
     "key_points": [
-      "turn 1: 5315 billed fresh",
-      "turn 4: 37 billed fresh",
-      "cache hit rate",
-      "turn 10 near-zero fresh tokens"
+      "projectRoot",
+      "base64",
+      "slice(0, 8)",
+      "namespace"
     ],
     "max_turns": 3
   },
   {
     "id": "t17-02",
     "tier": 17,
-    "question": "A tool call returns a 50,000-character ThreadSanitizer race condition report. This gets appended to conversation history. Explain the exact mechanism by which this single tool result causes every subsequent turn to cost significantly more, even if the user only types short messages.",
+    "question": "Where is the default folder for storing episodes located? How can this location be overridden?",
     "key_points": [
-      "history resent every turn",
-      "50k chars in every subsequent context",
-      "cumulative O(n) growth",
-      "cache may not help if content"
+      "~/.aura/episodes",
+      "process.env.HOME",
+      "defaultDir"
     ],
     "max_turns": 3
   },
   {
     "id": "t17-03",
     "tier": 17,
-    "question": "You want to reduce the cost of a long Aura debugging session by 80% without reducing quality. Rank these interventions by impact: (a) reduce max_turns, (b) use /compact more aggressively, (c) use a cheaper model for tool-heavy turns, (d) increase frequency_penalty.",
+    "question": "Explain the atomic write pattern used in saveEpisode to prevent corrupted episode files.",
     "key_points": [
-      "compact most impact",
-      "cheaper model second",
-      "max_turns third",
-      "frequency_penalty least impact on cost"
+      ".tmp",
+      "writeFile",
+      "rename",
+      "atomic"
     ],
     "max_turns": 3
   },
   {
     "id": "t17-04",
     "tier": 17,
-    "question": "The Ruby Alternator adds a verification call to every Ruby attempt. For a session where Ruby succeeds 80% of the time, calculate whether the verification call makes the system more or less expensive than just always using the large model, assuming the small model costs 0 and the large model costs $0.003 per call.",
+    "question": "How does loadEpisodes handle files that are corrupted or have invalid JSON content?",
     "key_points": [
-      "80% success: Ruby + verification",
-      "vs always large model",
-      "cost of verification matters",
-      "depends on verification model cost"
+      "JSON.parse",
+      "try/catch",
+      "skip",
+      "readdirSync"
     ],
-    "max_turns": 5
+    "max_turns": 3
   },
   {
     "id": "t17-05",
     "tier": 17,
-    "question": "Aura's context compaction summarizes the middle of the conversation but keeps the first message and the most recent tail verbatim. Explain why keeping the first message matters specifically for cost, not just quality.",
+    "question": "Describe the stats returned by getEpisodeStats. How does it count successes versus interventions?",
     "key_points": [
-      "first message sets the cache prefix",
-      "stripping it breaks cache invalidation",
-      "tail kept for recency",
-      "first message is stable prefix that"
+      "archimedesSuccesses",
+      "archimedesFailures",
+      "largeModelInterventions",
+      "readyForFineTune"
     ],
     "max_turns": 3
   }

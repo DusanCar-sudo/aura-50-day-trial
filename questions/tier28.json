@@ -2,55 +2,53 @@
   {
     "id": "t28-01",
     "tier": 28,
-    "question": "An agent must rename a function used in 40 files across a monorepo. What is the correct strategy versus manually editing each file one by one?",
+    "question": "Why might local model prefill throughput hang or run extremely slowly on AMD iGPUs? How can this be resolved?",
     "key_points": [
-      "search",
-      "codemod",
-      "verify each call site"
+      "Vulkan",
+      "CPU-only",
+      "GGML_VK_VISIBLE_DEVICES"
     ],
-    "max_turns": 5
+    "max_turns": 3
   },
   {
     "id": "t28-02",
     "tier": 28,
-    "question": "A large refactor touches 200 files. Should this be one giant commit, or broken into smaller commits? Explain the tradeoffs for review and rollback.",
+    "question": "What is the value of OLLAMA_PING_MS in alternator.ts?",
     "key_points": [
-      "easier to review",
-      "bisect",
-      "logical grouping"
+      "3_000",
+      "ping"
     ],
     "max_turns": 3
   },
   {
     "id": "t28-03",
     "tier": 28,
-    "question": "Midway through a large refactor, the agent realizes the original plan has a flaw that will require redoing 30% of the work already done. What should it do?",
+    "question": "How is the duration of an episode (durationMs) calculated?",
     "key_points": [
-      "stop and reassess",
-      "sunk cost",
-      "redo"
+      "Date.now() - startMs",
+      "durationMs"
     ],
     "max_turns": 3
   },
   {
     "id": "t28-04",
     "tier": 28,
-    "question": "A large-scale refactor changes a shared interface. How should the agent verify it hasn't broken any of the 40 files that depend on that interface, beyond just 'it compiles'?",
+    "question": "What performance impact occurs if the local Ollama server is unreachable during a task assessment?",
     "key_points": [
-      "runtime behavior",
-      "dynamic/reflective",
-      "string-based references"
+      "isOllamaAvailable",
+      "escalate",
+      "warning"
     ],
-    "max_turns": 5
+    "max_turns": 3
   },
   {
     "id": "t28-05",
     "tier": 28,
-    "question": "Should a large refactor be done on a long-lived feature branch, or in small increments merged directly to master behind a flag? Explain when each is appropriate.",
+    "question": "How does token-caching impact the benchmark if history is rewritten between turns?",
     "key_points": [
-      "merge conflicts",
-      "integration risk",
-      "team size"
+      "prompt cache",
+      "invalidate",
+      "compaction"
     ],
     "max_turns": 3
   }

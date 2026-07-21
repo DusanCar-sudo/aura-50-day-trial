@@ -2,61 +2,58 @@
   {
     "id": "t19-01",
     "tier": 19,
-    "question": "The 50-day trial ends with Ruby's Tier 1-2 competence at 85% but Tier 3 (code generation) still at 25%. What does this pattern suggest about the fine-tuning data you should collect next, and what would you change about how episodes are labeled?",
+    "question": "In model-selector.ts, what is the minimum number of historical episodes required before model selection is active?",
     "key_points": [
-      "collect more code gen episodes",
-      "label by subtask not just category",
-      "implementation vs explanation vs debugging",
-      "targeted fine-tune not general"
+      "MIN_EPISODES_FOR_SELECTION",
+      "5",
+      "undefined"
     ],
-    "max_turns": 5
+    "max_turns": 3
   },
   {
     "id": "t19-02",
     "tier": 19,
-    "question": "Design a Tier 20 question set that tests something none of tiers 1-19 currently test. Name the capability gap, write one example question with key_points, and explain why it matters for a real coding agent.",
+    "question": "Explain the weighting mechanism used in selectModelFromHistory. How are similar tasks prioritized?",
     "key_points": [
-      "identifies genuine gap",
-      "example question is testable",
-      "key_points are scoreable",
-      "capability matters in practice"
+      "similarity",
+      "SIMILARITY_THRESHOLD",
+      "1 + sim",
+      "0.1"
     ],
-    "max_turns": 5
+    "max_turns": 3
   },
   {
     "id": "t19-03",
     "tier": 19,
-    "question": "The Ruby Alternator currently has no mechanism for Ruby to ask the large model a clarifying question before attempting a task. Describe how you would add this without breaking the existing competence-gating and verification flow, and what new episode fields you'd need.",
+    "question": "How is the Jaccard similarity tokenization implemented in model-selector.ts? What words are filtered out?",
     "key_points": [
-      "pre-attempt clarification call",
-      "still counts as Ruby attempt",
-      "new field: clarificationUsed",
-      "verification still runs after"
+      "tokenize",
+      "length >= 3",
+      "lowercase"
     ],
-    "max_turns": 5
+    "max_turns": 3
   },
   {
     "id": "t19-04",
     "tier": 19,
-    "question": "After 50 days, you have 500 episodes. The fine-tune job completes and produces granite4.1:3b-aura-v1. How do you evaluate whether the fine-tuned model is actually better than the base model, without using the same benchmark questions it was trained on?",
+    "question": "When comparing model performance in selectModelFromHistory, how is a winner decided? What is the primary metric and the secondary tie-breaker?",
     "key_points": [
-      "held-out test set",
-      "new questions not in training",
-      "A/B test on real tasks",
-      "blind evaluation"
+      "approvalRate",
+      "tasks",
+      "tie-breaker",
+      "0.05"
     ],
-    "max_turns": 5
+    "max_turns": 3
   },
   {
     "id": "t19-05",
     "tier": 19,
-    "question": "The long-term goal is a local model that handles 80% of real Aura tasks without cloud escalation. Based on everything you know about the Ruby Alternator's current architecture, what is the single most important change needed to get there, and what would you measure to know you'd achieved it?",
+    "question": "Why does selectModelFromHistory only consider episodes where largeModelUsed is set?",
     "key_points": [
-      "fine-tuning on task-specific episodes",
-      "competence by category",
-      "escalation rate drops",
-      "measure cloud call frequency not just"
+      "largeModelUsed",
+      "availableModels",
+      "alternation"
     ],
-    "max_turns": 5
+    "max_turns": 3
   }
 ]

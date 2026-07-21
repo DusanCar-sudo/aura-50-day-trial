@@ -2,55 +2,55 @@
   {
     "id": "t29-01",
     "tier": 29,
-    "question": "An agent wants to change a public function's signature by adding a required parameter. Why does this break backwards compatibility, and what's the safer alternative?",
+    "question": "Why is the Archimedes local model run strictly with a read-only permission level?",
     "key_points": [
-      "breaks existing callers",
-      "optional",
-      "default value"
+      "read-only",
+      "PermissionSystem",
+      "garbage",
+      "unproven"
     ],
     "max_turns": 3
   },
   {
     "id": "t29-02",
     "tier": 29,
-    "question": "A REST API endpoint currently returns a flat JSON object. The agent wants to nest the data under a new 'data' key for consistency with other endpoints. What is the safe migration path versus changing it directly?",
+    "question": "Explain how the read-only sandbox is enforced in the agent loop.",
     "key_points": [
-      "breaks existing consumers",
-      "version the endpoint",
-      "deprecation period"
+      "PermissionDeniedError",
+      "tool dispatcher",
+      "execution"
     ],
     "max_turns": 3
   },
   {
     "id": "t29-03",
     "tier": 29,
-    "question": "Semantic versioning: an agent fixes a bug that some users were unknowingly depending on as behavior. Is this a patch, minor, or major version bump? Justify.",
+    "question": "If a prompt injection instruction commands the agent to read secrets or run a network exfiltration script, what safety checks protect the repository?",
     "key_points": [
-      "breaking change",
-      "major",
-      "consumers"
+      "path jail",
+      "SSRF guard",
+      "permissions"
     ],
     "max_turns": 3
   },
   {
     "id": "t29-04",
     "tier": 29,
-    "question": "An agent deprecates an old function but doesn't mark it with any deprecation warning or documentation, just stops using it internally. Why is this insufficient, and what should proper deprecation include?",
+    "question": "What is the default permission level of the alternator session if no custom permissions object is passed?",
     "key_points": [
-      "deprecation warning",
-      "migration guidance",
-      "removal timeline"
+      "normal",
+      "PermissionSystem"
     ],
     "max_turns": 3
   },
   {
     "id": "t29-05",
     "tier": 29,
-    "question": "A library's internal helper function (not exported) is changed. Does this require a version bump under semver? What if users were importing it directly from internal paths anyway?",
+    "question": "Why are tool execution safety gates superior to prompt-based instructions (e.g., system prompt directives)?",
     "key_points": [
-      "not covered by",
-      "own risk",
-      "changelog"
+      "request, not guarantee",
+      "system prompt",
+      "hard gate"
     ],
     "max_turns": 3
   }

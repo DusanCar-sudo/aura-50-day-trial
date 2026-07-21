@@ -2,61 +2,57 @@
   {
     "id": "t18-01",
     "tier": 18,
-    "question": "A new agent wants to connect to the Aura kanban server via MCP. It calls kanban_move_card but sends a card ID from its own internal state that doesn't exist on the board. What should the MCP tool return, and how should the agent handle this gracefully?",
+    "question": "In fine-tune.ts, how is Ollama 'fine-tuning' simulated since Ollama lacks a native fine-tuning API?",
     "key_points": [
-      "404 or error response",
-      "agent should re-fetch board state",
-      "stale local state",
-      "idempotent retry after sync"
+      "Modelfile",
+      "ollama create",
+      "SYSTEM",
+      "snippets"
     ],
     "max_turns": 3
   },
   {
     "id": "t18-02",
     "tier": 18,
-    "question": "The Telegram bot receives a voice note at 3am. Transcription takes 8 seconds. The user expects a response within 15 seconds total. Walk through every component that contributes to latency and identify the single most likely bottleneck.",
+    "question": "What is the maximum number of instruction-tuning exemplars included in the Modelfile generation in fineTuneWithOllama?",
     "key_points": [
-      "transcription",
-      "Aura agent loop",
-      "LLM call",
-      "Telegram API round trip",
-      "LLM call most likely bottleneck"
+      "slice(0, 50)",
+      "50",
+      "snippets"
     ],
     "max_turns": 3
   },
   {
     "id": "t18-03",
     "tier": 18,
-    "question": "You want to add AgentMesh as a sub-agent that Aura can spawn for lightweight tasks. What's the minimum interface AgentMesh needs to expose for the spawner tool to work with it, and what's the main risk of spawning a second agent inside an already-long Aura session?",
+    "question": "Walk through the OpenAI fine-tuning process in fineTuneWithOpenAI. What client calls are made?",
     "key_points": [
-      "stdin/stdout or HTTP",
-      "task input response output",
-      "context budget",
-      "spawned agent adds tokens to parent"
+      "files.create",
+      "fineTuning.jobs.create",
+      "OPENAI_API_KEY"
     ],
     "max_turns": 3
   },
   {
     "id": "t18-04",
     "tier": 18,
-    "question": "The Ruby Diamond Client has a multi-bot council feature where N bots debate a solution. Describe how you would wire the Ruby Alternator into this council so that the local model gets a chance to answer before any cloud model is invoked, without breaking the debate format.",
+    "question": "How does checkJobStatus check the progress of an Ollama model creation job versus an OpenAI fine-tuning job?",
     "key_points": [
-      "Ruby as first council member",
-      "escalation if Ruby fails",
-      "council format preserved",
-      "local-first before cloud spend"
+      "/api/tags",
+      "fineTuning.jobs.retrieve",
+      "status"
     ],
     "max_turns": 3
   },
   {
     "id": "t18-05",
     "tier": 18,
-    "question": "Aura writes session history to ~/.aura/sessions/. A backup script copies this directory to cloud storage nightly. What privacy and security risks does this introduce, and what's the minimal mitigation that doesn't break the session restore feature?",
+    "question": "What are the possible lifecycle states (status) of a FineTuneJob tracked in the system?",
     "key_points": [
-      "conversation history in plaintext",
-      "API keys may appear in tool",
-      "encrypt at rest",
-      "exclude sensitive tool outputs"
+      "pending",
+      "running",
+      "completed",
+      "failed"
     ],
     "max_turns": 3
   }
