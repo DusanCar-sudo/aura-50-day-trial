@@ -1,0 +1,309 @@
+{
+  "session": 10,
+  "model": "zhipu-coding/glm-5.2",
+  "mode": "tui_real_session",
+  "zero_memory": false,
+  "timestamp": "2026-07-18T12:31:18.621838+00:00",
+  "questions": [
+    {
+      "id": "t1-01",
+      "tier": 1,
+      "verdict": "correct"
+    },
+    {
+      "id": "t1-02",
+      "tier": 1,
+      "verdict": "correct"
+    },
+    {
+      "id": "t1-03",
+      "tier": 1,
+      "verdict": "correct"
+    },
+    {
+      "id": "t1-04",
+      "tier": 1,
+      "verdict": "correct"
+    },
+    {
+      "id": "t1-05",
+      "tier": 1,
+      "verdict": "correct"
+    },
+    {
+      "id": "t2-01",
+      "tier": 2,
+      "verdict": "correct"
+    },
+    {
+      "id": "t2-02",
+      "tier": 2,
+      "verdict": "correct"
+    },
+    {
+      "id": "t2-03",
+      "tier": 2,
+      "verdict": "correct"
+    },
+    {
+      "id": "t2-04",
+      "tier": 2,
+      "verdict": "correct"
+    },
+    {
+      "id": "t2-05",
+      "tier": 2,
+      "verdict": "correct"
+    },
+    {
+      "id": "t3-01",
+      "tier": 3,
+      "verdict": "incorrect"
+    },
+    {
+      "id": "t3-02",
+      "tier": 3,
+      "verdict": "correct"
+    },
+    {
+      "id": "t3-03",
+      "tier": 3,
+      "verdict": "partial"
+    },
+    {
+      "id": "t3-04",
+      "tier": 3,
+      "verdict": "partial"
+    },
+    {
+      "id": "t3-05",
+      "tier": 3,
+      "verdict": "correct"
+    },
+    {
+      "id": "t4-01",
+      "tier": 4,
+      "verdict": "correct"
+    },
+    {
+      "id": "t4-02",
+      "tier": 4,
+      "verdict": "correct"
+    },
+    {
+      "id": "t4-03",
+      "tier": 4,
+      "verdict": "correct"
+    },
+    {
+      "id": "t4-04",
+      "tier": 4,
+      "verdict": "correct"
+    },
+    {
+      "id": "t4-05",
+      "tier": 4,
+      "verdict": "correct"
+    },
+    {
+      "id": "t5-01",
+      "tier": 5,
+      "verdict": "correct"
+    },
+    {
+      "id": "t5-02",
+      "tier": 5,
+      "verdict": "correct"
+    },
+    {
+      "id": "t5-03",
+      "tier": 5,
+      "verdict": "correct"
+    },
+    {
+      "id": "t5-04",
+      "tier": 5,
+      "verdict": "correct"
+    },
+    {
+      "id": "t5-05",
+      "tier": 5,
+      "verdict": "correct"
+    },
+    {
+      "id": "t5-06",
+      "tier": 5,
+      "verdict": "correct"
+    },
+    {
+      "id": "t5-07",
+      "tier": 5,
+      "verdict": "correct"
+    },
+    {
+      "id": "t5-08",
+      "tier": 5,
+      "verdict": "correct"
+    },
+    {
+      "id": "t5-09",
+      "tier": 5,
+      "verdict": "correct"
+    },
+    {
+      "id": "t5-10",
+      "tier": 5,
+      "verdict": "correct"
+    },
+    {
+      "id": "t6-01",
+      "tier": 6,
+      "verdict": "correct"
+    },
+    {
+      "id": "t6-02",
+      "tier": 6,
+      "verdict": "correct"
+    },
+    {
+      "id": "t6-03",
+      "tier": 6,
+      "verdict": "correct"
+    },
+    {
+      "id": "t6-04",
+      "tier": 6,
+      "verdict": "correct"
+    },
+    {
+      "id": "t6-05",
+      "tier": 6,
+      "verdict": "correct"
+    },
+    {
+      "id": "t6-06",
+      "tier": 6,
+      "verdict": "partial"
+    },
+    {
+      "id": "t6-07",
+      "tier": 6,
+      "verdict": "correct"
+    },
+    {
+      "id": "t6-08",
+      "tier": 6,
+      "verdict": "correct"
+    },
+    {
+      "id": "t6-09",
+      "tier": 6,
+      "verdict": "correct"
+    },
+    {
+      "id": "t6-10",
+      "tier": 6,
+      "verdict": "correct"
+    },
+    {
+      "id": "t7-01",
+      "tier": 7,
+      "verdict": "correct"
+    },
+    {
+      "id": "t7-02",
+      "tier": 7,
+      "verdict": "correct"
+    },
+    {
+      "id": "t7-03",
+      "tier": 7,
+      "verdict": "correct"
+    },
+    {
+      "id": "t7-04",
+      "tier": 7,
+      "verdict": "correct"
+    },
+    {
+      "id": "t7-05",
+      "tier": 7,
+      "verdict": "correct"
+    },
+    {
+      "id": "t7-06",
+      "tier": 7,
+      "verdict": "correct"
+    },
+    {
+      "id": "t7-07",
+      "tier": 7,
+      "verdict": "partial"
+    },
+    {
+      "id": "t7-08",
+      "tier": 7,
+      "verdict": "correct"
+    },
+    {
+      "id": "t7-09",
+      "tier": 7,
+      "verdict": "correct"
+    },
+    {
+      "id": "t7-10",
+      "tier": 7,
+      "verdict": "partial"
+    },
+    {
+      "id": "t8-01",
+      "tier": 8,
+      "verdict": "correct"
+    },
+    {
+      "id": "t8-02",
+      "tier": 8,
+      "verdict": "partial"
+    },
+    {
+      "id": "t8-03",
+      "tier": 8,
+      "verdict": "correct"
+    },
+    {
+      "id": "t8-04",
+      "tier": 8,
+      "verdict": "correct"
+    },
+    {
+      "id": "t8-05",
+      "tier": 8,
+      "verdict": "correct"
+    },
+    {
+      "id": "t8-06",
+      "tier": 8,
+      "verdict": "partial"
+    },
+    {
+      "id": "t8-07",
+      "tier": 8,
+      "verdict": "correct"
+    },
+    {
+      "id": "t8-08",
+      "tier": 8,
+      "verdict": "partial"
+    },
+    {
+      "id": "t8-09",
+      "tier": 8,
+      "verdict": "partial"
+    },
+    {
+      "id": "t8-10",
+      "tier": 8,
+      "verdict": "partial"
+    }
+  ]
+}
