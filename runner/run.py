@@ -211,6 +211,7 @@ def run_benchmark(session_number: int, tier=None, question_id=None, zero_memory=
             print("  ✗ 'aura' binary not found on PATH — aborting run.")
             return None
         results["questions"].append(result)
+        recorder.append_answer_md(session_number, result["id"], result.get("answer", ""))
         mark = "✓" if result["score"]["verdict"] == "correct" else ("~" if result["score"]["verdict"] == "partial" else "✗")
         print(f"  {mark} {result['score']['verdict']} in {result['elapsed_seconds']}s")
         if result.get("exit_code", 0) != 0:

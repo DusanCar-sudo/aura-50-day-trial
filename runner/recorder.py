@@ -15,6 +15,20 @@ RESULTS_DIR.mkdir(exist_ok=True)
 INDEX_FILE = RESULTS_DIR / "index.json"
 
 
+def append_answer_md(session_number: int, question_id: str, answer_text: str) -> Path:
+    """
+    Append one answered question to answers/session_{N}_{DATE}.md as it
+    completes, so a crashed/interrupted run still leaves readable answers.
+    Additive only — results/*.json stays the single source of truth.
+    """
+    answers_dir = ROOT / "answers"
+    answers_dir.mkdir(exist_ok=True)
+    out_file = answers_dir / f"session_{session_number}_{datetime.utcnow().strftime('%Y-%m-%d')}.md"
+    with out_file.open("a", encoding="utf-8") as f:
+        f.write(f"## {question_id}\n{answer_text}\n\n---\n\n")
+    return out_file
+
+
 def save_session(results: dict) -> Path:
     session_number = results["session"]
     out_file = RESULTS_DIR / f"session_{session_number:03d}.json"

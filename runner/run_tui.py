@@ -212,6 +212,7 @@ def run_benchmark(session_number: int, tier=None, question_id=None):
                     "timestamp": datetime.now(timezone.utc).isoformat(),
                 }
             results["questions"].append(result)
+            recorder.append_answer_md(session_number, result["id"], result.get("answer", ""))
             mark = "✓" if result["score"]["verdict"] == "correct" else (
                 "~" if result["score"]["verdict"] == "partial" else "✗")
             print(f"  {mark} {result['score']['verdict']} in {result['elapsed_seconds']}s")
