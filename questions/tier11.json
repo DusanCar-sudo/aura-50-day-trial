@@ -2,59 +2,53 @@
   {
     "id": "t11-01",
     "tier": 11,
-    "question": "A new contributor asks: 'should I use Aura or AgentMesh for this task?' Give the one-sentence decision rule.",
+    "question": "In types.ts, what does the tokensUsed object structure look like in the Episode interface?",
     "key_points": [
-      "orchestration",
-      "lean loop",
-      "task complexity"
+      "archimedes",
+      "largeModel",
+      "number"
     ],
-    "max_turns": 2
+    "max_turns": 3
   },
   {
     "id": "t11-02",
     "tier": 11,
-    "question": "Enables translates Anthropic's Messages API to OpenAI Chat Completions format with zero runtime dependencies. What is the main risk of 'zero dependencies' as a design constraint, and why might the team accept that risk anyway?",
+    "question": "What is the default task category returned by inferTaskCategory if no regex patterns match the task string?",
     "key_points": [
-      "reinvent",
-      "maintenance burden",
-      "supply chain",
-      "audit"
+      "other",
+      "inferTaskCategory"
     ],
     "max_turns": 3
   },
   {
     "id": "t11-03",
     "tier": 11,
-    "question": "mesh_mcp.py exposes mesh_diagnose, mesh_run, and mesh_auto as MCP tools. For Aura Code to call AgentMesh as one of its own tools, what needs to be true?",
+    "question": "In episode-capture.ts, what property of the parsed JSON object does loadEpisodes inspect to verify it is a valid episode?",
     "key_points": [
-      "MCP server",
-      "registered",
-      "reachable",
-      "spawn"
+      "parsed?.id",
+      "parsed.timestamp",
+      "number"
     ],
     "max_turns": 3
   },
   {
     "id": "t11-04",
     "tier": 11,
-    "question": "Open Notebook is the shared memory backend with an API on port 5055. If both Aura and AgentMesh write session notes into the same notebook without coordination, what's the risk of concurrent writes?",
+    "question": "What does the durationMs field in the Episode interface represent, and how is it measured in alternator.ts?",
     "key_points": [
-      "race condition",
-      "last-write-wins",
-      "append",
-      "coordination"
+      "Date.now() - startMs",
+      "wall-clock",
+      "milliseconds"
     ],
     "max_turns": 3
   },
   {
     "id": "t11-05",
     "tier": 11,
-    "question": "Both GitHub remotes (DusanCar-sudo and milodule3-debug) receive every push via dual-push. What's the operational risk if the two remotes' branches ever diverge, e.g. someone pushes directly to the mirror?",
+    "question": "In episode-capture.ts, how is the filename of a stored episode named?",
     "key_points": [
-      "dual-push",
-      "diverge",
-      "rejected",
-      "read-only"
+      "${id}.json",
+      "episodePath"
     ],
     "max_turns": 3
   }
