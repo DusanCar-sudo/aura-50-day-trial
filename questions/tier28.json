@@ -3,35 +3,55 @@
     "id": "t28-01",
     "tier": 28,
     "question": "An agent must rename a function used in 40 files across a monorepo. What is the correct strategy versus manually editing each file one by one?",
-    "key_points": ["use search across the codebase first", "automated find-and-replace or codemod", "verify each call site's context not blind replace", "manual one-by-one doesn't scale and risks missed sites"],
+    "key_points": [
+      "search",
+      "codemod",
+      "verify each call site"
+    ],
     "max_turns": 5
   },
   {
     "id": "t28-02",
     "tier": 28,
     "question": "A large refactor touches 200 files. Should this be one giant commit, or broken into smaller commits? Explain the tradeoffs for review and rollback.",
-    "key_points": ["smaller commits easier to review", "smaller commits easier to bisect/rollback", "one giant commit is hard to review meaningfully", "logical grouping matters more than size alone"],
+    "key_points": [
+      "easier to review",
+      "bisect",
+      "logical grouping"
+    ],
     "max_turns": 3
   },
   {
     "id": "t28-03",
     "tier": 28,
     "question": "Midway through a large refactor, the agent realizes the original plan has a flaw that will require redoing 30% of the work already done. What should it do?",
-    "key_points": ["stop and reassess before continuing", "sunk cost shouldn't drive continuing a flawed plan", "communicate the discovery and revised estimate", "redo the flawed portion rather than build on it"],
+    "key_points": [
+      "stop and reassess",
+      "sunk cost",
+      "redo"
+    ],
     "max_turns": 3
   },
   {
     "id": "t28-04",
     "tier": 28,
     "question": "A large-scale refactor changes a shared interface. How should the agent verify it hasn't broken any of the 40 files that depend on that interface, beyond just 'it compiles'?",
-    "key_points": ["compiling doesn't guarantee correct runtime behavior", "run the full test suite", "check for dynamic/reflective usages compilers miss", "search for string-based references not caught by the type system"],
+    "key_points": [
+      "runtime behavior",
+      "dynamic/reflective",
+      "string-based references"
+    ],
     "max_turns": 5
   },
   {
     "id": "t28-05",
     "tier": 28,
     "question": "Should a large refactor be done on a long-lived feature branch, or in small increments merged directly to master behind a flag? Explain when each is appropriate.",
-    "key_points": ["long branches risk painful merge conflicts", "incremental behind a flag reduces integration risk", "long-lived branch appropriate for isolated/experimental work", "choice depends on team size and change scope"],
+    "key_points": [
+      "merge conflicts",
+      "integration risk",
+      "team size"
+    ],
     "max_turns": 3
   }
 ]

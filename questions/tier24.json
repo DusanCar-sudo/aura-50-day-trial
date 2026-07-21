@@ -3,35 +3,55 @@
     "id": "t24-01",
     "tier": 24,
     "question": "A production bug only reproduces intermittently, roughly 1 in 50 requests. What logging or observability approach should the agent add to catch it, versus just re-running the code hoping to see it fail?",
-    "key_points": ["add structured logging around suspected area", "capture request context on failure", "reproducing by luck doesn't scale", "instrument before hunting blind"],
+    "key_points": [
+      "structured logging",
+      "request context",
+      "instrument"
+    ],
     "max_turns": 5
   },
   {
     "id": "t24-02",
     "tier": 24,
     "question": "An agent adds `console.log` statements to debug an issue, fixes the bug, and moves on. What's wrong with leaving the console.log statements in, and what should replace them?",
-    "key_points": ["log spam in production", "no log level control", "should use structured/leveled logging or remove entirely", "debug logs are not observability"],
+    "key_points": [
+      "log spam",
+      "no log-level",
+      "structured/leveled"
+    ],
     "max_turns": 3
   },
   {
     "id": "t24-03",
     "tier": 24,
     "question": "Two services communicate over HTTP. A request fails somewhere in the chain but neither service logs anything useful. What single addition would most improve debuggability of failures like this across service boundaries?",
-    "key_points": ["request/correlation ID", "propagate ID across services", "log the ID at each hop", "ties distributed logs to one request"],
+    "key_points": [
+      "correlation id",
+      "propagate",
+      "each hop"
+    ],
     "max_turns": 3
   },
   {
     "id": "t24-04",
     "tier": 24,
     "question": "An agent is asked to add monitoring to a new feature. What's the difference between logging, metrics, and tracing, and which should be used to answer 'is this feature slow for some users but not others'?",
-    "key_points": ["logging is discrete events", "metrics are aggregated numbers", "tracing follows a request's path", "tracing/per-request metrics answer per-user slowness"],
+    "key_points": [
+      "discrete events",
+      "aggregated numbers",
+      "per-request"
+    ],
     "max_turns": 3
   },
   {
     "id": "t24-05",
     "tier": 24,
     "question": "An agent notices its own tool-call logs show it retried a failed API call 40 times in a loop before a human intervened. What should have stopped this automatically, and why is unlimited silent retry dangerous?",
-    "key_points": ["retry limit or backoff", "silent loops waste cost and time", "should surface failure after N attempts", "exponential backoff prevents hammering"],
+    "key_points": [
+      "retry limit",
+      "backoff",
+      "surface the failure"
+    ],
     "max_turns": 3
   }
 ]

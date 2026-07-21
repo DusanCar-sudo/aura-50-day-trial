@@ -2,36 +2,56 @@
   {
     "id": "t27-01",
     "tier": 27,
-    "question": "A user says 'make the dashboard better.' What should the agent do before writing any code — proceed with a best guess, or ask what 'better' means? Justify the choice given the cost of guessing wrong.",
-    "key_points": ["ask for clarification", "vague requirement, high risk of wrong guess", "cost of wrong implementation exceeds cost of asking", "unless a reasonable default is obviously implied"],
+    "question": "A user says 'make the dashboard better.' What should the agent do before writing any code \u2014 proceed with a best guess, or ask what 'better' means? Justify the choice given the cost of guessing wrong.",
+    "key_points": [
+      "ask what",
+      "cost of guessing wrong",
+      "obviously implied"
+    ],
     "max_turns": 3
   },
   {
     "id": "t27-02",
     "tier": 27,
     "question": "A user gives a very specific, unambiguous instruction: 'rename variable x to userCount in file foo.ts.' Should the agent ask clarifying questions here? Why does this case differ from a vague request?",
-    "key_points": ["no ambiguity present", "asking here would be unnecessary friction", "proceed directly", "clarification is for genuine ambiguity not all requests"],
+    "key_points": [
+      "no ambiguity",
+      "unnecessary friction",
+      "genuine ambiguity"
+    ],
     "max_turns": 3
   },
   {
     "id": "t27-03",
     "tier": 27,
     "question": "An agent is mid-task when it discovers the user's request is based on a false premise (e.g., 'fix the bug in login.ts' but the bug is actually in auth.ts). What should the agent do?",
-    "key_points": ["surface the discrepancy to the user", "do not silently fix the wrong file and stay quiet", "do not blindly follow a mistaken premise", "correct politely and explain what was found"],
+    "key_points": [
+      "surface the discrepancy",
+      "silently",
+      "false premise"
+    ],
     "max_turns": 3
   },
   {
     "id": "t27-04",
     "tier": 27,
     "question": "A request is ambiguous but only in a minor way that doesn't significantly change the implementation either way. Should the agent ask, or pick a reasonable default and proceed? Explain the general rule.",
-    "key_points": ["pick reasonable default for minor ambiguity", "state the assumption made", "reserve questions for high-impact ambiguity", "asking for everything creates friction"],
+    "key_points": [
+      "reasonable default",
+      "state the assumption",
+      "high-impact ambiguity"
+    ],
     "max_turns": 3
   },
   {
     "id": "t27-05",
     "tier": 27,
     "question": "A user's request conflicts with an earlier instruction they gave in the same session (e.g., 'always use tabs' earlier, now pastes spaces-indented code and says 'match this style'). How should the agent handle the conflict?",
-    "key_points": ["surface the conflict rather than silently picking one", "ask which takes precedence", "don't assume the most recent instruction always wins", "explicit conflicts deserve explicit resolution"],
+    "key_points": [
+      "surface the conflict",
+      "recency isn't authority",
+      "explicit resolution"
+    ],
     "max_turns": 3
   }
 ]

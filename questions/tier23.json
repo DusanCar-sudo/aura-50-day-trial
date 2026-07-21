@@ -3,35 +3,55 @@
     "id": "t23-01",
     "tier": 23,
     "question": "An agent needs to parse dates and considers `npm install some-random-date-lib` with 12 weekly downloads and no recent commits. What should it check before adding this dependency, and what's the safer default?",
-    "key_points": ["check maintenance activity", "check download counts and popularity", "prefer well-maintained or standard library", "supply chain risk from unmaintained packages"],
+    "key_points": [
+      "maintenance activity",
+      "download counts",
+      "supply-chain"
+    ],
     "max_turns": 3
   },
   {
     "id": "t23-02",
     "tier": 23,
     "question": "A `package.json` pins a dependency with a caret range `^2.1.0`. A minor version bump introduces a breaking change upstream despite semver promises. What does this reveal about trusting semver ranges blindly, and what's the safer practice?",
-    "key_points": ["semver is a convention not a guarantee", "lockfiles pin exact versions", "test before upgrading", "caret ranges can still break"],
+    "key_points": [
+      "convention",
+      "lockfile",
+      "caret"
+    ],
     "max_turns": 3
   },
   {
     "id": "t23-03",
     "tier": 23,
     "question": "An agent is asked to add a new dependency to fix a small bug that could be fixed with 5 lines of custom code. What factors should weigh into the build-vs-dependency decision?",
-    "key_points": ["dependency adds maintenance surface", "small fix may not justify a new dependency", "consider bundle size and attack surface", "weigh long-term maintenance cost"],
+    "key_points": [
+      "maintenance surface",
+      "attack surface",
+      "trivial"
+    ],
     "max_turns": 3
   },
   {
     "id": "t23-04",
     "tier": 23,
     "question": "`npm audit` reports a high-severity vulnerability in a transitive dependency four levels deep, with no available fix. What are the agent's realistic options, ranked by preference?",
-    "key_points": ["check if vulnerable code path is actually used", "look for a patched alternative package", "npm overrides/resolutions to force a version", "document and accept risk as last resort"],
+    "key_points": [
+      "vulnerable code path",
+      "overrides",
+      "resolutions"
+    ],
     "max_turns": 5
   },
   {
     "id": "t23-05",
     "tier": 23,
-    "question": "An agent commits a `package-lock.json` change that wasn't intentional — it was a side effect of running `npm install` for an unrelated task. Why does this matter, and what should the agent do?",
-    "key_points": ["lockfile changes affect all installs", "unintentional version bumps can break things", "review lockfile diff before committing", "revert unrelated lockfile changes"],
+    "question": "An agent commits a `package-lock.json` change that wasn't intentional \u2014 it was a side effect of running `npm install` for an unrelated task. Why does this matter, and what should the agent do?",
+    "key_points": [
+      "lockfile diff",
+      "revert",
+      "unrelated"
+    ],
     "max_turns": 3
   }
 ]

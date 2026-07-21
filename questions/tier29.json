@@ -3,35 +3,55 @@
     "id": "t29-01",
     "tier": 29,
     "question": "An agent wants to change a public function's signature by adding a required parameter. Why does this break backwards compatibility, and what's the safer alternative?",
-    "key_points": ["required param breaks existing callers", "make the parameter optional with a default", "or add a new function/overload instead", "backwards compatibility means old callers still work"],
+    "key_points": [
+      "breaks existing callers",
+      "optional",
+      "default value"
+    ],
     "max_turns": 3
   },
   {
     "id": "t29-02",
     "tier": 29,
     "question": "A REST API endpoint currently returns a flat JSON object. The agent wants to nest the data under a new 'data' key for consistency with other endpoints. What is the safe migration path versus changing it directly?",
-    "key_points": ["direct change breaks existing consumers", "version the endpoint or add new field alongside old", "deprecation period before removing old shape", "breaking changes need a migration window"],
+    "key_points": [
+      "breaks existing consumers",
+      "version the endpoint",
+      "deprecation period"
+    ],
     "max_turns": 3
   },
   {
     "id": "t29-03",
     "tier": 29,
     "question": "Semantic versioning: an agent fixes a bug that some users were unknowingly depending on as behavior. Is this a patch, minor, or major version bump? Justify.",
-    "key_points": ["technically a breaking change for those users", "major bump if behavior relied upon changes", "patch bump is understating the impact", "semver reflects impact on consumers not intent"],
+    "key_points": [
+      "breaking change",
+      "major",
+      "consumers"
+    ],
     "max_turns": 3
   },
   {
     "id": "t29-04",
     "tier": 29,
     "question": "An agent deprecates an old function but doesn't mark it with any deprecation warning or documentation, just stops using it internally. Why is this insufficient, and what should proper deprecation include?",
-    "key_points": ["external consumers don't know it's deprecated", "needs explicit deprecation warning/annotation", "needs migration guidance to the replacement", "removal timeline should be communicated"],
+    "key_points": [
+      "deprecation warning",
+      "migration guidance",
+      "removal timeline"
+    ],
     "max_turns": 3
   },
   {
     "id": "t29-05",
     "tier": 29,
     "question": "A library's internal helper function (not exported) is changed. Does this require a version bump under semver? What if users were importing it directly from internal paths anyway?",
-    "key_points": ["internal APIs aren't covered by semver contract", "users importing internals do so at their own risk", "still worth noting in changelog for transparency", "the public/documented API is what semver protects"],
+    "key_points": [
+      "not covered by",
+      "own risk",
+      "changelog"
+    ],
     "max_turns": 3
   }
 ]
