@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "strict": true,
+    "types": ["node"]
+  },
+  "include": ["load-agents-env.ts"]
+}

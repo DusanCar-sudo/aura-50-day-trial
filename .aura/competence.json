@@ -1,0 +1,111 @@
+{
+  "projectRoot": "/run/media/dusan/DATA1/Aura_Benchmark",
+  "scores": [
+    {
+      "specialist": "researcher",
+      "domain": "research",
+      "score": 0.65025,
+      "sampleCount": 2,
+      "lastUpdated": 1784588846990
+    },
+    {
+      "specialist": "researcher",
+      "domain": "implementation",
+      "score": 0.4,
+      "sampleCount": 0,
+      "lastUpdated": 1784418425004
+    },
+    {
+      "specialist": "researcher",
+      "domain": "ruby_gems",
+      "score": 0.6,
+      "sampleCount": 0,
+      "lastUpdated": 1784418425004
+    },
+    {
+      "specialist": "researcher",
+      "domain": "refactor",
+      "score": 0.5,
+      "sampleCount": 0,
+      "lastUpdated": 1784418425004
+    },
+    {
+      "specialist": "coder",
+      "domain": "implementation",
+      "score": 0.9,
+      "sampleCount": 0,
+      "lastUpdated": 1784418425004
+    },
+    {
+      "specialist": "coder",
+      "domain": "ruby_gems",
+      "score": 0.85,
+      "sampleCount": 0,
+      "lastUpdated": 1784418425004
+    },
+    {
+      "specialist": "coder",
+      "domain": "ruby_tests",
+      "score": 0.7,
+      "sampleCount": 0,
+      "lastUpdated": 1784418425004
+    },
+    {
+      "specialist": "coder",
+      "domain": "refactor",
+      "score": 0.8,
+      "sampleCount": 0,
+      "lastUpdated": 1784418425004
+    },
+    {
+      "specialist": "coder",
+      "domain": "research",
+      "score": 0.35,
+      "sampleCount": 0,
+      "lastUpdated": 1784418425004
+    },
+    {
+      "specialist": "reviewer",
+      "domain": "review",
+      "score": 0.95,
+      "sampleCount": 0,
+      "lastUpdated": 1784418425004
+    },
+    {
+      "specialist": "reviewer",
+      "domain": "implementation",
+      "score": 0.5,
+      "sampleCount": 0,
+      "lastUpdated": 1784418425004
+    },
+    {
+      "specialist": "reviewer",
+      "domain": "refactor",
+      "score": 0.6,
+      "sampleCount": 0,
+      "lastUpdated": 1784418425004
+    },
+    {
+      "specialist": "planner",
+      "domain": "planning",
+      "score": 0.95,
+      "sampleCount": 0,
+      "lastUpdated": 1784418425004
+    },
+    {
+      "specialist": "planner",
+      "domain": "research",
+      "score": 0.7,
+      "sampleCount": 0,
+      "lastUpdated": 1784418425004
+    },
+    {
+      "specialist": "planner",
+      "domain": "refactor",
+      "score": 0.55,
+      "sampleCount": 0,
+      "lastUpdated": 1784418425004
+    }
+  ],
+  "version": 1
+}

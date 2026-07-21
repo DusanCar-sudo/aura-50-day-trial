@@ -1,0 +1,16 @@
+[Unit]
+Description=Node.js App
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node /home/dusan/app/index.js
+EnvironmentFile=/home/dusan/.secrets/agents.env
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

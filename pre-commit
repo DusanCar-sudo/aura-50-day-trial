@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+#
+# Pre-commit hook: block commits containing strings that look like API keys.
+#
+# Pattern: sk-[a-zA-Z0-9]{32,}
+# This catches OpenAI-style secret keys (sk-... with 32+ alphanumeric chars).
+#
+# Installation:
+#   cp pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+#
+set -euo pipefail
+
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+# Pattern: sk- followed by 32+ alphanumeric characters
+PATTERN='sk-[a-zA-Z0-9]{32,}'
+
+# Check staged changes only (not unstaged/untracked files)
+staged_files=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null || true)
+
+if [ -z "$staged_files" ]; then
+    exit 0
+fi
+
+violations=0
+
+while IFS= read -r file; do
+    [ -z "$file" ] && continue
+    # Skip binary files
+    if git show ":${file}" 2>/dev/null | head -c 1024 | grep -qI . 2>/dev/null; then
+        matches=$(git show ":${file}" 2>/dev/null | grep -nE "$PATTERN" || true)
+        if [ -n "$matches" ]; then
+            echo -e "${RED}⚠  API key pattern detected in: ${file}${NC}"
+            echo "$matches"
+            violations=$((violations + 1))
+        fi
+    fi
+done <<< "$staged_files"
+
+if [ "$violations" -gt 0 ]; then
+    echo ""
+    echo -e "${RED}✗ Commit blocked: $violations file(s) contain potential API keys matching '${PATTERN}'.${NC}"
+    echo "  Remove or replace them before committing."
+    exit 1
+fi
+
+exit 0

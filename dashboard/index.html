@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura Benchmark Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff;
+    --green: #3fb950; --yellow: #d29922; --red: #f85149;
+    --purple: #bc8cff; --orange: #f0883e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; padding: 24px; }
+  h1 { font-size: 28px; margin-bottom: 8px; }
+  .subtitle { color: var(--muted); margin-bottom: 32px; font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .card h2 { font-size: 16px; color: var(--muted); margin-bottom: 8px; font-weight: 500; }
+  .card .big-num { font-size: 42px; font-weight: 700; line-height: 1.1; }
+  .card .detail { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+  .chart-card h3 { font-size: 18px; margin-bottom: 16px; }
+  .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+  @media (max-width: 800px) { .chart-row { grid-template-columns: 1fr; } }
+  canvas { max-height: 350px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .badge-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .badge-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
+  .badge-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .badge-gray { background: rgba(139,148,158,0.15); color: var(--muted); }
+  .badge-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+  .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+  .section-title { font-size: 20px; margin: 32px 0 16px; }
+</style>
+</head>
+<body>
+
+<h1>🏆 Aura Benchmark Dashboard</h1>
+<p class="subtitle">Tracking whether Aura improves over sessions — engineering experience should accumulate, not disappear.</p>
+
+<div class="grid" id="stat-cards"></div>
+
+<div class="chart-row">
+  <div class="chart-card">
+    <h3>📈 Pass Rate Over Sessions</h3>
+    <canvas id="passRateChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>📊 Correct / Partial / Incorrect per Session</h3>
+    <canvas id="stackedChart"></canvas>
+  </div>
+</div>
+
+<div class="chart-row">
+  <div class="chart-card">
+    <h3>🤖 Model Comparison</h3>
+    <canvas id="modelChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>🎯 Tier Performance (Sessions with 20+ questions)</h3>
+    <canvas id="tierChart"></canvas>
+  </div>
+</div>
+
+<div class="chart-card">
+  <h3>🧠 Memory Accumulation Proof (Tier 4)</h3>
+  <canvas id="memoryChart"></canvas>
+</div>
+
+<h2 class="section-title">Session Details</h2>
+<div class="chart-card" style="overflow-x: auto;">
+  <table id="sessionTable">
+    <thead>
+      <tr><th>Session</th><th>Model</th><th>Questions</th><th>Correct</th><th>Partial</th><th>Fail</th><th>Pass Rate</th><th>Tier 4</th><th>Avg Time</th><th>Date</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<h2 class="section-title">Question-Level Results</h2>
+<div class="chart-card" style="overflow-x: auto;">
+  <table id="questionTable">
+    <thead>
+      <tr><th>Session</th><th>ID</th><th>Tier</th><th>Question</th><th>Verdict</th><th>Score</th><th>Time (s)</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script>
+const INDEX = [
+  {session:0,timestamp:"2026-07-16T14:10:31",total:5,correct:2,partial:1,pass_rate:0.4,tier4_score:"0/0",avg_seconds:92.78,model:"ollama/granite4.1:3b",zero_memory:true},
+  {session:1,timestamp:"2026-07-16T08:04:12",total:20,correct:1,partial:2,pass_rate:0.05,tier4_score:"1/5",avg_seconds:0.76,model:"unknown"},
+  {session:2,timestamp:"2026-07-17T05:42:35",total:20,correct:3,partial:3,pass_rate:0.15,tier4_score:"0/5",avg_seconds:20.59,model:"ollama/granite4.1:3b"},
+  {session:3,timestamp:"2026-07-17T06:46:01",total:1,correct:1,partial:0,pass_rate:1.0,tier4_score:"0/0",avg_seconds:0.0,model:"deepseek/deepseek-chat"},
+  {session:4,timestamp:"2026-07-17T07:36:22",total:1,correct:1,partial:0,pass_rate:1.0,tier4_score:"0/0",avg_seconds:0.0,model:"deepseek/deepseek-chat"},
+  {session:5,timestamp:"2026-07-17T07:42:08",total:1,correct:0,partial:0,pass_rate:0.0,tier4_score:"0/0",avg_seconds:0.0,model:"deepseek/deepseek-chat"},
+  {session:6,timestamp:"2026-07-17T07:45:43",total:20,correct:0,partial:0,pass_rate:0.0,tier4_score:"0/5",avg_seconds:0.0,model:"deepseek/deepseek-chat"},
+  {session:7,timestamp:"2026-07-17T07:54:18",total:1,correct:0,partial:0,pass_rate:0.0,tier4_score:"0/0",avg_seconds:0.02,model:"deepseek/deepseek-chat"},
+  {session:8,timestamp:"2026-07-17T12:56:18",total:20,correct:6,partial:2,pass_rate:0.3,tier4_score:"3/5",avg_seconds:121.0,model:"deepseek/deepseek-chat"},
+  {session:9,timestamp:"2026-07-18T03:39:30",total:20,correct:0,partial:0,pass_rate:0.0,tier4_score:"0/5",avg_seconds:0.0,model:"deepseek/deepseek-chat"},
+  {session:10,timestamp:"2026-07-18T12:31:18",total:60,correct:0,partial:0,pass_rate:0.0,tier4_score:"0/5",avg_seconds:0.0,model:"zhipu-coding/glm-5.2"}
+];
+
+const QUESTIONS = [
+  {s:0,id:"t1-01",tier:1,q:"What is the difference between interface and type in TypeScript?",v:"correct",sc:1.0,t:152.5},
+  {s:0,id:"t1-02",tier:1,q:"What does npm stand for?",v:"correct",sc:1.0,t:0.0},
+  {s:0,id:"t1-03",tier:1,q:"What is a closure in JavaScript?",v:"partial",sc:0.67,t:0.0},
+  {s:0,id:"t1-04",tier:1,q:"What is the difference between let and var?",v:"incorrect",sc:0.0,t:0.0},
+  {s:0,id:"t1-05",tier:1,q:"What is REST API?",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t1-01",tier:1,q:"What is the difference between interface and type in TypeScript?",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t1-02",tier:1,q:"What does npm stand for?",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t1-03",tier:1,q:"What is a closure in JavaScript?",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t1-04",tier:1,q:"What is the difference between let and var?",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t1-05",tier:1,q:"What is REST API?",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t2-01",tier:2,q:"Why does this React component re-render infinitely?",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t2-02",tier:2,q:"Diagnose: Node.js memory leak in production",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t2-03",tier:2,q:"Why is this SQL query slow?",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t2-04",tier:2,q:"Why does this Docker build fail?",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t2-05",tier:2,q:"Why does this CI pipeline break?",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t3-01",tier:3,q:"Write a rate limiter middleware",v:"partial",sc:0.5,t:0.0},
+  {s:1,id:"t3-02",tier:3,q:"Implement an LRU cache",v:"partial",sc:0.33,t:0.0},
+  {s:1,id:"t3-03",tier:3,q:"Write a debounced search input",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t3-04",tier:3,q:"Create a binary tree serializer",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t3-05",tier:3,q:"Implement a pub/sub system",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t4-01",tier:4,q:"What custom rules did we define for the linter?",v:"correct",sc:1.0,t:0.0},
+  {s:1,id:"t4-02",tier:4,q:"What is the project's deployment target?",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t4-03",tier:4,q:"What was the architectural decision for auth?",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t4-04",tier:4,q:"What database migrations are pending?",v:"incorrect",sc:0.0,t:0.0},
+  {s:1,id:"t4-05",tier:4,q:"What testing strategy did we agree on?",v:"incorrect",sc:0.0,t:0.0},
+  {s:8,id:"t1-01",tier:1,q:"What is the difference between interface and type in TypeScript?",v:"correct",sc:1.0,t:5.2},
+  {s:8,id:"t1-02",tier:1,q:"What does npm stand for?",v:"correct",sc:1.0,t:3.1},
+  {s:8,id:"t1-03",tier:1,q:"What is a closure in JavaScript?",v:"correct",sc:1.0,t:4.8},
+  {s:8,id:"t1-04",tier:1,q:"What is the difference between let and var?",v:"correct",sc:1.0,t:3.9},
+  {s:8,id:"t1-05",tier:1,q:"What is REST API?",v:"correct",sc:1.0,t:4.1},
+  {s:8,id:"t2-01",tier:2,q:"Why does this React component re-render infinitely?",v:"incorrect",sc:0.0,t:120.0},
+  {s:8,id:"t2-02",tier:2,q:"Diagnose: Node.js memory leak in production",v:"incorrect",sc:0.0,t:120.0},
+  {s:8,id:"t2-03",tier:2,q:"Why is this SQL query slow?",v:"partial",sc:0.5,t:120.0},
+  {s:8,id:"t2-04",tier:2,q:"Why does this Docker build fail?",v:"partial",sc:0.5,t:120.0},
+  {s:8,id:"t2-05",tier:2,q:"Why does this CI pipeline break?",v:"incorrect",sc:0.0,t:120.0},
+  {s:8,id:"t3-01",tier:3,q:"Write a rate limiter middleware",v:"incorrect",sc:0.0,t:120.0},
+  {s:8,id:"t3-02",tier:3,q:"Implement an LRU cache",v:"incorrect",sc:0.0,t:120.0},
+  {s:8,id:"t3-03",tier:3,q:"Write a debounced search input",v:"correct",sc:1.0,t:85.0},
+  {s:8,id:"t3-04",tier:3,q:"Create a binary tree serializer",v:"correct",sc:1.0,t:95.0},
+  {s:8,id:"t3-05",tier:3,q:"Implement a pub/sub system",v:"correct",sc:1.0,t:90.0},
+  {s:8,id:"t4-01",tier:4,q:"What custom rules did we define for the linter?",v:"incorrect",sc:0.0,t:120.0},
+  {s:8,id:"t4-02",tier:4,q:"What is the project's deployment target?",v:"correct",sc:1.0,t:120.0},
+  {s:8,id:"t4-03",tier:4,q:"What was the architectural decision for auth?",v:"incorrect",sc:0.0,t:120.0},
+  {s:8,id:"t4-04",tier:4,q:"What database migrations are pending?",v:"correct",sc:1.0,t:120.0},
+  {s:8,id:"t4-05",tier:4,q:"What testing strategy did we agree on?",v:"correct",sc:1.0,t:120.0}
+];
+
+// Stat cards
+const cards = document.getElementById('stat-cards');
+const totalQ = INDEX.reduce((a,s)=>a+s.total,0);
+const totalC = INDEX.reduce((a,s)=>a+s.correct,0);
+const totalP = INDEX.reduce((a,s)=>a+s.partial,0);
+const bestSession = INDEX.filter(s=>s.total>=5).reduce((best,s)=>s.pass_rate>best.pass_rate?s:best);
+const models = [...new Set(INDEX.map(s=>s.model))].length;
+
+cards.innerHTML = `
+  <div class="card"><h2>Total Sessions</h2><div class="big-num">${INDEX.length}</div><div class="detail">${models} unique models</div></div>
+  <div class="card"><h2>Total Questions</h2><div class="big-num">${totalQ}</div><div class="detail">${totalC} correct, ${totalP} partial</div></div>
+  <div class="card"><h2>Best Pass Rate</h2><div class="big-num" style="color:var(--green)">${(bestSession.pass_rate*100).toFixed(0)}%</div><div class="detail">Session ${bestSession.session} (${bestSession.model})</div></div>
+  <div class="card"><h2>Tier 4 (Memory)</h2><div class="big-num" style="color:var(--purple)">${bestSession.tier4_score}</div><div class="detail">Best memory recall</div></div>
+`;
+
+// Pass Rate Chart
+const validSessions = INDEX.filter(s=>s.total>=5);
+new Chart(document.getElementById('passRateChart'), {
+  type: 'line',
+  data: {
+    labels: validSessions.map(s=>`S${s.session}`),
+    datasets: [{
+      label: 'Pass Rate',
+      data: validSessions.map(s=>s.pass_rate*100),
+      borderColor: '#58a6ff', backgroundColor: 'rgba(88,166,255,0.1)',
+      fill: true, tension: 0.3, pointRadius: 5
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: { y: { beginAtZero: true, max: 100, ticks: { color: '#8b949e', callback: v=>v+'%' }, grid: { color: '#21262d' } }, x: { ticks: { color: '#8b949e' }, grid: { color: '#21262d' } } },
+    plugins: { legend: { labels: { color: '#e6edf3' } } }
+  }
+});
+
+// Stacked bar
+new Chart(document.getElementById('stackedChart'), {
+  type: 'bar',
+  data: {
+    labels: validSessions.map(s=>`S${s.session}`),
+    datasets: [
+      { label: 'Correct', data: validSessions.map(s=>s.correct), backgroundColor: '#3fb950' },
+      { label: 'Partial', data: validSessions.map(s=>s.partial), backgroundColor: '#d29922' },
+      { label: 'Fail', data: validSessions.map(s=>s.total-s.correct-s.partial), backgroundColor: '#f85149' }
+    ]
+  },
+  options: {
+    responsive: true, scales: { x: { stacked: true, ticks: { color: '#8b949e' }, grid: { color: '#21262d' } }, y: { stacked: true, ticks: { color: '#8b949e' }, grid: { color: '#21262d' } } },
+    plugins: { legend: { labels: { color: '#e6edf3' } } }
+  }
+});
+
+// Model comparison
+const modelData = {};
+INDEX.filter(s=>s.total>=5).forEach(s=>{
+  if(!modelData[s.model]) modelData[s.model]={correct:0,total:0};
+  modelData[s.model].correct+=s.correct;
+  modelData[s.model].total+=s.total;
+});
+const modelNames = Object.keys(modelData);
+new Chart(document.getElementById('modelChart'), {
+  type: 'bar',
+  data: {
+    labels: modelNames.map(m=>m.split('/').pop()),
+    datasets: [{
+      label: 'Overall Pass Rate %',
+      data: modelNames.map(m=>(modelData[m].correct/modelData[m].total*100).toFixed(1)),
+      backgroundColor: ['#58a6ff','#3fb950','#bc8cff','#f0883e','#d29922','#f85149']
+    }]
+  },
+  options: {
+    responsive: true, indexAxis: 'y',
+    scales: { x: { beginAtZero: true, max: 100, ticks: { color: '#8b949e', callback: v=>v+'%' }, grid: { color: '#21262d' } }, y: { ticks: { color: '#e6edf3', font: {size:11} }, grid: { color: '#21262d' } } },
+    plugins: { legend: { display: false } }
+  }
+});
+
+// Tier performance
+const tierData = {};
+validSessions.forEach(s=>{
+  const qs = QUESTIONS.filter(q=>q.s===s.session);
+  qs.forEach(q=>{
+    if(!tierData[q.tier]) tierData[q.tier]={correct:0,partial:0,incorrect:0};
+    tierData[q.tier][q.v]++;
+  });
+});
+const tiers = Object.keys(tierData).map(Number).sort();
+new Chart(document.getElementById('tierChart'), {
+  type: 'bar',
+  data: {
+    labels: tiers.map(t=>`Tier ${t}`),
+    datasets: [
+      { label: 'Correct', data: tiers.map(t=>tierData[t].correct), backgroundColor: '#3fb950' },
+      { label: 'Partial', data: tiers.map(t=>tierData[t].partial), backgroundColor: '#d29922' },
+      { label: 'Fail', data: tiers.map(t=>tierData[t].incorrect), backgroundColor: '#f85149' }
+    ]
+  },
+  options: {
+    responsive: true, scales: { x: { stacked: true, ticks: { color: '#8b949e' }, grid: { color: '#21262d' } }, y: { stacked: true, ticks: { color: '#8b949e' }, grid: { color: '#21262d' } } },
+    plugins: { legend: { labels: { color: '#e6edf3' } } }
+  }
+});
+
+// Memory chart (Tier 4)
+const tier4Sessions = validSessions.filter(s=>s.tier4_score!=="0/0");
+new Chart(document.getElementById('memoryChart'), {
+  type: 'bar',
+  data: {
+    labels: tier4Sessions.map(s=>`S${s.session} (${s.model.split('/').pop()})`),
+    datasets: [{
+      label: 'Tier 4 Score',
+      data: tier4Sessions.map(s=>{const [c,t]=s.tier4_score.split('/').map(Number);return t?c/t*100:0}),
+      backgroundColor: tier4Sessions.map(s=>{const [c,t]=s.tier4_score.split('/').map(Number);return c/t>=0.6?'#3fb950':c/t>=0.3?'#d29922':'#f85149'}),
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: { y: { beginAtZero: true, max: 100, ticks: { color: '#8b949e', callback: v=>v+'%' }, grid: { color: '#21262d' } }, x: { ticks: { color: '#8b949e', font: {size:10} }, grid: { color: '#21262d' } } },
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => tier4Sessions[ctx.dataIndex].tier4_score } } }
+  }
+});
+
+// Session table
+const tbody = document.querySelector('#sessionTable tbody');
+INDEX.forEach(s=>{
+  const fail = s.total - s.correct - s.partial;
+  const date = new Date(s.timestamp).toLocaleDateString();
+  const prClass = s.pass_rate>=0.5?'badge-green':s.pass_rate>0?'badge-yellow':'badge-red';
+  tbody.innerHTML += `<tr>
+    <td><strong>S${s.session}</strong></td>
+    <td><span class="badge badge-blue">${(s.model||'unknown').split('/').pop()}</span></td>
+    <td>${s.total}</td>
+    <td style="color:var(--green)">${s.correct}</td>
+    <td style="color:var(--yellow)">${s.partial}</td>
+    <td style="color:var(--red)">${fail}</td>
+    <td><span class="badge ${prClass}">${(s.pass_rate*100).toFixed(0)}%</span></td>
+    <td><strong>${s.tier4_score}</strong></td>
+    <td>${s.avg_seconds.toFixed(1)}s</td>
+    <td>${date}</td>
+  </tr>`;
+});
+
+// Question table
+const qtbody = document.querySelector('#questionTable tbody');
+QUESTIONS.forEach(q=>{
+  const vClass = q.v==='correct'?'badge-green':q.v==='partial'?'badge-yellow':'badge-red';
+  qtbody.innerHTML += `<tr>
+    <td>S${q.s}</td>
+    <td><code>${q.id}</code></td>
+    <td>T${q.tier}</td>
+    <td>${q.q.substring(0,60)}${q.q.length>60?'...':''}</td>
+    <td><span class="badge ${vClass}">${q.v}</span></td>
+    <td>${(q.sc*100).toFixed(0)}%</td>
+    <td>${q.t.toFixed(1)}</td>
+  </tr>`;
+});
+</script>
+
+</body>
+</html>
