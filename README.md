@@ -1,51 +1,35 @@
-# Aura Benchmark
+# Aura 50-Day Trial
 
-Live benchmark tracking whether Aura improves over sessions.
+Daily, automated, unedited proof: does Aura's Ruby Alternator get
+measurably better over 50 days of real use?
 
-**The claim:** Engineering experience should accumulate instead of disappearing.
-**The proof:** Run the same 20 questions every N sessions. Watch the numbers move.
+## 📊 Live Dashboard
+**[View live charts →](https://dusancar-sudo.github.io/aura-50-day-trial/)**
 
-## Questions
-- **Tier 1** (5): Factual — should answer instantly, 1 turn, no tools
-- **Tier 2** (5): Reasoning — diagnosis, 1-2 turns
-- **Tier 3** (5): Code generation — must produce working code, actually compiled/run/syntax-checked by scorer.py
-- **Tier 4** (5): Memory — only Aura with accumulated sessions can answer these
+Pass rate trend, verification catch rate, and Ruby competence by category —
+updated automatically every day. No download needed.
 
 ## Setup
-```bash
-mkdir -p /mnt/bigdata/aura/projects/aura-benchmark
-cd /mnt/bigdata/aura/projects/aura-benchmark
-# copy this folder's contents in
-git init
-git add .
-git commit -m "Initial benchmark project structure"
-git remote add origin https://github.com/DusanCar-sudo/aura-benchmark.git
-git push -u origin master
-```
-Enable GitHub Pages: Settings → Pages → Source: master branch → /dashboard folder.
+- **Large model (cloud):** GLM-5.2 (zhipu-coding/glm-5.2) — Zhipu AI, 1M context
+- **Local model (Ruby Alternator):** Granite 4.1 3B — IBM, running via Ollama on CPU, 3.4B parameters
+- **Ruby Alternator:** local model attempts every task first, gets verified by the large model, escalates on failure or low competence
 
-## Run
-```bash
-./run_benchmark.sh          # auto-assigns next session number
-./run_benchmark.sh 3        # explicit session number
-python3 runner/run.py --session 2 --tier 4   # single tier
-python3 runner/run.py --session 2 --question t4-01   # single question
-```
+## What is this?
+Every day a systemd timer runs the full Aura benchmark suite (115 questions,
+tiers 1-19) against the current state of Ruby Alternator's accumulated
+episode/competence history, and commits the raw result here — good day or
+bad day, nothing is cherry-picked.
 
-## Baseline (session 0 — no memory)
-```bash
-mv ~/.aura/memory ~/.aura/memory.bak
-python3 runner/run.py --session 0
-mv ~/.aura/memory.bak ~/.aura/memory
-```
-The gap between session 0 and session 1+ is the proof.
+See [CHARTER.md](CHARTER.md) for the full architecture and success metrics.
 
-## Verify before first real run
-`runner/run.py` calls `aura --auto "<question>"` and reads stdout. Confirm that flag
-actually exists on your current Aura CLI — it was assumed, not verified against the
-real interface.
+## Case Studies
+Real incidents — infrastructure failures, bugs found, fixes applied:
+- [2026-07-17 — Ollama port collision: why sessions 002 and 008 scored near zero](case-studies/2026-07-17-ollama-port-collision.md)
+- [2026-07-17 — Catching Ruby fabricating a function that doesn't exist](case-studies/2026-07-17-fabrication-catch.md)
 
-## Results
-All results are public and unedited — `results/session_NNN.json` + `results/index.json`
-(read by the dashboard). Wins and failures both posted. No cherry-picking, no skipped
-questions, no mid-run question edits.
+## Structure
+- `logs/` — one dated entry per day
+- `results/` — raw benchmark JSON + session notes per day
+- `case-studies/` — real incidents: what broke, why, how it was fixed
+- `scripts/daily_run.sh` — the automation itself
+- `index.html` — the live dashboard (auto-regenerated daily)

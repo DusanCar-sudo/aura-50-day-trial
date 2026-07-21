@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura — 50-Day Trial Dashboard</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  :root {
+    --bg:      #0d1117;
+    --surface: #161b22;
+    --canvas:  #1c2128;
+    --card:    #21262d;
+    --border:  #30363d;
+    --border2: #484f58;
+    --primary: #cc785c;
+    --primary2: #e8956e;
+    --text:    #e6edf3;
+    --muted:   #8b949e;
+    --dim:     #6e7681;
+    --success: #3fb950;
+    --error:   #f85149;
+    --amber:   #d29922;
+    --blue:    #58a6ff;
+    --purple:  #bc8cff;
+    --teal:    #39d353;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: ui-monospace, 'JetBrains Mono', 'Fira Code', monospace; font-size: 15px; min-height: 100vh; }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .logo {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--primary) 0%, #7a3a22 100%);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 900; color: #fff; flex-shrink: 0;
+  }
+  header h1 { color: var(--primary); font-size: 14px; font-weight: 700; letter-spacing: 0.03em; }
+  .header-sub { color: var(--muted); font-size: 11px; }
+  .header-right { display: flex; gap: 16px; align-items: center; }
+  .live-badge {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 10px; color: var(--success);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .live-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--success);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.85); } }
+  .updated { color: var(--dim); font-size: 10px; }
+
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex; flex-wrap: wrap;
+    padding: 0 8px;
+  }
+  nav button {
+    background: none; border: none; border-bottom: 2px solid transparent;
+    color: var(--muted); cursor: pointer; font: inherit; font-size: 12px;
+    padding: 10px 14px; transition: color .12s;
+  }
+  nav button:hover { color: var(--text); }
+  nav button.active { border-bottom-color: var(--primary); color: var(--primary); }
+
+  .panel { display: none; padding: 20px; height: calc(100vh - 87px); overflow: auto; }
+  .panel.active { display: flex; flex-direction: column; gap: 14px; }
+
+  /* Stats row */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px 18px;
+    transition: border-color .15s;
+  }
+  .stat-card:hover { border-color: var(--border2); }
+  .stat-card .num { color: var(--primary); font-size: 28px; font-weight: 700; line-height: 1; }
+  .stat-card .lbl { color: var(--muted); font-size: 10px; margin-top: 5px; text-transform: uppercase; letter-spacing: .08em; }
+  .stat-card .trend { font-size: 10px; margin-top: 4px; }
+  .trend-up { color: var(--success); }
+  .trend-warn { color: var(--amber); }
+
+  /* Chart panels */
+  .chart-wrap {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .chart-title {
+    color: var(--muted); font-size: 10px;
+    text-transform: uppercase; letter-spacing: .1em;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .chart-title span { color: var(--dim); font-size: 9px; }
+  svg.chart { width: 100%; display: block; }
+
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .chart-full { grid-column: 1 / -1; }
+
+  /* Session table */
+  .session-table { border-collapse: collapse; width: 100%; }
+  .session-table th {
+    background: var(--canvas); border-bottom: 2px solid var(--border);
+    color: var(--muted); font-size: 10px; font-weight: 700;
+    letter-spacing: .08em; padding: 9px 12px;
+    text-align: left; text-transform: uppercase;
+  }
+  .session-table td {
+    border-bottom: 1px solid var(--border);
+    color: var(--muted); font-size: 11px; padding: 8px 12px;
+  }
+  .session-table td:first-child { color: var(--primary); font-weight: 600; }
+  .session-table tr:hover td { background: var(--canvas); }
+  .pill {
+    display: inline-block; border-radius: 4px; font-size: 10px;
+    font-weight: 700; padding: 2px 7px; letter-spacing: .03em;
+  }
+  .pill-green { background: #1f3a2a; color: #3fb950; border: 1px solid #3fb95040; }
+  .pill-amber { background: #332a1a; color: #d29922; border: 1px solid #d2992240; }
+  .pill-red   { background: #3a1f1f; color: #f85149; border: 1px solid #f8514940; }
+  .pill-blue  { background: #1a2233; color: #58a6ff; border: 1px solid #58a6ff40; }
+
+  /* Ruby heatmap */
+  .heatmap-wrap { display: flex; flex-direction: column; gap: 4px; }
+  .heatmap-row { display: flex; align-items: center; gap: 6px; }
+  .heatmap-label { color: var(--muted); font-size: 10px; width: 100px; flex-shrink: 0; text-align: right; }
+  .heatmap-cells { display: flex; gap: 3px; }
+  .heatmap-cell {
+    width: 16px; height: 16px; border-radius: 2px;
+    cursor: pointer; transition: transform .1s;
+  }
+  .heatmap-cell:hover { transform: scale(1.3); }
+  .heatmap-val { color: var(--muted); font-size: 10px; margin-left: 6px; }
+
+  /* Competence bars */
+  .comp-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .comp-label { color: var(--muted); font-size: 11px; width: 120px; flex-shrink: 0; }
+  .comp-bar-bg { flex: 1; background: var(--canvas); border-radius: 3px; height: 8px; overflow: hidden; }
+  .comp-bar { height: 100%; border-radius: 3px; transition: width 1s ease; }
+  .comp-val { color: var(--text); font-size: 10px; width: 36px; text-align: right; flex-shrink: 0; }
+
+  /* Timeline */
+  .timeline-wrap { flex: 1; overflow: auto; }
+  .tl-item {
+    display: flex; gap: 14px; padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .tl-item:last-child { border-bottom: none; }
+  .tl-session { color: var(--primary); font-size: 11px; font-weight: 700; width: 32px; flex-shrink: 0; }
+  .tl-date { color: var(--dim); font-size: 10px; width: 80px; flex-shrink: 0; margin-top: 1px; }
+  .tl-content { flex: 1; }
+  .tl-model { color: var(--blue); font-size: 10px; }
+  .tl-score { margin-top: 3px; }
+  .tl-bar-bg { background: var(--canvas); border-radius: 2px; height: 6px; margin-top: 4px; overflow: hidden; width: 100%; }
+  .tl-bar { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  .tooltip-box {
+    position: fixed; background: #161b22f0; border: 1px solid var(--border2);
+    border-radius: 7px; color: var(--text); font-size: 11px;
+    max-width: 260px; padding: 8px 12px; pointer-events: none;
+    z-index: 999; line-height: 1.7; box-shadow: 0 4px 20px #0008;
+    display: none;
+  }
+  .tooltip-box strong { color: var(--primary); }
+
+  @media (max-width: 700px) {
+    .chart-grid { grid-template-columns: 1fr; }
+    .chart-full { grid-column: 1; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="logo">A</div>
+    <div>
+      <h1>Aura — 50-Day Trial</h1>
+      <div class="header-sub">Ruby Alternator benchmark · unedited · public</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div>live</div>
+    <div class="updated" id="updated-at"></div>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showPanel('overview',this)">Overview</button>
+  <button onclick="showPanel('sessions',this)">Sessions</button>
+  <button onclick="showPanel('ruby',this)">Ruby Alternator</button>
+  <button onclick="showPanel('tiers',this)">Tier Breakdown</button>
+  <button onclick="showPanel('timeline',this)">Timeline</button>
+</nav>
+
+<div id="overview" class="panel active"></div>
+<div id="sessions" class="panel"></div>
+<div id="ruby" class="panel"></div>
+<div id="tiers" class="panel"></div>
+<div id="timeline" class="panel"></div>
+
+<div class="tooltip-box" id="tip"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+// DATA — injected by generate_dashboard.py
+// ══════════════════════════════════════════════════════════════════
+const SESSIONS = __SESSIONS_JSON__;
+const RUBY_SNAPSHOTS = __RUBY_SNAPSHOTS_JSON__;
+
+const TIER_LABELS = {
+  1:'Fundamentals', 2:'Diagnostics', 3:'Code Gen',
+  4:'Memory', 5:'Ruby Alternator', 6:'Source Code',
+  7:'Safety', 8:'Synthesis'
+};
+
+// ══════════════════════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════════════════════
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function scoreColor(v) { return v >= 75 ? 'var(--success)' : v >= 50 ? 'var(--amber)' : 'var(--error)'; }
+function scorePill(v) {
+  const cls = v >= 75 ? 'pill-green' : v >= 50 ? 'pill-amber' : 'pill-red';
+  return `<span class="pill ${cls}">${v}%</span>`;
+}
+
+const tip = document.getElementById('tip');
+function showTip(html, ev) { tip.innerHTML = html; tip.style.display = 'block'; moveTip(ev); }
+function moveTip(ev) {
+  const x = ev.clientX + 14, y = ev.clientY + 14;
+  tip.style.left = Math.min(x, window.innerWidth - 280) + 'px';
+  tip.style.top = Math.min(y, window.innerHeight - 160) + 'px';
+}
+function hideTip() { tip.style.display = 'none'; }
+
+// ══════════════════════════════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════════════════════════════
+function showPanel(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (!window._inited) window._inited = {};
+  if (!window._inited[id]) { window._inited[id] = true; BUILDERS[id](); }
+}
+
+// ══════════════════════════════════════════════════════════════════
+// OVERVIEW
+// ══════════════════════════════════════════════════════════════════
+function buildOverview() {
+  const el = document.getElementById('overview');
+  const latest = SESSIONS[SESSIONS.length - 1] || {};
+  const latestRuby = RUBY_SNAPSHOTS[RUBY_SNAPSHOTS.length - 1] || {};
+  const ep = latestRuby.episodeStats || {};
+  const catchRate = latestRuby.catchRate != null ? (latestRuby.catchRate * 100).toFixed(1) : '—';
+  const rubyTotal = (ep.rubySuccesses || 0) + (ep.rubyFailures || 0);
+  const rubySuccessRate = rubyTotal > 0 ? ((ep.rubySuccesses / rubyTotal) * 100).toFixed(0) : '—';
+
+  el.innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="num">${SESSIONS.length}</div>
+        <div class="lbl">Sessions run</div>
+        <div class="trend trend-up">50-day trial active</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" style="color:${scoreColor(latest.score || 0)}">${latest.score || 0}%</div>
+        <div class="lbl">Latest score</div>
+        <div class="trend">${latest.correct || 0}/${latest.total || 0} correct</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">${ep.total || '—'}</div>
+        <div class="lbl">Episodes captured</div>
+        <div class="trend trend-up">${ep.rubySuccesses || 0} Ruby successes</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" style="color:var(--amber)">${catchRate}%</div>
+        <div class="lbl">Catch rate</div>
+        <div class="trend trend-warn">↓ lower = Ruby improving</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" style="color:var(--blue)">${rubySuccessRate}%</div>
+        <div class="lbl">Ruby success rate</div>
+        <div class="trend">${rubyTotal} attempts</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" style="color:${ep.readyForFineTune ? 'var(--success)' : 'var(--dim)'}">${ep.readyForFineTune ? 'YES' : 'NO'}</div>
+        <div class="lbl">Ready to fine-tune</div>
+        <div class="trend">${ep.rubyFailures || 0} labeled failures</div>
+      </div>
+    </div>
+
+    <div class="chart-full chart-wrap">
+      <div class="chart-title">Benchmark score trend <span>weighted: correct + 0.5×partial</span></div>
+      <svg class="chart" id="trend-svg" height="220"></svg>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-wrap">
+        <div class="chart-title">Score by tier — latest session <span>S${latest.session || '—'}</span></div>
+        <svg class="chart" id="tier-svg" height="220"></svg>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Verification catch rate over time <span>↓ = improving</span></div>
+        <svg class="chart" id="catch-svg" height="220"></svg>
+      </div>
+    </div>
+  `;
+
+  setTimeout(() => {
+    drawTrend();
+    drawTierBar(latest);
+    drawCatchRate();
+  }, 50);
+}
+
+function drawTrend() {
+  const svg = d3.select('#trend-svg');
+  const W = svg.node().getBoundingClientRect().width;
+  const H = 220;
+  const m = { top: 20, right: 20, bottom: 30, left: 40 };
+  const w = W - m.left - m.right, h = H - m.top - m.bottom;
+
+  svg.selectAll('*').remove();
+  const g = svg.append('g').attr('transform', `translate(${m.left},${m.top})`);
+
+  const x = d3.scalePoint().domain(SESSIONS.map(s => `S${s.session}`)).range([0, w]).padding(0.3);
+  const y = d3.scaleLinear().domain([0, 100]).range([h, 0]);
+
+  // Grid
+  g.append('g').attr('class', 'grid')
+    .call(d3.axisLeft(y).ticks(5).tickSize(-w).tickFormat(''))
+    .call(g => g.select('.domain').remove())
+    .call(g => g.selectAll('line').attr('stroke', 'var(--border)').attr('stroke-dasharray', '3,3'));
+
+  // Area
+  const area = d3.area()
+    .x(d => x(`S${d.session}`))
+    .y0(h).y1(d => y(d.score))
+    .curve(d3.curveCatmullRom.alpha(0.5));
+
+  g.append('path').datum(SESSIONS)
+    .attr('fill', 'rgba(204,120,92,0.08)')
+    .attr('d', area);
+
+  // Line
+  const line = d3.line()
+    .x(d => x(`S${d.session}`))
+    .y(d => y(d.score))
+    .curve(d3.curveCatmullRom.alpha(0.5));
+
+  g.append('path').datum(SESSIONS)
+    .attr('fill', 'none')
+    .attr('stroke', 'var(--primary)')
+    .attr('stroke-width', 2.5)
+    .attr('d', line);
+
+  // Target line at 85%
+  g.append('line')
+    .attr('x1', 0).attr('x2', w)
+    .attr('y1', y(85)).attr('y2', y(85))
+    .attr('stroke', 'var(--success)').attr('stroke-width', 1)
+    .attr('stroke-dasharray', '4,3').attr('opacity', 0.5);
+  g.append('text').attr('x', w - 4).attr('y', y(85) - 4)
+    .attr('text-anchor', 'end').attr('font-size', 9).attr('fill', 'var(--success)').attr('opacity', 0.7)
+    .text('target 85%');
+
+  // Dots
+  g.selectAll('circle').data(SESSIONS).join('circle')
+    .attr('cx', d => x(`S${d.session}`))
+    .attr('cy', d => y(d.score))
+    .attr('r', 5)
+    .attr('fill', d => scoreColor(d.score))
+    .attr('stroke', 'var(--bg)').attr('stroke-width', 2)
+    .on('mouseover', (ev, d) => showTip(`<strong>Session ${d.session}</strong><br>Score: ${d.score}%<br>Correct: ${d.correct}/${d.total}<br>Model: ${d.model.split('/').pop()}`, ev))
+    .on('mousemove', moveTip)
+    .on('mouseout', hideTip);
+
+  // Axes
+  g.append('g').attr('transform', `translate(0,${h})`)
+    .call(d3.axisBottom(x).tickSize(3))
+    .call(g => g.select('.domain').attr('stroke', 'var(--border)'))
+    .call(g => g.selectAll('text').attr('fill', 'var(--muted)').attr('font-size', 10));
+  g.append('g')
+    .call(d3.axisLeft(y).ticks(5).tickFormat(d => d + '%'))
+    .call(g => g.select('.domain').remove())
+    .call(g => g.selectAll('text').attr('fill', 'var(--muted)').attr('font-size', 10));
+}
+
+function drawTierBar(session) {
+  if (!session || !session.tiers) return;
+  const svg = d3.select('#tier-svg');
+  const W = svg.node().getBoundingClientRect().width;
+  const H = 220;
+  const m = { top: 20, right: 20, bottom: 60, left: 40 };
+  const w = W - m.left - m.right, h = H - m.top - m.bottom;
+
+  svg.selectAll('*').remove();
+  const g = svg.append('g').attr('transform', `translate(${m.left},${m.top})`);
+
+  const tiers = Object.entries(session.tiers).map(([t, d]) => ({
+    tier: +t,
+    label: TIER_LABELS[+t] || `T${t}`,
+    score: d.total > 0 ? Math.round(100 * (d.correct + d.partial * 0.5) / d.total) : 0,
+    correct: d.correct, partial: d.partial, total: d.total,
+  })).sort((a, b) => a.tier - b.tier);
+
+  const x = d3.scaleBand().domain(tiers.map(t => t.label)).range([0, w]).padding(0.25);
+  const y = d3.scaleLinear().domain([0, 100]).range([h, 0]);
+
+  g.append('g').attr('class', 'grid')
+    .call(d3.axisLeft(y).ticks(4).tickSize(-w).tickFormat(''))
+    .call(g => g.select('.domain').remove())
+    .call(g => g.selectAll('line').attr('stroke', 'var(--border)').attr('stroke-dasharray', '3,3'));
+
+  g.selectAll('rect').data(tiers).join('rect')
+    .attr('x', d => x(d.label))
+    .attr('width', x.bandwidth())
+    .attr('y', d => y(d.score))
+    .attr('height', d => h - y(d.score))
+    .attr('fill', d => scoreColor(d.score))
+    .attr('opacity', 0.75)
+    .attr('rx', 3)
+    .on('mouseover', (ev, d) => showTip(`<strong>${d.label}</strong><br>Score: ${d.score}%<br>Correct: ${d.correct} / Partial: ${d.partial} / Total: ${d.total}`, ev))
+    .on('mousemove', moveTip)
+    .on('mouseout', hideTip);
+
+  // Score labels on bars
+  g.selectAll('text.bar-val').data(tiers).join('text')
+    .attr('class', 'bar-val')
+    .attr('x', d => x(d.label) + x.bandwidth() / 2)
+    .attr('y', d => y(d.score) - 4)
+    .attr('text-anchor', 'middle')
+    .attr('font-size', 9)
+    .attr('fill', 'var(--muted)')
+    .text(d => d.score + '%');
+
+  g.append('g').attr('transform', `translate(0,${h})`)
+    .call(d3.axisBottom(x).tickSize(3))
+    .call(g => g.select('.domain').attr('stroke', 'var(--border)'))
+    .call(g => g.selectAll('text').attr('fill', 'var(--muted)').attr('font-size', 9)
+      .attr('transform', 'rotate(-35)').attr('text-anchor', 'end').attr('dy', '0.5em'));
+  g.append('g')
+    .call(d3.axisLeft(y).ticks(4).tickFormat(d => d + '%'))
+    .call(g => g.select('.domain').remove())
+    .call(g => g.selectAll('text').attr('fill', 'var(--muted)').attr('font-size', 9));
+}
+
+function drawCatchRate() {
+  const data = RUBY_SNAPSHOTS.filter(s => s.catchRate != null);
+  if (!data.length) {
+    d3.select('#catch-svg').append('text')
+      .attr('x', '50%').attr('y', '50%').attr('text-anchor', 'middle')
+      .attr('fill', 'var(--dim)').attr('font-size', 11)
+      .text('No catch rate data yet');
+    return;
+  }
+
+  const svg = d3.select('#catch-svg');
+  const W = svg.node().getBoundingClientRect().width;
+  const H = 220;
+  const m = { top: 20, right: 20, bottom: 30, left: 45 };
+  const w = W - m.left - m.right, h = H - m.top - m.bottom;
+
+  svg.selectAll('*').remove();
+  const g = svg.append('g').attr('transform', `translate(${m.left},${m.top})`);
+
+  const x = d3.scalePoint().domain(data.map(s => s.date)).range([0, w]).padding(0.3);
+  const y = d3.scaleLinear().domain([0, 60]).range([h, 0]);
+
+  g.append('g').attr('class', 'grid')
+    .call(d3.axisLeft(y).ticks(4).tickSize(-w).tickFormat(''))
+    .call(g => g.select('.domain').remove())
+    .call(g => g.selectAll('line').attr('stroke', 'var(--border)').attr('stroke-dasharray', '3,3'));
+
+  const area = d3.area()
+    .x(d => x(d.date)).y0(h).y1(d => y(d.catchRate * 100))
+    .curve(d3.curveCatmullRom.alpha(0.5));
+  g.append('path').datum(data).attr('fill', 'rgba(181,149,74,0.1)').attr('d', area);
+
+  const line = d3.line()
+    .x(d => x(d.date)).y(d => y(d.catchRate * 100))
+    .curve(d3.curveCatmullRom.alpha(0.5));
+  g.append('path').datum(data)
+    .attr('fill', 'none').attr('stroke', 'var(--amber)')
+    .attr('stroke-width', 2.5).attr('d', line);
+
+  g.selectAll('circle').data(data).join('circle')
+    .attr('cx', d => x(d.date)).attr('cy', d => y(d.catchRate * 100))
+    .attr('r', 5).attr('fill', 'var(--amber)')
+    .attr('stroke', 'var(--bg)').attr('stroke-width', 2)
+    .on('mouseover', (ev, d) => showTip(`<strong>${d.date}</strong><br>Catch rate: ${(d.catchRate*100).toFixed(1)}%<br><span style="color:var(--dim)">↓ lower = Ruby improving</span>`, ev))
+    .on('mousemove', moveTip).on('mouseout', hideTip);
+
+  g.append('g').attr('transform', `translate(0,${h})`)
+    .call(d3.axisBottom(x).tickSize(3))
+    .call(g => g.select('.domain').attr('stroke', 'var(--border)'))
+    .call(g => g.selectAll('text').attr('fill', 'var(--muted)').attr('font-size', 10));
+  g.append('g')
+    .call(d3.axisLeft(y).ticks(4).tickFormat(d => d + '%'))
+    .call(g => g.select('.domain').remove())
+    .call(g => g.selectAll('text').attr('fill', 'var(--muted)').attr('font-size', 10));
+}
+
+// ══════════════════════════════════════════════════════════════════
+// SESSIONS
+// ══════════════════════════════════════════════════════════════════
+function buildSessions() {
+  const el = document.getElementById('sessions');
+  const rows = SESSIONS.map(s => `
+    <tr>
+      <td>S${s.session}</td>
+      <td>${s.timestamp ? s.timestamp.slice(0,10) : '—'}</td>
+      <td style="color:var(--blue);font-size:10px">${esc(s.model.split('/').pop())}</td>
+      <td>${scorePill(s.score)}</td>
+      <td style="color:var(--text)">${s.correct}</td>
+      <td style="color:var(--amber)">${s.partial}</td>
+      <td style="color:var(--error)">${s.incorrect || (s.total - s.correct - s.partial)}</td>
+      <td>${s.total}</td>
+      <td><span class="pill ${s.mode === 'tui_real_session' ? 'pill-blue' : 'pill-amber'}">${s.mode === 'tui_real_session' ? 'TUI' : 'headless'}</span></td>
+    </tr>
+  `).join('');
+
+  el.innerHTML = `
+    <div class="chart-wrap">
+      <div class="chart-title">All benchmark sessions</div>
+      <table class="session-table">
+        <thead>
+          <tr>
+            <th>#</th><th>Date</th><th>Model</th><th>Score</th>
+            <th>Correct</th><th>Partial</th><th>Wrong</th><th>Total Q</th><th>Mode</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// RUBY ALTERNATOR
+// ══════════════════════════════════════════════════════════════════
+function buildRuby() {
+  const el = document.getElementById('ruby');
+  const latest = RUBY_SNAPSHOTS[RUBY_SNAPSHOTS.length - 1] || {};
+  const ep = latest.episodeStats || {};
+  const comp = latest.competence || [];
+  const rubyTotal = (ep.rubySuccesses || 0) + (ep.rubyFailures || 0);
+  const catchRate = latest.catchRate != null ? (latest.catchRate * 100).toFixed(1) : '—';
+
+  const compRows = comp.map(c => {
+    const pct = Math.round(c.successRate * 100);
+    const col = pct >= 70 ? 'var(--success)' : pct >= 50 ? 'var(--amber)' : 'var(--error)';
+    return `
+      <div class="comp-row">
+        <div class="comp-label">${esc(c.category)}</div>
+        <div class="comp-bar-bg">
+          <div class="comp-bar" style="width:${pct}%;background:${col}"></div>
+        </div>
+        <div class="comp-val" style="color:${col}">${pct}%</div>
+        <div style="color:var(--dim);font-size:10px;margin-left:4px">${c.count} episodes</div>
+      </div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="num">${ep.total || '—'}</div>
+        <div class="lbl">Total episodes</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" style="color:var(--success)">${ep.rubySuccesses || '—'}</div>
+        <div class="lbl">Ruby successes</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" style="color:var(--error)">${ep.rubyFailures || '—'}</div>
+        <div class="lbl">Caught & escalated</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" style="color:var(--amber)">${catchRate}%</div>
+        <div class="lbl">Catch rate</div>
+        <div class="trend trend-warn">lower = Ruby improving</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" style="color:var(--blue)">${rubyTotal > 0 ? ((ep.rubySuccesses/rubyTotal)*100).toFixed(0) : '—'}%</div>
+        <div class="lbl">Ruby success rate</div>
+        <div class="trend">${rubyTotal} attempts total</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" style="color:${ep.readyForFineTune ? 'var(--success)' : 'var(--dim)'}">${ep.readyForFineTune ? '✓' : '✗'}</div>
+        <div class="lbl">Fine-tune ready</div>
+        <div class="trend">threshold: 20 failures</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Ruby competence by task category <span>threshold: 70%</span></div>
+      ${comp.length ? `<div class="heatmap-wrap" style="padding: 8px 0">${compRows}</div>` : '<div style="color:var(--dim);padding:20px;font-size:11px">No competence data yet</div>'}
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Catch rate over time <span>verification gate effectiveness</span></div>
+      <svg class="chart" id="ruby-catch-svg" height="200"></svg>
+    </div>
+  `;
+
+  setTimeout(() => {
+    const svg = d3.select('#ruby-catch-svg');
+    const W = svg.node().getBoundingClientRect().width;
+    if (W < 10) return;
+    const H = 200, m = {top:16,right:20,bottom:28,left:42};
+    const w = W - m.left - m.right, h = H - m.top - m.bottom;
+    svg.selectAll('*').remove();
+    const g = svg.append('g').attr('transform', `translate(${m.left},${m.top})`);
+    const data = RUBY_SNAPSHOTS.filter(s => s.catchRate != null);
+    if (!data.length) { g.append('text').attr('x', w/2).attr('y', h/2).attr('text-anchor','middle').attr('fill','var(--dim)').attr('font-size',11).text('No data yet'); return; }
+    const x = d3.scalePoint().domain(data.map(s => s.date)).range([0, w]).padding(0.3);
+    const y = d3.scaleLinear().domain([0, 60]).range([h, 0]);
+    g.append('g').call(d3.axisLeft(y).ticks(4).tickSize(-w).tickFormat(''))
+      .call(g2 => g2.select('.domain').remove())
+      .call(g2 => g2.selectAll('line').attr('stroke','var(--border)').attr('stroke-dasharray','3,3'));
+    g.append('path').datum(data).attr('fill','rgba(181,149,74,0.1)')
+      .attr('d', d3.area().x(d => x(d.date)).y0(h).y1(d => y(d.catchRate*100)).curve(d3.curveCatmullRom));
+    g.append('path').datum(data).attr('fill','none').attr('stroke','var(--amber)').attr('stroke-width',2.5)
+      .attr('d', d3.line().x(d => x(d.date)).y(d => y(d.catchRate*100)).curve(d3.curveCatmullRom));
+    g.selectAll('circle').data(data).join('circle')
+      .attr('cx', d => x(d.date)).attr('cy', d => y(d.catchRate*100))
+      .attr('r', 5).attr('fill','var(--amber)').attr('stroke','var(--bg)').attr('stroke-width',2);
+    g.append('g').attr('transform',`translate(0,${h})`).call(d3.axisBottom(x).tickSize(3))
+      .call(g2 => g2.select('.domain').attr('stroke','var(--border)'))
+      .call(g2 => g2.selectAll('text').attr('fill','var(--muted)').attr('font-size',10));
+    g.append('g').call(d3.axisLeft(y).ticks(4).tickFormat(d => d+'%'))
+      .call(g2 => g2.select('.domain').remove())
+      .call(g2 => g2.selectAll('text').attr('fill','var(--muted)').attr('font-size',10));
+  }, 50);
+}
+
+// ══════════════════════════════════════════════════════════════════
+// TIERS
+// ══════════════════════════════════════════════════════════════════
+function buildTiers() {
+  const el = document.getElementById('tiers');
+  const allTiers = new Set();
+  SESSIONS.forEach(s => Object.keys(s.tiers || {}).forEach(t => allTiers.add(+t)));
+  const tiers = [...allTiers].sort((a,b) => a-b);
+
+  // Build heatmap data: sessions × tiers
+  const heatCells = tiers.map(t => ({
+    tier: t,
+    label: TIER_LABELS[t] || `T${t}`,
+    sessions: SESSIONS.map(s => {
+      const td = (s.tiers || {})[t];
+      if (!td) return null;
+      return Math.round(100 * (td.correct + td.partial * 0.5) / td.total);
+    })
+  }));
+
+  const heatRows = heatCells.map(row => {
+    const cells = row.sessions.map((v, i) => {
+      if (v === null) return `<div class="heatmap-cell" style="background:var(--canvas)" title="S${SESSIONS[i]?.session}: no data"></div>`;
+      const alpha = v / 100;
+      const col = v >= 75 ? `rgba(63,185,80,${0.2 + alpha * 0.6})` :
+                  v >= 50 ? `rgba(210,153,34,${0.2 + alpha * 0.6})` :
+                            `rgba(248,81,73,${0.2 + alpha * 0.6})`;
+      return `<div class="heatmap-cell" style="background:${col}"
+        onmouseover="showTip('<strong>${row.label}</strong><br>S${SESSIONS[i]?.session}: ${v}%', event)"
+        onmousemove="moveTip(event)" onmouseout="hideTip()"></div>`;
+    }).join('');
+    const latest = row.sessions.filter(v => v !== null).pop();
+    return `
+      <div class="heatmap-row">
+        <div class="heatmap-label">${esc(row.label)}</div>
+        <div class="heatmap-cells">${cells}</div>
+        <div class="heatmap-val">${latest !== undefined && latest !== null ? latest + '%' : '—'}</div>
+      </div>`;
+  }).join('');
+
+  const sessionLabels = SESSIONS.map(s => `<div style="width:16px;text-align:center;font-size:9px;color:var(--dim)">S${s.session}</div>`).join('');
+
+  el.innerHTML = `
+    <div class="chart-wrap">
+      <div class="chart-title">Score heatmap — tier × session <span>green ≥75% · amber ≥50% · red &lt;50%</span></div>
+      <div style="display:flex;gap:6px;margin-left:106px;margin-bottom:2px">${sessionLabels}</div>
+      <div class="heatmap-wrap">${heatRows}</div>
+    </div>
+    <div class="chart-wrap chart-full">
+      <div class="chart-title">Tier scores — latest session</div>
+      <svg class="chart" id="tier-detail-svg" height="240"></svg>
+    </div>
+  `;
+
+  setTimeout(() => {
+    const latest = SESSIONS[SESSIONS.length - 1];
+    if (latest) drawTierBar2(latest);
+  }, 50);
+}
+
+function drawTierBar2(session) {
+  const svg = d3.select('#tier-detail-svg');
+  const W = svg.node().getBoundingClientRect().width;
+  const H = 240, m = {top:20,right:20,bottom:70,left:40};
+  const w = W - m.left - m.right, h = H - m.top - m.bottom;
+  svg.selectAll('*').remove();
+  const g = svg.append('g').attr('transform', `translate(${m.left},${m.top})`);
+  const tiers = Object.entries(session.tiers || {}).map(([t, d]) => ({
+    tier:+t, label: TIER_LABELS[+t] || `T${t}`,
+    score: d.total > 0 ? Math.round(100*(d.correct+d.partial*0.5)/d.total) : 0,
+    correct:d.correct, partial:d.partial, total:d.total
+  })).sort((a,b) => a.tier - b.tier);
+  const x = d3.scaleBand().domain(tiers.map(t=>t.label)).range([0,w]).padding(0.3);
+  const y = d3.scaleLinear().domain([0,100]).range([h,0]);
+  g.append('g').call(d3.axisLeft(y).ticks(5).tickSize(-w).tickFormat(''))
+    .call(g2 => g2.select('.domain').remove())
+    .call(g2 => g2.selectAll('line').attr('stroke','var(--border)').attr('stroke-dasharray','3,3'));
+  // Stacked: correct / partial / incorrect
+  tiers.forEach(d => {
+    const total = d.total || 1;
+    const cH = h - y(d.correct/total*100);
+    const pH = h - y(d.partial/total*100);
+    const iH = h - y((total-d.correct-d.partial)/total*100);
+    let yPos = y(100 * d.correct/total);
+    g.append('rect').attr('x',x(d.label)).attr('width',x.bandwidth()).attr('y',yPos).attr('height',cH).attr('fill','var(--success)').attr('opacity',0.7).attr('rx',3);
+    yPos = y(100*(d.correct+d.partial)/total);
+    g.append('rect').attr('x',x(d.label)).attr('width',x.bandwidth()).attr('y',yPos).attr('height',pH).attr('fill','var(--amber)').attr('opacity',0.7);
+    yPos = y(100*(d.correct+d.partial+(total-d.correct-d.partial))/total);
+    g.append('rect').attr('x',x(d.label)).attr('width',x.bandwidth()).attr('y',yPos).attr('height',iH).attr('fill','var(--error)').attr('opacity',0.4);
+  });
+  g.selectAll('text.lbl2').data(tiers).join('text').attr('class','lbl2')
+    .attr('x',d=>x(d.label)+x.bandwidth()/2).attr('y',d=>y(d.score)-4)
+    .attr('text-anchor','middle').attr('font-size',9).attr('fill','var(--text)')
+    .text(d=>d.score+'%');
+  g.append('g').attr('transform',`translate(0,${h})`)
+    .call(d3.axisBottom(x).tickSize(3))
+    .call(g2=>g2.select('.domain').attr('stroke','var(--border)'))
+    .call(g2=>g2.selectAll('text').attr('fill','var(--muted)').attr('font-size',9).attr('transform','rotate(-30)').attr('text-anchor','end'));
+  g.append('g').call(d3.axisLeft(y).ticks(5).tickFormat(d=>d+'%'))
+    .call(g2=>g2.select('.domain').remove())
+    .call(g2=>g2.selectAll('text').attr('fill','var(--muted)').attr('font-size',9));
+  // Legend
+  const legend = [['Correct','var(--success)'],['Partial','var(--amber)'],['Incorrect','var(--error)']];
+  legend.forEach(([lbl,col],i) => {
+    g.append('rect').attr('x',i*80).attr('y',-16).attr('width',8).attr('height',8).attr('fill',col).attr('opacity',0.7).attr('rx',2);
+    g.append('text').attr('x',i*80+12).attr('y',-8).attr('font-size',9).attr('fill','var(--muted)').text(lbl);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// TIMELINE
+// ══════════════════════════════════════════════════════════════════
+function buildTimeline() {
+  const el = document.getElementById('timeline');
+  const rows = [...SESSIONS].reverse().map(s => `
+    <div class="tl-item">
+      <div class="tl-session">S${s.session}</div>
+      <div class="tl-date">${s.timestamp ? s.timestamp.slice(0,10) : '—'}</div>
+      <div class="tl-content">
+        <div class="tl-model">${esc(s.model)}</div>
+        <div class="tl-score">${scorePill(s.score)} &nbsp; ${s.correct}/${s.total} correct &nbsp; <span style="color:var(--dim);font-size:10px">${s.mode || 'headless'}</span></div>
+        <div class="tl-bar-bg">
+          <div class="tl-bar" style="width:${s.score}%;background:${scoreColor(s.score)}"></div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  el.innerHTML = `
+    <div class="chart-wrap" style="flex:1">
+      <div class="chart-title">Session timeline — newest first</div>
+      <div class="timeline-wrap">${rows}</div>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════════
+const BUILDERS = {
+  overview: buildOverview,
+  sessions: buildSessions,
+  ruby: buildRuby,
+  tiers: buildTiers,
+  timeline: buildTimeline,
+};
+
+window._inited = { overview: true };
+document.getElementById('updated-at').textContent = new Date().toISOString().slice(0,16).replace('T',' ') + ' UTC';
+buildOverview();
+</script>
+</body>
+</html>
