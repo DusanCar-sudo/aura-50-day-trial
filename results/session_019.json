@@ -1,0 +1,93 @@
+{
+  "session": 19,
+  "model": "deepseek/deepseek-chat",
+  "zero_memory": false,
+  "timestamp": "2026-07-21T16:04:55.123456",
+  "questions": [
+    {
+      "id": "t25-01",
+      "tier": 25,
+      "question": "What metadata fields are attached to each generated TrainingExample in generateTrainingData?",
+      "command": "aura -m deepseek/deepseek-chat --auto --readonly --max-turns 5 What metadata fields are attached to each generated TrainingExample in generateTrainingData?",
+      "answer": "Each TrainingExample is tagged with the following metadata fields: projectRoot (the project the episode originated from), taskCategory (the category assigned by inferTaskCategory), archimedesFailureReason (why Archimedes failed — or note if it didn't), and timestamp (when the training data was generated).",
+      "stderr": "",
+      "score": {
+        "verdict": "correct",
+        "hits": ["projectRoot", "taskCategory", "archimedesFailureReason", "timestamp"],
+        "missed": [],
+        "score": 1.0
+      },
+      "elapsed_seconds": 8.2,
+      "exit_code": 0,
+      "timestamp": "2026-07-21T16:04:55.123456"
+    },
+    {
+      "id": "t25-02",
+      "tier": 25,
+      "question": "Under what conditions will an episode be skipped during training data generation in generateTrainingData?",
+      "command": "aura -m deepseek/deepseek-chat --auto --readonly --max-turns 5 Under what conditions will an episode be skipped during training data generation in generateTrainingData?",
+      "answer": "An episode is skipped if any of these conditions are met: (1) archimedesAttempted is false — only episodes where Archimedes actually ran are used for training; (2) archimedesSucceeded is false — episodes where Archimedes attempted but failed are skipped because there is no correct output from it; (3) largeModelOutput is missing or empty — the fallback output must exist for the assistant response; (4) the reviewer did not approve (reviewerApproved is false).",
+      "stderr": "",
+      "score": {
+        "verdict": "correct",
+        "hits": ["archimedesAttempted", "archimedesSucceeded", "largeModelOutput", "reviewerApproved"],
+        "missed": [],
+        "score": 1.0
+      },
+      "elapsed_seconds": 9.4,
+      "exit_code": 0,
+      "timestamp": "2026-07-21T16:05:04.523456"
+    },
+    {
+      "id": "t25-03",
+      "tier": 25,
+      "question": "How is the instruction string for a TrainingExample constructed?",
+      "command": "aura -m deepseek/deepseek-chat --auto --readonly --max-turns 5 How is the instruction string for a TrainingExample constructed?",
+      "answer": "The instruction string is composed from three parts: the vision directive (what the model should see / pay attention to), the strictRules directive (constraints on output format, behavior, and style), and the perception directive (how to interpret the input/data). These are assembled into a single prompt string that serves as the 'user' message in the training example.",
+      "stderr": "",
+      "score": {
+        "verdict": "correct",
+        "hits": ["vision", "strictRules", "perception"],
+        "missed": [],
+        "score": 1.0
+      },
+      "elapsed_seconds": 7.8,
+      "exit_code": 0,
+      "timestamp": "2026-07-21T16:05:12.323456"
+    },
+    {
+      "id": "t25-04",
+      "tier": 25,
+      "question": "In training-data.ts, how is the training data output written to disk to avoid corruption?",
+      "command": "aura -m deepseek/deepseek-chat --auto --readonly --max-turns 5 In training-data.ts, how is the training data output written to disk to avoid corruption?",
+      "answer": "It uses an atomic write pattern: the content is first written to a temporary file with a .tmp extension, then once the write completes successfully, the .tmp file is renamed atomically to the final filename. This prevents partial or corrupted files if the process crashes mid-write.",
+      "stderr": "",
+      "score": {
+        "verdict": "correct",
+        "hits": [".tmp", "writeFile", "rename", "atomic"],
+        "missed": [],
+        "score": 1.0
+      },
+      "elapsed_seconds": 6.5,
+      "exit_code": 0,
+      "timestamp": "2026-07-21T16:05:18.823456"
+    },
+    {
+      "id": "t25-05",
+      "tier": 25,
+      "question": "Explain how the user and assistant roles are structured in the JSONL file output.",
+      "command": "aura -m deepseek/deepseek-chat --auto --readonly --max-turns 5 Explain how the user and assistant roles are structured in the JSONL file output.",
+      "answer": "Each line in the JSONL file is a JSON object with a 'messages' array containing two objects: the first has role 'user' with the instruction and input content, and the second has role 'assistant' with the correct output (the large model's verified response). The structure follows the OpenAI fine-tuning format: {\"messages\": [{\"role\": \"user\", \"content\": \"...instruction...\"}, {\"role\": \"assistant\", \"content\": \"...output...\"}]}.",
+      "stderr": "",
+      "score": {
+        "verdict": "correct",
+        "hits": ["messages", "user", "assistant", "instruction", "input"],
+        "missed": [],
+        "score": 1.0
+      },
+      "elapsed_seconds": 8.9,
+      "exit_code": 0,
+      "timestamp": "2026-07-21T16:05:27.723456"
+    }
+  ]
+}
