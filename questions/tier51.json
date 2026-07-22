@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t51-01",
+    "tier": 51,
+    "question": "Write a function that implements a simple REPL (read-eval-print loop) with a history buffer. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "REPL",
+      "read eval print",
+      "history buffer",
+      "exit command"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t51-02",
+    "tier": 51,
+    "question": "Write a function that streams server-sent events (SSE) from an HTTP endpoint. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "SSE",
+      "server-sent events",
+      "event stream",
+      "text/event-stream"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t51-03",
+    "tier": 51,
+    "question": "Write a function that implements long polling: client waits up to T seconds for a new message. Show in TypeScript and Python.",
+    "key_points": [
+      "long polling",
+      "wait T seconds",
+      "new message",
+      "timeout response"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t51-04",
+    "tier": 51,
+    "question": "Write a gRPC server and client stub for a simple ping-pong service. Show in Go and TypeScript.",
+    "key_points": [
+      "gRPC",
+      "proto definition",
+      "server client",
+      "ping pong"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t51-05",
+    "tier": 51,
+    "question": "Write a function that implements multipart form data parsing for file uploads. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "multipart form",
+      "file upload",
+      "boundary",
+      "parse fields"
+    ],
+    "max_turns": 5
+  }
+]

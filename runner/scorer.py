@@ -141,7 +141,7 @@ def score(question: dict, answer: str) -> dict:
         return score_code(answer, question.get("eval", "syntax"))
     if question["tier"] == 4:
         return score_expected(answer, question.get("expected", ""))
-    if question["tier"] in range(5, 31):
+    if question["tier"] in range(5, 61):
         return score_keyword(answer, question.get("key_points", []))
     return {"verdict": "incorrect", "note": "unknown tier", "score": 0.0}
 

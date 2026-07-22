@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t33-01",
+    "tier": 33,
+    "question": "Write a function that generates a cryptographically secure random token of N bytes as hex. Show in TypeScript, Python, Go, and Bash.",
+    "key_points": [
+      "crypto random",
+      "N bytes",
+      "hex string",
+      "secure"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t33-02",
+    "tier": 33,
+    "question": "Write a function that hashes a password using bcrypt or argon2 and verifies it. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "bcrypt or argon2",
+      "hash password",
+      "verify",
+      "salt"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t33-03",
+    "tier": 33,
+    "question": "Write a function that signs a JWT token and verifies it. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "JWT sign",
+      "verify",
+      "secret",
+      "claims"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t33-04",
+    "tier": 33,
+    "question": "Write a function that sanitizes user input to prevent XSS by escaping HTML. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "escape HTML",
+      "& < > quotes",
+      "XSS prevention",
+      "sanitize"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t33-05",
+    "tier": 33,
+    "question": "Write a function that validates an email address format. Show in TypeScript, Python, Go, Rust, and Bash.",
+    "key_points": [
+      "email regex",
+      "@ sign",
+      "domain part",
+      "validate format"
+    ],
+    "max_turns": 5
+  }
+]

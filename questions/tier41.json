@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t41-01",
+    "tier": 41,
+    "question": "Write sliding window maximum sum of K consecutive elements. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "sliding window",
+      "K elements",
+      "maximum sum",
+      "O(n)"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t41-02",
+    "tier": 41,
+    "question": "Write BFS to find shortest path between two graph nodes. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "BFS",
+      "shortest path",
+      "queue",
+      "visited set"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t41-03",
+    "tier": 41,
+    "question": "Write topological sort of a directed acyclic graph. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "topological sort",
+      "DAG",
+      "DFS or Kahn",
+      "cycle detection"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t41-04",
+    "tier": 41,
+    "question": "Write a function that finds all permutations of a string. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "permutations",
+      "backtracking",
+      "all results",
+      "recursive"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t41-05",
+    "tier": 41,
+    "question": "Write the 0/1 knapsack problem solution. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "knapsack",
+      "dynamic programming",
+      "capacity weight value",
+      "optimal"
+    ],
+    "max_turns": 5
+  }
+]

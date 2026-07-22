@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t34-01",
+    "tier": 34,
+    "question": "Write a concurrent worker pool that processes N jobs with a fixed number of workers. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "worker pool",
+      "fixed N workers",
+      "parallel",
+      "queue jobs"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t34-02",
+    "tier": 34,
+    "question": "Write a function that runs multiple async operations in parallel and collects all errors without failing fast. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "parallel all",
+      "collect errors",
+      "don't fail fast",
+      "wait all"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t34-03",
+    "tier": 34,
+    "question": "Write a mutex-protected counter safe for concurrent access. Show in Go, Rust, and Python.",
+    "key_points": [
+      "mutex",
+      "thread safe",
+      "atomic increment",
+      "concurrent"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t34-04",
+    "tier": 34,
+    "question": "Write a semaphore to limit concurrent access to N slots. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "semaphore",
+      "limit concurrent",
+      "acquire release",
+      "N slots"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t34-05",
+    "tier": 34,
+    "question": "Write a pipeline where stage A produces, stage B transforms, and stage C consumes using channels. Show in Go and TypeScript.",
+    "key_points": [
+      "pipeline stages",
+      "channel",
+      "producer transformer consumer",
+      "concurrent"
+    ],
+    "max_turns": 5
+  }
+]

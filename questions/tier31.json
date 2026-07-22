@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t31-01",
+    "tier": 31,
+    "question": "Write a function that retries an async operation up to N times with exponential backoff. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "exponential backoff",
+      "retry N times",
+      "async",
+      "delay doubles"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t31-02",
+    "tier": 31,
+    "question": "Write a function that reads a file line by line without loading it all into memory. Show in TypeScript, Python, Go, and Bash.",
+    "key_points": [
+      "streaming",
+      "readline",
+      "no full load",
+      "line by line"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t31-03",
+    "tier": 31,
+    "question": "Write a function that deep-merges two objects where nested keys from the second override the first. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "deep merge",
+      "nested override",
+      "recursive",
+      "maps"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t31-04",
+    "tier": 31,
+    "question": "Write a rate limiter that allows N requests per second using a token bucket algorithm. Show in TypeScript and Python.",
+    "key_points": [
+      "token bucket",
+      "N per second",
+      "refill",
+      "consume token"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t31-05",
+    "tier": 31,
+    "question": "Write a function that converts camelCase to snake_case and back. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "camelCase to snake_case",
+      "regex",
+      "reverse conversion",
+      "both directions"
+    ],
+    "max_turns": 5
+  }
+]

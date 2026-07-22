@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t46-01",
+    "tier": 46,
+    "question": "Write a state machine with states and transitions that errors on invalid transitions. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "state machine",
+      "states transitions",
+      "current state",
+      "invalid transition error"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t46-02",
+    "tier": 46,
+    "question": "Write the observer pattern where objects subscribe to and receive events. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "observer pattern",
+      "subscribe",
+      "notify",
+      "decouple"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t46-03",
+    "tier": 46,
+    "question": "Write the command pattern with execute and undo. Show in TypeScript and Python.",
+    "key_points": [
+      "command pattern",
+      "execute undo",
+      "history stack",
+      "reversible"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t46-04",
+    "tier": 46,
+    "question": "Write a dependency injection container that registers and resolves dependencies. Show in TypeScript and Python.",
+    "key_points": [
+      "DI container",
+      "register",
+      "resolve",
+      "constructor injection"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t46-05",
+    "tier": 46,
+    "question": "Write the builder pattern for constructing complex objects step by step. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "builder pattern",
+      "step by step",
+      "fluent interface",
+      "build method"
+    ],
+    "max_turns": 5
+  }
+]

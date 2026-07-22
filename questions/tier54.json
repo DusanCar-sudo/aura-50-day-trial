@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t54-01",
+    "tier": 54,
+    "question": "Write a function that generates an OpenAPI 3.0 spec from a list of route definitions. Show in TypeScript and Python.",
+    "key_points": [
+      "OpenAPI 3.0",
+      "spec generation",
+      "routes",
+      "YAML or JSON output"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t54-02",
+    "tier": 54,
+    "question": "Write a function that validates an HTTP request against an OpenAPI spec and returns validation errors. Show in TypeScript and Python.",
+    "key_points": [
+      "request validation",
+      "OpenAPI spec",
+      "validation errors",
+      "schema check"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t54-03",
+    "tier": 54,
+    "question": "Write a function that generates a TypeScript client SDK from an OpenAPI spec. Show in TypeScript.",
+    "key_points": [
+      "SDK generation",
+      "OpenAPI",
+      "TypeScript client",
+      "type-safe"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t54-04",
+    "tier": 54,
+    "question": "Write a function that implements content negotiation for an HTTP response (JSON, XML, plain text). Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "content negotiation",
+      "Accept header",
+      "JSON XML text",
+      "406 if unsupported"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t54-05",
+    "tier": 54,
+    "question": "Write a function that implements HTTP caching with ETags and conditional requests. Show in TypeScript and Python.",
+    "key_points": [
+      "ETag",
+      "conditional GET",
+      "304 Not Modified",
+      "cache control"
+    ],
+    "max_turns": 5
+  }
+]

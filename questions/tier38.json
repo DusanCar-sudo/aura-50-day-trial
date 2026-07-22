@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t38-01",
+    "tier": 38,
+    "question": "Write a CLI argument parser supporting flags, options, and positional args. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "flags boolean",
+      "options with value",
+      "positional args",
+      "parse argv"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t38-02",
+    "tier": 38,
+    "question": "Write a function that colorizes terminal output with ANSI codes for red, green, yellow. Show in TypeScript, Python, Go, Rust, and Bash.",
+    "key_points": [
+      "ANSI codes",
+      "red green yellow",
+      "terminal color",
+      "reset code"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t38-03",
+    "tier": 38,
+    "question": "Write a progress bar that updates in place on a single terminal line. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "progress bar",
+      "carriage return",
+      "single line",
+      "percentage"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t38-04",
+    "tier": 38,
+    "question": "Write a function that spawns a child process capturing stdout and stderr separately with exit code. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "spawn child",
+      "capture stdout stderr",
+      "exit code",
+      "separate streams"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t38-05",
+    "tier": 38,
+    "question": "Write a function that runs a shell command with a timeout and kills it if exceeded. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "shell command",
+      "timeout",
+      "kill process",
+      "return output"
+    ],
+    "max_turns": 5
+  }
+]

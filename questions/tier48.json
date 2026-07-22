@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t48-01",
+    "tier": 48,
+    "question": "Write a Snowflake-like unique ID generator combining timestamp, machine ID, and random bytes. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "unique ID",
+      "timestamp",
+      "machine ID",
+      "random bytes"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t48-02",
+    "tier": 48,
+    "question": "Write a write-ahead log (WAL) for crash recovery that can replay on startup. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "write-ahead log",
+      "append only",
+      "crash recovery",
+      "replay on start"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t48-03",
+    "tier": 48,
+    "question": "Write vector clocks to track causality between distributed events. Show in TypeScript and Python.",
+    "key_points": [
+      "vector clock",
+      "causality",
+      "increment on send",
+      "merge on receive"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t48-04",
+    "tier": 48,
+    "question": "Write a two-phase commit protocol between two participants. Show in TypeScript and Python.",
+    "key_points": [
+      "two-phase commit",
+      "prepare phase",
+      "commit phase",
+      "rollback on failure"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t48-05",
+    "tier": 48,
+    "question": "Write eventual consistency: apply updates in any order and converge to the same state. Show in TypeScript and Python.",
+    "key_points": [
+      "eventual consistency",
+      "CRDT or last-write-wins",
+      "converge",
+      "any order"
+    ],
+    "max_turns": 5
+  }
+]

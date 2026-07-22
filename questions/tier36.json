@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t36-01",
+    "tier": 36,
+    "question": "Write an HTTP GET with timeout returning body as string. Show in TypeScript, Python, Go, Rust, and Bash.",
+    "key_points": [
+      "HTTP GET",
+      "timeout",
+      "response body",
+      "string"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t36-02",
+    "tier": 36,
+    "question": "Write a function that POSTs JSON to an API and handles non-200 responses as errors. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "HTTP POST",
+      "JSON body",
+      "non-200 error",
+      "Content-Type header"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t36-03",
+    "tier": 36,
+    "question": "Write a simple HTTP server responding Hello World on GET / and 404 on other paths. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "HTTP server",
+      "GET /",
+      "404 other paths",
+      "listen port"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t36-04",
+    "tier": 36,
+    "question": "Write a function that polls an API every N seconds until a condition is met or timeout. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "polling",
+      "every N seconds",
+      "condition check",
+      "timeout"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t36-05",
+    "tier": 36,
+    "question": "Write a WebSocket client that connects, sends a message, and prints responses. Show in TypeScript and Python.",
+    "key_points": [
+      "WebSocket client",
+      "connect",
+      "send message",
+      "receive print"
+    ],
+    "max_turns": 5
+  }
+]

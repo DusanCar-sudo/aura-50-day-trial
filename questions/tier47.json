@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t47-01",
+    "tier": 47,
+    "question": "Write structured logging with levels (debug, info, warn, error) and JSON output. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "structured logging",
+      "levels",
+      "JSON output",
+      "timestamp"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t47-02",
+    "tier": 47,
+    "question": "Write a decorator/wrapper that traces function execution time and logs it. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "execution time",
+      "trace",
+      "decorator or wrapper",
+      "log duration"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t47-03",
+    "tier": 47,
+    "question": "Write a health check HTTP endpoint that reports service status and dependencies. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "health check",
+      "service status",
+      "dependencies",
+      "HTTP endpoint"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t47-04",
+    "tier": 47,
+    "question": "Write a function that monitors CPU and memory and alerts when thresholds are exceeded. Show in TypeScript, Python, Go, and Bash.",
+    "key_points": [
+      "CPU memory usage",
+      "threshold alert",
+      "monitor",
+      "periodic check"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t47-05",
+    "tier": 47,
+    "question": "Write metrics aggregation (count, sum, min, max, avg) over a sliding time window. Show in TypeScript and Python.",
+    "key_points": [
+      "metrics aggregation",
+      "sliding window",
+      "count sum min max avg",
+      "time based"
+    ],
+    "max_turns": 5
+  }
+]

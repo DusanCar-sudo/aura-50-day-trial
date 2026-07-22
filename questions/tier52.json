@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t52-01",
+    "tier": 52,
+    "question": "Write a function that builds a Docker image programmatically using the Docker API. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "Docker API",
+      "build image",
+      "Dockerfile",
+      "programmatic"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t52-02",
+    "tier": 52,
+    "question": "Write a function that deploys a container and waits for it to be healthy. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "deploy container",
+      "health check",
+      "wait ready",
+      "Docker API"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t52-03",
+    "tier": 52,
+    "question": "Write a function that reads Kubernetes pod logs and streams them to stdout. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "Kubernetes",
+      "pod logs",
+      "stream",
+      "kubectl or API"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t52-04",
+    "tier": 52,
+    "question": "Write a function that applies a Kubernetes manifest from a YAML file. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "Kubernetes manifest",
+      "apply YAML",
+      "kubectl apply",
+      "API call"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t52-05",
+    "tier": 52,
+    "question": "Write a Dockerfile for a Node.js application using multi-stage builds to minimize image size.",
+    "key_points": [
+      "Dockerfile",
+      "multi-stage",
+      "Node.js",
+      "minimize size"
+    ],
+    "max_turns": 5
+  }
+]

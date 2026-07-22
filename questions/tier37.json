@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t37-01",
+    "tier": 37,
+    "question": "Write a directory watcher that prints file changes. Show in TypeScript, Python, Go, and Bash.",
+    "key_points": [
+      "watch directory",
+      "file change",
+      "print event",
+      "inotify or fs.watch"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t37-02",
+    "tier": 37,
+    "question": "Write a function that recursively finds all files with a given extension. Show in TypeScript, Python, Go, Rust, and Bash.",
+    "key_points": [
+      "recursive walk",
+      "filter extension",
+      "directory tree",
+      "glob or walk"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t37-03",
+    "tier": 37,
+    "question": "Write a function that atomically writes a file using write-to-temp-then-rename. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "atomic write",
+      "temp file",
+      "rename",
+      "no partial"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t37-04",
+    "tier": 37,
+    "question": "Write a function that reads a CSV and returns objects keyed by header row. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "CSV parse",
+      "header row",
+      "array of objects",
+      "keyed by header"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t37-05",
+    "tier": 37,
+    "question": "Write a function that tails a log file printing new lines as appended. Show in TypeScript, Python, Go, and Bash.",
+    "key_points": [
+      "tail file",
+      "follow append",
+      "new lines only",
+      "like tail -f"
+    ],
+    "max_turns": 5
+  }
+]

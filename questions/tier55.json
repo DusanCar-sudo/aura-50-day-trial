@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t55-01",
+    "tier": 55,
+    "question": "Write a function that parses and validates a YAML configuration file with required fields. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "YAML parse",
+      "required fields",
+      "validate",
+      "error on missing"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t55-02",
+    "tier": 55,
+    "question": "Write a function that hot-reloads a configuration file when it changes on disk. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "hot reload",
+      "file watch",
+      "config update",
+      "no restart"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t55-03",
+    "tier": 55,
+    "question": "Write a function that merges configuration from environment variables, a config file, and CLI flags with clear precedence. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "config merge",
+      "env vars",
+      "config file",
+      "CLI flags precedence"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t55-04",
+    "tier": 55,
+    "question": "Write a function that encrypts sensitive config values at rest using a master key. Show in TypeScript and Python.",
+    "key_points": [
+      "encrypt config",
+      "master key",
+      "at rest",
+      "decrypt on load"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t55-05",
+    "tier": 55,
+    "question": "Write a function that generates a typed configuration object from environment variables with defaults and type coercion. Show in TypeScript and Python.",
+    "key_points": [
+      "typed config",
+      "env vars",
+      "defaults",
+      "type coercion"
+    ],
+    "max_turns": 5
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t58-01",
+    "tier": 58,
+    "question": "Write a function that sends an email with an attachment using SMTP. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "SMTP",
+      "send email",
+      "attachment",
+      "MIME"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t58-02",
+    "tier": 58,
+    "question": "Write a function that sends a Slack message with a block layout. Show in TypeScript and Python.",
+    "key_points": [
+      "Slack API",
+      "block layout",
+      "webhook or API",
+      "send message"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t58-03",
+    "tier": 58,
+    "question": "Write a function that creates a GitHub issue with labels and assignees. Show in TypeScript and Python.",
+    "key_points": [
+      "GitHub API",
+      "create issue",
+      "labels",
+      "assignees"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t58-04",
+    "tier": 58,
+    "question": "Write a Telegram bot that responds to /start with a welcome message and /help with a list of commands. Show in TypeScript and Python.",
+    "key_points": [
+      "Telegram bot",
+      "webhook or polling",
+      "/start /help",
+      "reply"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t58-05",
+    "tier": 58,
+    "question": "Write a function that sends a push notification via Firebase Cloud Messaging (FCM). Show in TypeScript and Python.",
+    "key_points": [
+      "FCM push notification",
+      "device token",
+      "message payload",
+      "HTTP API"
+    ],
+    "max_turns": 5
+  }
+]

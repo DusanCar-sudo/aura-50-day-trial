@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t42-01",
+    "tier": 42,
+    "question": "Write a thread-safe in-memory message queue with enqueue, dequeue, and peek. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "message queue",
+      "enqueue dequeue peek",
+      "thread safe",
+      "mutex"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t42-02",
+    "tier": 42,
+    "question": "Write a priority queue (min-heap) with push and pop. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "min-heap",
+      "priority queue",
+      "push pop",
+      "heapify"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t42-03",
+    "tier": 42,
+    "question": "Write a task scheduler that runs registered callbacks at specified intervals. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "scheduler",
+      "interval",
+      "register callback",
+      "run periodically"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t42-04",
+    "tier": 42,
+    "question": "Write consistent hashing to distribute keys across N nodes. Show in TypeScript and Python.",
+    "key_points": [
+      "consistent hashing",
+      "virtual nodes",
+      "key distribution",
+      "add remove node"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t42-05",
+    "tier": 42,
+    "question": "Write a CRON expression parser that returns the next run time. Show in TypeScript and Python.",
+    "key_points": [
+      "cron expression",
+      "next run time",
+      "parse fields",
+      "minute hour dom month dow"
+    ],
+    "max_turns": 5
+  }
+]

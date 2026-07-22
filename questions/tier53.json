@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t53-01",
+    "tier": 53,
+    "question": "Write a GitHub Actions workflow that runs tests, builds, and deploys on push to main.",
+    "key_points": [
+      "GitHub Actions",
+      "workflow YAML",
+      "test build deploy",
+      "on push main"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t53-02",
+    "tier": 53,
+    "question": "Write a function that uses the GitHub API to create a pull request and add a reviewer. Show in TypeScript and Python.",
+    "key_points": [
+      "GitHub API",
+      "create PR",
+      "add reviewer",
+      "REST API"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t53-03",
+    "tier": 53,
+    "question": "Write a function that clones a repo, makes a commit, and pushes using libgit2 or a similar library. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "clone",
+      "commit",
+      "push",
+      "programmatic git"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t53-04",
+    "tier": 53,
+    "question": "Write a git hook script that runs linting before each commit and rejects if it fails. Show in Bash and Python.",
+    "key_points": [
+      "pre-commit hook",
+      "run linter",
+      "reject on failure",
+      "exit code 1"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t53-05",
+    "tier": 53,
+    "question": "Write a function that parses a git log and returns commits as structured objects with hash, author, date, and message. Show in TypeScript, Python, and Bash.",
+    "key_points": [
+      "git log",
+      "parse",
+      "hash author date message",
+      "structured"
+    ],
+    "max_turns": 5
+  }
+]

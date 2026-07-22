@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t50-01",
+    "tier": 50,
+    "question": "Write a function that spawns N sub-agents in parallel processing subsets of tasks and aggregates results. Show in TypeScript and Python.",
+    "key_points": [
+      "sub-agents",
+      "parallel",
+      "partition tasks",
+      "aggregate results"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t50-02",
+    "tier": 50,
+    "question": "Write a tool registry where tools are registered by name and called with JSON arguments. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "tool registry",
+      "register by name",
+      "lookup",
+      "call with JSON args"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t50-03",
+    "tier": 50,
+    "question": "Write a conversation history manager with a token budget that evicts oldest messages when over limit. Show in TypeScript and Python.",
+    "key_points": [
+      "conversation history",
+      "token budget",
+      "evict oldest",
+      "maintain context"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t50-04",
+    "tier": 50,
+    "question": "Write a simple ReAct loop: think, act, observe, repeat until done. Show in TypeScript and Python.",
+    "key_points": [
+      "ReAct loop",
+      "think act observe",
+      "tool call",
+      "exit condition"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t50-05",
+    "tier": 50,
+    "question": "Write a function that validates agent tool call arguments match a JSON schema before executing. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "tool call validation",
+      "JSON schema",
+      "type check",
+      "reject invalid"
+    ],
+    "max_turns": 5
+  }
+]

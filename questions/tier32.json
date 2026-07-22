@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t32-01",
+    "tier": 32,
+    "question": "Write a simple LRU cache with get and set operations. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "LRU eviction",
+      "get set",
+      "capacity limit",
+      "doubly linked list"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t32-02",
+    "tier": 32,
+    "question": "Write a debounce function that delays execution until N ms after the last call. Show in TypeScript and Python.",
+    "key_points": [
+      "debounce",
+      "delay N ms",
+      "last call",
+      "cancel previous"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t32-03",
+    "tier": 32,
+    "question": "Write a function that flattens a deeply nested array to a single level. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "flatten",
+      "recursive",
+      "any depth",
+      "nested array"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t32-04",
+    "tier": 32,
+    "question": "Write a simple publish-subscribe event emitter with on, off, and emit. Show in TypeScript and Python.",
+    "key_points": [
+      "on off emit",
+      "subscribe unsubscribe",
+      "event name",
+      "callback list"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t32-05",
+    "tier": 32,
+    "question": "Write a function that throttles calls to at most once per N milliseconds. Show in TypeScript and Python.",
+    "key_points": [
+      "throttle",
+      "at most once",
+      "N ms window",
+      "leading edge"
+    ],
+    "max_turns": 5
+  }
+]

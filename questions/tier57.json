@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t57-01",
+    "tier": 57,
+    "question": "Write a function that generates a PDF report from structured data. Show in TypeScript and Python.",
+    "key_points": [
+      "PDF generation",
+      "structured data",
+      "tables or sections",
+      "library"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t57-02",
+    "tier": 57,
+    "question": "Write a function that converts an HTML page to a PDF using a headless browser. Show in TypeScript and Python.",
+    "key_points": [
+      "HTML to PDF",
+      "headless browser",
+      "Puppeteer or Playwright",
+      "page.pdf"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t57-03",
+    "tier": 57,
+    "question": "Write a function that extracts text from a PDF file. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "PDF text extraction",
+      "parse PDF",
+      "text content",
+      "library"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t57-04",
+    "tier": 57,
+    "question": "Write a function that generates an Excel spreadsheet from a 2D array of data with headers. Show in TypeScript and Python.",
+    "key_points": [
+      "Excel generation",
+      "2D array",
+      "headers",
+      "xlsx library"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t57-05",
+    "tier": 57,
+    "question": "Write a function that converts a CSV to JSON and a JSON array to CSV. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "CSV to JSON",
+      "JSON to CSV",
+      "headers",
+      "bidirectional"
+    ],
+    "max_turns": 5
+  }
+]

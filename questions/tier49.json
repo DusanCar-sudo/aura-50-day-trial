@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t49-01",
+    "tier": 49,
+    "question": "Write a neural network forward pass with one hidden layer using only math primitives. Show in Python and TypeScript.",
+    "key_points": [
+      "neural network",
+      "forward pass",
+      "hidden layer",
+      "sigmoid or ReLU"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t49-02",
+    "tier": 49,
+    "question": "Write k-means clustering from scratch. Show in Python and TypeScript.",
+    "key_points": [
+      "k-means",
+      "centroids",
+      "assign clusters",
+      "iterate until convergence"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t49-03",
+    "tier": 49,
+    "question": "Write a function that calls an OpenAI-compatible LLM API and streams the response token by token. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "LLM API",
+      "stream",
+      "token by token",
+      "SSE or streaming response"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t49-04",
+    "tier": 49,
+    "question": "Write a text chunker that splits text into overlapping segments for RAG. Show in TypeScript and Python.",
+    "key_points": [
+      "text chunking",
+      "overlap",
+      "fixed size",
+      "RAG preparation"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t49-05",
+    "tier": 49,
+    "question": "Write cosine similarity between two embedding vectors. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "cosine similarity",
+      "dot product",
+      "magnitude",
+      "normalize"
+    ],
+    "max_turns": 5
+  }
+]

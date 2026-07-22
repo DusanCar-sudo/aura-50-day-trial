@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t35-01",
+    "tier": 35,
+    "question": "Write binary search on a sorted array. Show in TypeScript, Python, Go, Rust, and Bash.",
+    "key_points": [
+      "binary search",
+      "sorted array",
+      "O(log n)",
+      "mid pivot"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t35-02",
+    "tier": 35,
+    "question": "Write the longest common subsequence of two strings. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "LCS",
+      "dynamic programming",
+      "two strings",
+      "subsequence not substring"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t35-03",
+    "tier": 35,
+    "question": "Write cycle detection in a linked list using Floyd's algorithm. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "Floyd cycle detection",
+      "slow fast pointer",
+      "linked list",
+      "O(1) space"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t35-04",
+    "tier": 35,
+    "question": "Write merge sort. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "merge sort",
+      "divide conquer",
+      "O(n log n)",
+      "merge step"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t35-05",
+    "tier": 35,
+    "question": "Write a trie data structure with insert and search. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "trie node",
+      "insert",
+      "search",
+      "children map"
+    ],
+    "max_turns": 5
+  }
+]

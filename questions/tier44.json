@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t44-01",
+    "tier": 44,
+    "question": "Write OAuth2 PKCE flow: generate code verifier, challenge, and verify. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "PKCE",
+      "code verifier",
+      "SHA256 challenge",
+      "base64url"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t44-02",
+    "tier": 44,
+    "question": "Write HTTP middleware that rate-limits requests per IP address. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "rate limit middleware",
+      "per IP",
+      "request count",
+      "429 response"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t44-03",
+    "tier": 44,
+    "question": "Write AES-256-GCM encryption and decryption. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "AES-256-GCM",
+      "encrypt decrypt",
+      "IV nonce",
+      "authenticated encryption"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t44-04",
+    "tier": 44,
+    "question": "Write webhook signature verification using HMAC-SHA256. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "HMAC-SHA256",
+      "webhook signature",
+      "constant time compare",
+      "verify"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t44-05",
+    "tier": 44,
+    "question": "Write an API key generator with prefix and checksum that can validate the key format. Show in TypeScript and Python.",
+    "key_points": [
+      "API key",
+      "prefix",
+      "checksum",
+      "validate format"
+    ],
+    "max_turns": 5
+  }
+]

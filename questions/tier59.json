@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t59-01",
+    "tier": 59,
+    "question": "Write a function that transcribes audio using the Whisper API or a local Whisper model. Show in TypeScript and Python.",
+    "key_points": [
+      "Whisper API",
+      "audio file",
+      "transcription",
+      "text output"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t59-02",
+    "tier": 59,
+    "question": "Write a function that generates an image using the DALL-E or Stable Diffusion API. Show in TypeScript and Python.",
+    "key_points": [
+      "image generation",
+      "DALL-E or SD API",
+      "prompt",
+      "image URL or bytes"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t59-03",
+    "tier": 59,
+    "question": "Write a function that embeds text using an embedding API and stores results in a vector database. Show in TypeScript and Python.",
+    "key_points": [
+      "text embedding",
+      "embedding API",
+      "vector store",
+      "upsert"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t59-04",
+    "tier": 59,
+    "question": "Write a function that performs semantic search over a collection of documents using embeddings. Show in TypeScript and Python.",
+    "key_points": [
+      "semantic search",
+      "embeddings",
+      "cosine similarity",
+      "top K results"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t59-05",
+    "tier": 59,
+    "question": "Write a function that implements a simple RAG pipeline: chunk, embed, store, retrieve, and generate. Show in TypeScript and Python.",
+    "key_points": [
+      "RAG pipeline",
+      "chunk embed store",
+      "retrieve",
+      "generate with context"
+    ],
+    "max_turns": 5
+  }
+]

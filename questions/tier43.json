@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t43-01",
+    "tier": 43,
+    "question": "Write a function that diffs two JSON objects returning added, removed, and modified keys. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "JSON diff",
+      "added removed modified",
+      "recursive",
+      "path to change"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t43-02",
+    "tier": 43,
+    "question": "Write serialize and deserialize a binary tree to/from a string. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "serialize tree",
+      "deserialize",
+      "string format",
+      "null markers"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t43-03",
+    "tier": 43,
+    "question": "Write run-length encoding compression and decompression. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "run-length encoding",
+      "compress",
+      "decompress",
+      "count consecutive"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t43-04",
+    "tier": 43,
+    "question": "Write a simple Markdown-to-HTML converter for headers, bold, italic, and code. Show in TypeScript and Python.",
+    "key_points": [
+      "markdown to HTML",
+      "headers bold italic code",
+      "regex replace",
+      "basic conversion"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t43-05",
+    "tier": 43,
+    "question": "Write a function that validates a JSON document against a schema. Show in TypeScript and Python.",
+    "key_points": [
+      "schema validate",
+      "type check",
+      "required fields",
+      "nested validation"
+    ],
+    "max_turns": 5
+  }
+]

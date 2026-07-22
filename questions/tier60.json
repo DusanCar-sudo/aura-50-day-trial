@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t60-01",
+    "tier": 60,
+    "question": "Write a function that profiles another function and returns execution time, memory delta, and number of allocations. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "profiling",
+      "execution time",
+      "memory delta",
+      "allocations"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t60-02",
+    "tier": 60,
+    "question": "Write a function that generates a flame graph from a profiling run. Show in Python and Go.",
+    "key_points": [
+      "flame graph",
+      "profiling data",
+      "call stack",
+      "visualization"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t60-03",
+    "tier": 60,
+    "question": "Write a function that benchmarks a function by running it N times and reporting p50, p95, p99 latencies. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "benchmark",
+      "N iterations",
+      "p50 p95 p99",
+      "percentile latency"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t60-04",
+    "tier": 60,
+    "question": "Write a function that detects memory leaks by comparing heap snapshots before and after an operation. Show in TypeScript and Python.",
+    "key_points": [
+      "memory leak detection",
+      "heap snapshot",
+      "before after",
+      "growing objects"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t60-05",
+    "tier": 60,
+    "question": "Write a function that auto-scales a worker pool based on queue depth \u2014 adding workers when busy, removing when idle. Show in TypeScript and Python.",
+    "key_points": [
+      "auto-scale",
+      "queue depth",
+      "add workers",
+      "remove idle workers"
+    ],
+    "max_turns": 5
+  }
+]

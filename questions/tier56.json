@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t56-01",
+    "tier": 56,
+    "question": "Write a function that implements a simple key-value cache with LRU eviction backed by Redis. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "Redis cache",
+      "LRU eviction",
+      "get set",
+      "TTL"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t56-02",
+    "tier": 56,
+    "question": "Write a function that implements distributed locking using Redis SETNX. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "distributed lock",
+      "Redis SETNX",
+      "TTL lock",
+      "release lock"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t56-03",
+    "tier": 56,
+    "question": "Write a function that publishes and subscribes to messages using Redis Pub/Sub. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "Redis Pub/Sub",
+      "publish",
+      "subscribe",
+      "channel"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t56-04",
+    "tier": 56,
+    "question": "Write a function that implements a distributed counter using Redis atomic operations. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "distributed counter",
+      "Redis INCR",
+      "atomic",
+      "no race condition"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t56-05",
+    "tier": 56,
+    "question": "Write a function that implements a job queue using Redis lists with worker pickup. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "Redis list",
+      "job queue",
+      "LPUSH BRPOP",
+      "worker"
+    ],
+    "max_turns": 5
+  }
+]

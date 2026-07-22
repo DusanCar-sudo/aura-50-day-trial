@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t45-01",
+    "tier": 45,
+    "question": "Write a simple arithmetic expression evaluator supporting +, -, *, /. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "expression parser",
+      "arithmetic",
+      "operator precedence",
+      "evaluate"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t45-02",
+    "tier": 45,
+    "question": "Write a simple template engine that replaces {{variable}} placeholders. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "template engine",
+      "placeholder replace",
+      "{{variable}}",
+      "context map"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t45-03",
+    "tier": 45,
+    "question": "Write a function that converts a number to its English word representation. Show in TypeScript and Python.",
+    "key_points": [
+      "number to words",
+      "English",
+      "ones tens hundreds",
+      "recursive"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t45-04",
+    "tier": 45,
+    "question": "Write fuzzy string matching that returns a similarity score 0-1. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "fuzzy match",
+      "similarity score",
+      "edit distance",
+      "0 to 1"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t45-05",
+    "tier": 45,
+    "question": "Write a function that tokenizes a string into words, numbers, and operators. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "tokenizer",
+      "words numbers operators",
+      "lexer",
+      "token types"
+    ],
+    "max_turns": 5
+  }
+]

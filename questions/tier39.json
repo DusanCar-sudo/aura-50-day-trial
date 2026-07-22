@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t39-01",
+    "tier": 39,
+    "question": "Write a function that connects to SQLite, creates a table, inserts, and queries back. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "SQLite connect",
+      "create table",
+      "insert",
+      "query back"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t39-02",
+    "tier": 39,
+    "question": "Write a JSON file-backed key-value store with get, set, delete. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "JSON file store",
+      "get set delete",
+      "persist",
+      "load on start"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t39-03",
+    "tier": 39,
+    "question": "Write a function that connects to Redis, sets a key with TTL, and gets it back. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "Redis connect",
+      "SET with TTL",
+      "GET",
+      "expire"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t39-04",
+    "tier": 39,
+    "question": "Write a SQL migration runner that applies files in order tracking which have run. Show in TypeScript and Python.",
+    "key_points": [
+      "SQL migration",
+      "ordered files",
+      "track applied",
+      "idempotent"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t39-05",
+    "tier": 39,
+    "question": "Write optimistic locking: read with version, update only if version unchanged. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "optimistic locking",
+      "version field",
+      "check on update",
+      "conflict error"
+    ],
+    "max_turns": 5
+  }
+]

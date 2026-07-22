@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t40-01",
+    "tier": 40,
+    "question": "Write a function that batches an array into chunks of size N and processes sequentially. Show in TypeScript, Python, Go, and Rust.",
+    "key_points": [
+      "batch chunks",
+      "size N",
+      "sequential",
+      "slice array"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t40-02",
+    "tier": 40,
+    "question": "Write a function that streams a large JSON array from a file without loading all into memory. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "streaming JSON",
+      "no full load",
+      "process each element",
+      "large file"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t40-03",
+    "tier": 40,
+    "question": "Write a circuit breaker: after N failures open the circuit and reject calls for T seconds. Show in TypeScript and Python.",
+    "key_points": [
+      "circuit breaker",
+      "N failures open",
+      "reject during T seconds",
+      "half-open retry"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t40-04",
+    "tier": 40,
+    "question": "Write a memoize function with TTL-based cache. Show in TypeScript, Python, and Go.",
+    "key_points": [
+      "memoize",
+      "TTL cache",
+      "cache hit",
+      "cache miss recompute"
+    ],
+    "max_turns": 5
+  },
+  {
+    "id": "t40-05",
+    "tier": 40,
+    "question": "Write a bloom filter for membership testing with configurable false positive rate. Show in TypeScript and Python.",
+    "key_points": [
+      "bloom filter",
+      "bit array",
+      "multiple hash",
+      "false positive rate"
+    ],
+    "max_turns": 5
+  }
+]
