@@ -1,0 +1,73 @@
+{
+  "session": 103,
+  "model": "deepseek/deepseek-chat",
+  "zero_memory": false,
+  "timestamp": "2026-07-22T11:56:47.136087",
+  "questions": [
+    {
+      "id": "t3-01",
+      "tier": 3,
+      "question": "Write a TypeScript function that reads ~/.secrets/agents.env and loads it into process.env. Skip comments and blank lines. Never override existing env vars.",
+      "answer": "",
+      "score": {
+        "verdict": "incorrect",
+        "note": "timed out"
+      },
+      "elapsed_seconds": 180,
+      "exit_code": -1,
+      "timestamp": "2026-07-22T11:59:47.252603"
+    },
+    {
+      "id": "t3-02",
+      "tier": 3,
+      "question": "Write a bash one-liner that finds all .ts files modified in the last 24 hours under the current directory.",
+      "answer": "",
+      "score": {
+        "verdict": "incorrect",
+        "note": "timed out"
+      },
+      "elapsed_seconds": 180,
+      "exit_code": -1,
+      "timestamp": "2026-07-22T12:02:47.345992"
+    },
+    {
+      "id": "t3-03",
+      "tier": 3,
+      "question": "Write a Python function that retries an HTTP GET call up to 3 times with exponential backoff starting at 1 second.",
+      "answer": "",
+      "score": {
+        "verdict": "incorrect",
+        "note": "timed out"
+      },
+      "elapsed_seconds": 180,
+      "exit_code": -1,
+      "timestamp": "2026-07-22T12:05:47.368739"
+    },
+    {
+      "id": "t3-04",
+      "tier": 3,
+      "question": "Write a systemd user service unit file for a Node.js script at /home/dusan/app/index.js that uses EnvironmentFile=/home/dusan/.secrets/agents.env",
+      "answer": "",
+      "score": {
+        "verdict": "incorrect",
+        "note": "timed out"
+      },
+      "elapsed_seconds": 180,
+      "exit_code": -1,
+      "timestamp": "2026-07-22T12:08:47.385292"
+    },
+    {
+      "id": "t3-05",
+      "tier": 3,
+      "question": "Write a git pre-commit hook that blocks commits containing strings that look like API keys (matching pattern sk-[a-zA-Z0-9]{32,}).",
+      "answer": "",
+      "score": {
+        "verdict": "incorrect",
+        "note": "timed out"
+      },
+      "elapsed_seconds": 180,
+      "exit_code": -1,
+      "timestamp": "2026-07-22T12:11:47.487840"
+    }
+  ]
+}
