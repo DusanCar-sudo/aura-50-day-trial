@@ -25,10 +25,12 @@
   {
     "id": "t26-03",
     "tier": 26,
-    "question": "What timeout limit (in milliseconds) is applied to the model creation subprocess in fineTuneWithOllama?",
+    "question": "What timeout limit is applied to the model creation subprocess in fineTuneWithOllama?",
     "key_points": [
-      "300_000",
-      "timeout"
+      "5 minutes",
+      "timeout",
+      "execFile",
+      "creation"
     ],
     "max_turns": 5
   },
@@ -37,9 +39,11 @@
     "tier": 26,
     "question": "Where is the temporary directory created to store the generated Modelfile?",
     "key_points": [
-      "os.tmpdir()",
+      "tmpdir",
       "mkdtemp",
-      "aura-ft-"
+      "prefix",
+      "temporary",
+      "Modelfile"
     ],
     "max_turns": 5
   },

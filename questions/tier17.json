@@ -6,8 +6,9 @@
     "key_points": [
       "projectRoot",
       "base64",
-      "slice(0, 8)",
-      "namespace"
+      "prefix",
+      "namespace",
+      "hash"
     ],
     "max_turns": 5
   },

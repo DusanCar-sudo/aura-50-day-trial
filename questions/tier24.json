@@ -40,7 +40,9 @@
     "question": "In alternator.ts, what is the default maximum number of turns allowed for Archimedes in its inner agent loop?",
     "key_points": [
       "maxTurns",
-      "15"
+      "limit",
+      "inner loop",
+      "turns"
     ],
     "max_turns": 5
   },

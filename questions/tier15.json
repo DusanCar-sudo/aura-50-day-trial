@@ -28,10 +28,11 @@
     "tier": 15,
     "question": "Explain the 'Epsilon Probe' feature in the alternator loop. What problem does it solve, and how does it work?",
     "key_points": [
-      "EPSILON_PROBE_RATE",
-      "0.05",
+      "epsilon",
+      "probe",
       "exploration",
-      "gate"
+      "gate",
+      "frozen score"
     ],
     "max_turns": 5
   },

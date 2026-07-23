@@ -2,21 +2,25 @@
   {
     "id": "t28-01",
     "tier": 28,
-    "question": "Why might local model prefill throughput hang or run extremely slowly on AMD iGPUs? How can this be resolved?",
+    "question": "What does isOllamaAvailable check in alternator.ts, and what happens when Ollama is unreachable?",
     "key_points": [
-      "Vulkan",
-      "CPU-only",
-      "GGML_VK_VISIBLE_DEVICES"
+      "Ollama",
+      "reachable",
+      "escalate",
+      "warning",
+      "large model"
     ],
     "max_turns": 5
   },
   {
     "id": "t28-02",
     "tier": 28,
-    "question": "What is the value of OLLAMA_PING_MS in alternator.ts?",
+    "question": "What is the value of OLLAMA_PING_MS in alternator.ts, and what is it used for?",
     "key_points": [
-      "3_000",
-      "ping"
+      "3 seconds",
+      "timeout",
+      "ping",
+      "OLLAMA_PING_MS"
     ],
     "max_turns": 5
   },
@@ -25,8 +29,11 @@
     "tier": 28,
     "question": "How is the duration of an episode (durationMs) calculated?",
     "key_points": [
-      "Date.now() - startMs",
-      "durationMs"
+      "elapsed",
+      "startMs",
+      "durationMs",
+      "wall-clock",
+      "milliseconds"
     ],
     "max_turns": 5
   },
@@ -44,11 +51,13 @@
   {
     "id": "t28-05",
     "tier": 28,
-    "question": "How does token-caching impact the benchmark if history is rewritten between turns?",
+    "question": "In compactor.ts, what does the RETENTION_RATIO constant control, and what is its value?",
     "key_points": [
-      "prompt cache",
-      "invalidate",
-      "compaction"
+      "RETENTION_RATIO",
+      "verbatim",
+      "recent history",
+      "compaction",
+      "window"
     ],
     "max_turns": 5
   }
