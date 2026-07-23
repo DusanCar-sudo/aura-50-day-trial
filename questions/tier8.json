@@ -2,7 +2,7 @@
   {
     "id": "t8-01",
     "tier": 8,
-    "question": "A Ruby Alternator session has these stats: total=50, rubySuccesses=8, rubyFailures=32, largeModelInterventions=42. Calculate Ruby's actual success rate among attempts, explain whether fine-tuning is warranted, and suggest what the most likely root cause is given the ratio.",
+    "question": "An Archimedes Alternator session has these stats: total=50, archimedesSuccesses=8, archimedesFailures=32, largeModelInterventions=42. Calculate Archimedes's actual success rate among attempts, explain whether fine-tuning is warranted, and suggest what the most likely root cause is given the ratio.",
     "key_points": [
       "success rate 20%",
       "below threshold",
@@ -26,9 +26,9 @@
   {
     "id": "t8-03",
     "tier": 8,
-    "question": "Design a minimal .aura.json configuration for a new developer joining the aura-code project who wants Ruby Alternator active with conservative settings (high threshold, more attempts before trusting Ruby). Write the actual JSON.",
+    "question": "Design a minimal .aura.json configuration for a new developer joining the aura-code project who wants Archimedes Alternator active with conservative settings (high threshold, more attempts before trusting Archimedes). Write the actual JSON.",
     "key_points": [
-      "ruby",
+      "archimedes",
       "enabled true",
       "competenceThreshold",
       "minAttempts",
@@ -89,7 +89,7 @@
   {
     "id": "t8-08",
     "tier": 8,
-    "question": "Given that Ruby's per-turn attempts are now forced read-only, describe a multi-step coding task where Ruby could still cause problems even without write access, and how you would detect it.",
+    "question": "Given that Archimedes's per-turn attempts are now forced read-only, describe a multi-step coding task where Archimedes could still cause problems even without write access, and how you would detect it.",
     "key_points": [
       "fabrication",
       "wrong advice",
