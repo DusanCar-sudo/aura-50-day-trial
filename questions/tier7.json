@@ -14,7 +14,7 @@
   {
     "id": "t7-02",
     "tier": 7,
-    "question": "Ruby is running in read-only mode and attempts to call edit_file. What happens, and what does the user see?",
+    "question": "Archimedes is running in read-only mode and attempts to call edit_file. What happens, and what does the user see?",
     "key_points": [
       "blocked",
       "read-only",
@@ -38,12 +38,12 @@
   {
     "id": "t7-04",
     "tier": 7,
-    "question": "The verification gate calls the large model's complete() method and gets a network error. What does verifyRubyAnswer return \u2014 valid or invalid \u2014 and why is this direction safer?",
+    "question": "The verification gate calls the large model's complete() method and gets a network error. What does verifyArchimedesAnswer return — valid or invalid — and why is this direction safer?",
     "key_points": [
       "invalid",
       "fail-safe",
       "escalate",
-      "not trust Ruby"
+      "not trust Archimedes"
     ],
     "max_turns": 5
   },
@@ -86,7 +86,7 @@
   {
     "id": "t7-08",
     "tier": 7,
-    "question": "Why should a local small model like Ruby never inherit the session's --auto permission level, even when the user explicitly launched with --auto?",
+    "question": "Why should a local small model like Archimedes never inherit the session's --auto permission level, even when the user explicitly launched with --auto?",
     "key_points": [
       "unproven",
       "competence not established",
@@ -110,7 +110,7 @@
   {
     "id": "t7-10",
     "tier": 7,
-    "question": "A developer copies a .aura.json from one project to another without changing ruby.modelName. The second project's machine doesn't have that model installed. What happens now, versus what would have happened before the dynamic model detection fix?",
+    "question": "A developer copies a .aura.json from one project to another without changing archimedes.modelName. The second project's machine doesn't have that model installed. What happens now, versus what would have happened before the dynamic model detection fix?",
     "key_points": [
       "auto-detect",
       "falls back",

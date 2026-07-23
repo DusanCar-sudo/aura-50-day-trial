@@ -50,7 +50,7 @@
   {
     "id": "t9-05",
     "tier": 9,
-    "question": "Ruby Alternator is currently forced read-only and text-only. If Ruby is later given qwen3-vl as its model, should Ruby's read-only restriction be loosened before or after it's allowed to receive images? Explain the risk ordering.",
+    "question": "Archimedes Alternator is currently forced read-only and text-only. If Archimedes is later given qwen3-vl as its model, should Archimedes's read-only restriction be loosened before or after it's allowed to receive images? Explain the risk ordering.",
     "key_points": [
       "orthogonal to modality",
       "write access",

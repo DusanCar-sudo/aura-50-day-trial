@@ -2,7 +2,7 @@
   {
     "id": "t5-01",
     "tier": 5,
-    "question": "What is the default competence threshold in RubyAlternator, and what happens when Ruby's success rate falls below it?",
+    "question": "What is the default competence threshold in Archimedes Alternator, and what happens when Archimedes's success rate falls below it?",
     "key_points": [
       "0.7",
       "escalates to large model",
@@ -13,7 +13,7 @@
   {
     "id": "t5-02",
     "tier": 5,
-    "question": "What is the minimum number of Ruby attempts required before competence gating applies, and why does this minimum exist?",
+    "question": "What is the minimum number of Archimedes attempts required before competence gating applies, and why does this minimum exist?",
     "key_points": [
       "3",
       "gather training data",
@@ -24,7 +24,7 @@
   {
     "id": "t5-03",
     "tier": 5,
-    "question": "Ruby attempts a task and its own search_code tool returns 'No results' for a function name, but Ruby's answer describes that function in detail. What does the verification gate do, and why?",
+    "question": "Archimedes attempts a task and its own search_code tool returns 'No results' for a function name, but Archimedes's answer describes that function in detail. What does the verification gate do, and why?",
     "key_points": [
       "fabrication",
       "tool history",
@@ -36,7 +36,7 @@
   {
     "id": "t5-04",
     "tier": 5,
-    "question": "A user runs 'aura --auto' from their home directory with no .aura.json file. What model does Ruby use, and how is it selected?",
+    "question": "A user runs 'aura --auto' from their home directory with no .aura.json file. What model does Archimedes use, and how is it selected?",
     "key_points": [
       "auto-detect",
       "most recently used",
@@ -48,7 +48,7 @@
   {
     "id": "t5-05",
     "tier": 5,
-    "question": "What permission level does Ruby's attempt always use, regardless of the session's own permission mode, and why was this enforced?",
+    "question": "What permission level does Archimedes's attempt always use, regardless of the session's own permission mode, and why was this enforced?",
     "key_points": [
       "read-only",
       "unproven",
@@ -60,10 +60,10 @@
   {
     "id": "t5-06",
     "tier": 5,
-    "question": "A user types ':rubyoff' in the Aura TUI. The project's .aura.json has ruby.enabled set to true. Which takes precedence, and for how long?",
+    "question": "A user types ':archoff' in the Aura TUI. The project's .aura.json has archimedes.enabled set to true. Which takes precedence, and for how long?",
     "key_points": [
       "session override",
-      ":rubyoff",
+      ":archoff",
       "until restart",
       "overrides config"
     ],
@@ -72,9 +72,9 @@
   {
     "id": "t5-07",
     "tier": 5,
-    "question": "Ruby answers a question correctly and its answer passes verification. The episode is recorded. What fields does the episode store, and how does this affect future routing for similar tasks?",
+    "question": "Archimedes answers a question correctly and its answer passes verification. The episode is recorded. What fields does the episode store, and how does this affect future routing for similar tasks?",
     "key_points": [
-      "rubySucceeded",
+      "archimedesSucceeded",
       "taskCategory",
       "successRate",
       "competence"
@@ -84,7 +84,7 @@
   {
     "id": "t5-08",
     "tier": 5,
-    "question": "Ollama's /api/tags endpoint returns an empty models list when Ruby tries to resolve its model. What does RubyAlternator do, and what message does the user see?",
+    "question": "Ollama's /api/tags endpoint returns an empty models list when Archimedes tries to resolve its model. What does Archimedes Alternator do, and what message does the user see?",
     "key_points": [
       "null config",
       "warning",
@@ -108,10 +108,10 @@
   {
     "id": "t5-10",
     "tier": 5,
-    "question": "What happens to Ruby's competence score when the verification gate catches a fabricated answer and escalates to the large model?",
+    "question": "What happens to Archimedes's competence score when the verification gate catches a fabricated answer and escalates to the large model?",
     "key_points": [
-      "rubySucceeded false",
-      "rubyFailures",
+      "archimedesSucceeded false",
+      "archimedesFailures",
       "counts against",
       "competence drops"
     ],
