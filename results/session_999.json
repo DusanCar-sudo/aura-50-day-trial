@@ -1,0 +1,21 @@
+{
+  "session": 999,
+  "model": "deepseek/deepseek-chat",
+  "zero_memory": false,
+  "timestamp": "2026-07-23T03:50:00.607057",
+  "questions": [
+    {
+      "id": "t21-01",
+      "tier": 21,
+      "question": "In alternator.ts, what LLM call parameters are used in verifyArchimedesAnswer? Does it run a full agent loop?",
+      "answer": "",
+      "score": {
+        "verdict": "incorrect",
+        "note": "timed out"
+      },
+      "elapsed_seconds": 180,
+      "exit_code": -1,
+      "timestamp": "2026-07-23T03:53:00.698590"
+    }
+  ]
+}

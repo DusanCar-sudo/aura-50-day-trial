@@ -1,0 +1,21 @@
+{
+  "session": 307,
+  "model": "deepseek/deepseek-chat",
+  "zero_memory": false,
+  "timestamp": "2026-07-23T04:33:54.909643",
+  "questions": [
+    {
+      "id": "t7-10",
+      "tier": 7,
+      "question": "A developer copies a .aura.json from one project to another without changing ruby.modelName. The second project's machine doesn't have that model installed. What happens now, versus what would have happened before the dynamic model detection fix?",
+      "answer": "",
+      "score": {
+        "verdict": "incorrect",
+        "note": "timed out"
+      },
+      "elapsed_seconds": 180,
+      "exit_code": -1,
+      "timestamp": "2026-07-23T04:36:55.040038"
+    }
+  ]
+}

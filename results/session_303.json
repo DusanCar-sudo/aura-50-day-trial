@@ -1,0 +1,21 @@
+{
+  "session": 303,
+  "model": "deepseek/deepseek-chat",
+  "zero_memory": false,
+  "timestamp": "2026-07-23T03:18:12.344777",
+  "questions": [
+    {
+      "id": "t3-05",
+      "tier": 3,
+      "question": "Write a git pre-commit hook that blocks commits containing strings that look like API keys (matching pattern sk-[a-zA-Z0-9]{32,}).",
+      "answer": "",
+      "score": {
+        "verdict": "incorrect",
+        "note": "timed out"
+      },
+      "elapsed_seconds": 180,
+      "exit_code": -1,
+      "timestamp": "2026-07-23T03:21:12.459989"
+    }
+  ]
+}
