@@ -4,11 +4,11 @@
     "tier": 16,
     "question": "In competence.ts, how is the similarity between two task strings calculated? What is the default threshold value?",
     "key_points": [
-      "similarity",
-      "Set",
+      "Jaccard",
       "intersection",
       "union",
-      "0.35"
+      "threshold",
+      "similarity"
     ],
     "max_turns": 5
   },
@@ -41,9 +41,11 @@
     "tier": 16,
     "question": "What is the maximum number of exemplars stored in the examples array of a CompetenceLevel or inside updateCompetence?",
     "key_points": [
-      "MAX_EXAMPLES",
-      "10",
-      "slice"
+      "exemplars",
+      "cap",
+      "examples",
+      "trim",
+      "recency"
     ],
     "max_turns": 5
   },

@@ -13,11 +13,11 @@
   {
     "id": "t30-02",
     "tier": 30,
-    "question": "How are token counts formatted for readability in stats.ts? Write out the thresholds for K and M.",
+    "question": "How are token counts formatted for readability in stats.ts? Describe the thresholds for K and M.",
     "key_points": [
       "formatTokenCount",
-      "1_000",
-      "1_000_000",
+      "thousands",
+      "millions",
       "K",
       "M"
     ],
@@ -40,9 +40,10 @@
     "tier": 30,
     "question": "How does stats.ts format the output string if no episodes are recorded?",
     "key_points": [
-      "Episodes recorded:  0",
-      "Tasks completed:    0 (0%)",
-      "Avg duration:       \u2014"
+      "zero episodes",
+      "empty output",
+      "zero tasks",
+      "dash placeholder"
     ],
     "max_turns": 5
   },

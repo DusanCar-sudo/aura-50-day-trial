@@ -23,11 +23,13 @@
   {
     "id": "t11-03",
     "tier": 11,
-    "question": "In episode-capture.ts, what property of the parsed JSON object does loadEpisodes inspect to verify it is a valid episode?",
+    "question": "In episode-capture.ts, what properties of the parsed JSON object does loadEpisodes inspect to verify it is a valid episode?",
     "key_points": [
-      "parsed?.id",
-      "parsed.timestamp",
-      "number"
+      "id",
+      "timestamp",
+      "validation",
+      "parse",
+      "guard"
     ],
     "max_turns": 5
   },
@@ -36,9 +38,11 @@
     "tier": 11,
     "question": "What does the durationMs field in the Episode interface represent, and how is it measured in alternator.ts?",
     "key_points": [
-      "Date.now() - startMs",
       "wall-clock",
-      "milliseconds"
+      "milliseconds",
+      "elapsed",
+      "startMs",
+      "timestamp"
     ],
     "max_turns": 5
   },
@@ -47,8 +51,10 @@
     "tier": 11,
     "question": "In episode-capture.ts, how is the filename of a stored episode named?",
     "key_points": [
-      "${id}.json",
-      "episodePath"
+      "id",
+      "json",
+      "episodePath",
+      "filename"
     ],
     "max_turns": 5
   }

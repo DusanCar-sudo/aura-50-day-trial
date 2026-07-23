@@ -4,8 +4,11 @@
     "tier": 23,
     "question": "What regex patterns are used in inferTaskCategory to categorize a task as 'review' versus 'research'?",
     "key_points": [
-      "review|audit|lint|check",
-      "research|explore|find|investigate|understand"
+      "review",
+      "audit",
+      "research",
+      "explore",
+      "regex"
     ],
     "max_turns": 5
   },
@@ -14,8 +17,11 @@
     "tier": 23,
     "question": "What regex patterns categorize a task as 'refactor' versus 'implementation'?",
     "key_points": [
-      "refactor|restructure|rename|migrate",
-      "implement|fix|add|write|create|build|update"
+      "refactor",
+      "restructure",
+      "implement",
+      "fix",
+      "regex"
     ],
     "max_turns": 5
   },

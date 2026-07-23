@@ -22,14 +22,13 @@
   {
     "id": "t27-03",
     "tier": 27,
-    "question": "In checkOpenAIJobStatus, what status values map to the job lifecycle states?",
+    "question": "In checkOpenAIJobStatus, what OpenAI status values map to each internal job lifecycle state?",
     "key_points": [
-      "validating_files",
-      "queued",
+      "pending",
       "running",
-      "succeeded",
+      "completed",
       "failed",
-      "cancelled"
+      "status map"
     ],
     "max_turns": 5
   },
@@ -49,7 +48,9 @@
     "question": "If the API key is missing during fineTuneWithOpenAI, what status does the returned job object have?",
     "key_points": [
       "failed",
-      "error: 'OPENAI_API_KEY is not set'"
+      "missing key",
+      "error message",
+      "early return"
     ],
     "max_turns": 5
   }

@@ -2,12 +2,13 @@
   {
     "id": "t14-01",
     "tier": 14,
-    "question": "In types.ts, DEFAULT_ARCHIMEDES_CONFIG specifies the default local model name. What is it, and what model is actually run in practice in this project according to the configuration?",
+    "question": "In types.ts, what does DEFAULT_ARCHIMEDES_CONFIG specify as the default local model name? How can the model be overridden at the project level?",
     "key_points": [
       "qwen2.5-coder:1.5b",
-      "granite4.1:3b",
       "modelName",
-      ".aura.json"
+      ".aura.json",
+      "override",
+      "archimedes"
     ],
     "max_turns": 5
   },
@@ -55,9 +56,10 @@
     "question": "What does the shouldFineTune function in competence.ts do, and what is its default threshold for the failure count?",
     "key_points": [
       "failures",
-      "20",
+      "threshold",
       "minFailures",
-      "fine-tune"
+      "fine-tune",
+      "trigger"
     ],
     "max_turns": 5
   }

@@ -4,11 +4,11 @@
     "tier": 20,
     "question": "In types.ts, write out the DEFAULT_ARCHIMEDES_CONFIG structure with all its default values.",
     "key_points": [
-      "modelName: 'qwen2.5-coder:1.5b'",
-      "ollamaBaseUrl: 'http://localhost:11434/v1'",
-      "competenceThreshold: 0.7",
-      "minAttempts: 3",
-      "enabled: true"
+      "qwen2.5-coder",
+      "localhost ollamaBaseUrl",
+      "competenceThreshold",
+      "minAttempts",
+      "enabled"
     ],
     "max_turns": 5
   },
@@ -29,20 +29,23 @@
     "tier": 20,
     "question": "How does the alternator determine if Archimedes is disabled via config, and what routing decision does it make in that case?",
     "key_points": [
-      "!cfg.enabled",
-      "fallbackModel",
-      "useArchimedes: false",
-      "reason"
+      "enabled",
+      "fallback",
+      "disabled",
+      "reason",
+      "escalate"
     ],
     "max_turns": 5
   },
   {
     "id": "t20-04",
     "tier": 20,
-    "question": "What is the default fallback model used when Archimedes is bypassed or disabled? Specify the exact model string in competence.ts.",
+    "question": "What is the default fallback model used when Archimedes is bypassed or disabled? Where is it defined in the source?",
     "key_points": [
       "DEFAULT_FALLBACK_MODEL",
-      "claude-sonnet-4-5-20251001"
+      "claude-sonnet",
+      "competence.ts",
+      "fallback"
     ],
     "max_turns": 5
   },

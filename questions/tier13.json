@@ -4,9 +4,10 @@
     "tier": 13,
     "question": "In competence.ts, what are the character-length filtering rules in the tokenize helper?",
     "key_points": [
-      "length > 2",
-      "split",
-      "filter"
+      "minimum length",
+      "filter",
+      "tokenize",
+      "short words"
     ],
     "max_turns": 5
   },
@@ -15,10 +16,11 @@
     "tier": 13,
     "question": "Explain the logic of tasksSimilar in competence.ts. What are the check conditions before token similarity is computed?",
     "key_points": [
-      "na === nb",
-      "includes",
-      "trim",
-      "toLowerCase"
+      "exact match",
+      "substring",
+      "normalize",
+      "lowercase",
+      "early return"
     ],
     "max_turns": 5
   },
@@ -27,8 +29,9 @@
     "tier": 13,
     "question": "If one task string is 'run test' and another is 'run', why does tasksSimilar return true immediately?",
     "key_points": [
+      "substring",
       "includes",
-      "na.includes(nb)"
+      "early return"
     ],
     "max_turns": 5
   },
@@ -37,9 +40,10 @@
     "tier": 13,
     "question": "In model-selector.ts, what is the minimum token length filtered by the tokenize helper? How does it differ from competence.ts's helper?",
     "key_points": [
-      "length >= 3",
+      "minimum 3",
       "competence",
-      "length > 2"
+      "exclusive vs inclusive",
+      "tokenize"
     ],
     "max_turns": 5
   },

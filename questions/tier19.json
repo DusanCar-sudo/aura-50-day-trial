@@ -4,9 +4,11 @@
     "tier": 19,
     "question": "In model-selector.ts, what is the minimum number of historical episodes required before model selection is active?",
     "key_points": [
-      "MIN_EPISODES_FOR_SELECTION",
-      "5",
-      "undefined"
+      "minimum episodes",
+      "threshold",
+      "undefined",
+      "history",
+      "gate"
     ],
     "max_turns": 5
   },
@@ -16,9 +18,10 @@
     "question": "Explain the weighting mechanism used in selectModelFromHistory. How are similar tasks prioritized?",
     "key_points": [
       "similarity",
-      "SIMILARITY_THRESHOLD",
-      "1 + sim",
-      "0.1"
+      "weight",
+      "boost",
+      "similar tasks",
+      "fallback weight"
     ],
     "max_turns": 5
   },
@@ -41,7 +44,8 @@
       "approvalRate",
       "tasks",
       "tie-breaker",
-      "0.05"
+      "tolerance",
+      "weighted"
     ],
     "max_turns": 5
   },

@@ -2,17 +2,19 @@
   {
     "id": "t22-01",
     "tier": 22,
-    "question": "What is the value of EPSILON_PROBE_RATE in alternator.ts?",
+    "question": "What is the default epsilon probe rate in alternator.ts, and what constant defines it?",
     "key_points": [
-      "0.05",
-      "probe"
+      "DEFAULT_EPSILON_PROBE_RATE",
+      "probe",
+      "probability",
+      "small"
     ],
     "max_turns": 5
   },
   {
     "id": "t22-02",
     "tier": 22,
-    "question": "Why is EPSILON_PROBE_RATE kept low in the alternator? Explain the cost implications.",
+    "question": "Why is the epsilon probe rate kept low in the alternator? Explain the cost implications.",
     "key_points": [
       "probe",
       "cost",
@@ -28,7 +30,8 @@
     "key_points": [
       "enabled",
       "minAttempts",
-      "useArchimedes: true"
+      "already routed",
+      "learning phase"
     ],
     "max_turns": 5
   },
@@ -37,9 +40,11 @@
     "tier": 22,
     "question": "How does assessCompetence build the confidence score when the pattern has fewer than minAttempts?",
     "key_points": [
-      "0.3 + level.attemptCount",
+      "base confidence",
+      "attempt ratio",
       "minAttempts",
-      "confidence"
+      "confidence",
+      "low attempts"
     ],
     "max_turns": 5
   },
@@ -48,8 +53,11 @@
     "tier": 22,
     "question": "How is confidence computed when success rate is high and meets the threshold?",
     "key_points": [
-      "successRate * Math.min(1, level.attemptCount / 10)",
-      "confidence"
+      "successRate",
+      "attempt count",
+      "scale",
+      "confidence",
+      "cap"
     ],
     "max_turns": 5
   }

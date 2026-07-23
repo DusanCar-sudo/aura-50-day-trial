@@ -16,9 +16,11 @@
     "tier": 18,
     "question": "What is the maximum number of instruction-tuning exemplars included in the Modelfile generation in fineTuneWithOllama?",
     "key_points": [
-      "slice(0, 50)",
-      "50",
-      "snippets"
+      "exemplars",
+      "limit",
+      "snippets",
+      "Modelfile",
+      "cap"
     ],
     "max_turns": 5
   },

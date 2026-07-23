@@ -25,12 +25,13 @@
   {
     "id": "t21-03",
     "tier": 21,
-    "question": "Explain how tool activity is summarized for the verifier in summarizeToolActivity. What truncation limit is applied to each tool result?",
+    "question": "Explain how tool activity is summarized for the verifier in summarizeToolActivity. What truncation limit is applied to each tool result? The relevant implementation is in aura-code-src/src/archimedes/alternator.ts.",
     "key_points": [
-      "MAX_RESULT_CHARS",
-      "300",
-      "argsById",
-      "tool_result"
+      "truncation",
+      "tool result",
+      "character limit",
+      "args",
+      "summarize"
     ],
     "max_turns": 5
   },
