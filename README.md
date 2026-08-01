@@ -1,42 +1,16 @@
 # Aura 50-Day Trial
 
-> ## 🔴 Trial paused — hardware limitation + broken automation
+> ## 🟢 Benchmark testing restarted — 2026-08-01
 >
-> **Status: paused as of 2026-07-26. Daily collection is stopped.**
+> **Status: restarted.** Session 8004 completed the full 320-question benchmark
+> with **180/320 correct (56.2%)**, the best full-run result so far.
 >
-> Two separate problems, neither of them the model or the approach:
+> Session 8005 then re-ran the healthy tier 3+4 slice after scorer fixes and
+> scored **8/10 correct (80%)**. Previous full-run comparison:
+> S223 31.9% → S9999 11.9% → S10000 11.9% → S10001 38.1% → **S8004 56.2%**.
 >
-> **1. The daily automation has been failing since 2026-07-24.** The systemd
-> service runs with an empty environment, so it couldn't find the `aura`
-> binary (installed under nvm) on its `PATH`. Every scheduled run since then
-> aborted at the first question, before reaching any model. Three days of
-> scheduled runs produced nothing — not bad results, no results.
->
-> **2. The GPU serving the local model has become unstable.** The AMD Radeon
-> 680M iGPU running Ollama crashes under sustained load — roughly half of
-> longer requests fail with a driver-level error
-> (`vk::Queue::submit: ErrorDeviceLost`). These failures can look identical
-> to a normal empty response unless you check the underlying logs directly,
-> which means benchmark data collected right now couldn't be trusted.
->
-> Rather than keep collecting numbers we can't stand behind, the trial is
-> paused and the daily timer is disabled until both are resolved. Everything
-> published so far reflects real, verified runs — the existing dashboard is
-> not affected by either issue, since both were caught before further
-> collection rather than after.
->
-> **What's being tried first:** setting an explicit `PATH` in the systemd
-> unit, and lowering `OLLAMA_CONTEXT_LENGTH` to reduce memory pressure on the
-> iGPU — the cheapest things to test before anything more invasive
-> (different GPU config, different hardware, or a different local-inference
-> backend).
->
-> When the hardware issue is resolved, the **full benchmark will be re-run
-> from scratch** — not resumed from where it left off — and the complete
-> comparison published, so the before/after is honest and whole.
->
-> *"I don't try. I verify"* cuts both ways: better to stop and redo it
-> properly than publish numbers we can't vouch for.
+> The earlier pause notice has been retired. The dashboard now includes the
+> restarted runs so the comparison is visible from the live charts.
 
 Daily, automated, unedited proof: does Aura's Ruby Alternator get
 measurably better over 50 days of real use?

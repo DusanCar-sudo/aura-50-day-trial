@@ -101,6 +101,7 @@ def load_sessions():
             "score": round(100 * (correct + partial * 0.5) / total, 1),
             "tiers": tiers, "mode": data.get("mode", "headless"),
         })
+    sessions.sort(key=lambda s: (s.get("timestamp") or "", _safe_int(s.get("session")) or -1))
     return sessions, raw
 
 
