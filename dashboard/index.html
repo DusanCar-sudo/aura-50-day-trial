@@ -38,6 +38,11 @@
   .progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 8px; }
   .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
   .section-title { font-size: 20px; margin: 32px 0 16px; }
+  .announcement { background: linear-gradient(135deg, rgba(63,185,80,0.22), rgba(88,166,255,0.12)); border: 1px solid rgba(63,185,80,0.6); border-radius: 12px; padding: 16px 18px; margin: 0 0 24px; }
+  .announcement h2 { color: var(--green); font-size: 18px; margin-bottom: 8px; }
+  .announcement p { color: var(--text); line-height: 1.5; margin-bottom: 6px; }
+  .announcement strong { color: var(--green); }
+  .comparison-note { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
 </style>
 </head>
 <body>
@@ -45,7 +50,20 @@
 <h1>🏆 Aura Benchmark Dashboard</h1>
 <p class="subtitle">Tracking whether Aura improves over sessions — engineering experience should accumulate, not disappear.</p>
 
+<section class="announcement" aria-label="Benchmark restart announcement">
+  <h2>✅ Benchmark testing RESTARTED</h2>
+  <p>Session 8004 completed on 2026-08-01 with <strong>180/320 correct (56.2%)</strong> on granite-4-h-tiny, the best full-run result so far.</p>
+  <p>Healthy tier 3+4 rerun S8005 also completed after scorer fixes: <strong>8/10 correct (80%)</strong>.</p>
+  <p>Full-run trend: S223 31.9% → S9999 11.9% → S10000 11.9% → S10001 38.1% → <strong>S8004 56.2%</strong>.</p>
+</section>
+
 <div class="grid" id="stat-cards"></div>
+
+<div class="chart-card">
+  <h3>🏁 Full-Run Comparison (320 Questions)</h3>
+  <p class="comparison-note">Only complete 320-question benchmark sessions are shown here for apples-to-apples comparison.</p>
+  <canvas id="fullRunChart"></canvas>
+</div>
 
 <div class="chart-row">
   <div class="chart-card">
@@ -106,7 +124,14 @@ const INDEX = [
   {session:7,timestamp:"2026-07-17T07:54:18",total:1,correct:0,partial:0,pass_rate:0.0,tier4_score:"0/0",avg_seconds:0.02,model:"deepseek/deepseek-chat"},
   {session:8,timestamp:"2026-07-17T12:56:18",total:20,correct:6,partial:2,pass_rate:0.3,tier4_score:"3/5",avg_seconds:121.0,model:"deepseek/deepseek-chat"},
   {session:9,timestamp:"2026-07-18T03:39:30",total:20,correct:0,partial:0,pass_rate:0.0,tier4_score:"0/5",avg_seconds:0.0,model:"deepseek/deepseek-chat"},
-  {session:10,timestamp:"2026-07-18T12:31:18",total:60,correct:0,partial:0,pass_rate:0.0,tier4_score:"0/5",avg_seconds:0.0,model:"zhipu-coding/glm-5.2"}
+  {session:10,timestamp:"2026-07-18T12:31:18",total:60,correct:0,partial:0,pass_rate:0.0,tier4_score:"0/5",avg_seconds:0.0,model:"zhipu-coding/glm-5.2"},
+  {session:21,timestamp:"2026-07-21T23:00:38",total:170,correct:52,partial:66,pass_rate:0.306,tier4_score:"3/5",avg_seconds:9.48,model:"deepseek/deepseek-chat"},
+  {session:223,timestamp:"2026-07-22T23:00:38",total:320,correct:102,partial:160,pass_rate:0.319,tier4_score:"3/5",avg_seconds:18.1,model:"deepseek/deepseek-chat"},
+  {session:9999,timestamp:"2026-07-24T23:00:44",total:320,correct:38,partial:197,pass_rate:0.119,tier4_score:"0/5",avg_seconds:3.06,model:"deepseek/deepseek-chat"},
+  {session:10000,timestamp:"2026-07-25T23:00:00",total:320,correct:38,partial:195,pass_rate:0.119,tier4_score:"0/5",avg_seconds:2.74,model:"deepseek/deepseek-chat"},
+  {session:10001,timestamp:"2026-07-26T23:00:02",total:320,correct:122,partial:165,pass_rate:0.381,tier4_score:"2/5",avg_seconds:19.65,model:"deepseek/deepseek-chat"},
+  {session:8004,timestamp:"2026-08-01T03:52:45",total:320,correct:180,partial:104,pass_rate:0.5625,tier4_score:"0/5",avg_seconds:51.82,model:"deepseek/deepseek-chat"},
+  {session:8005,timestamp:"2026-08-01T09:27:23",total:10,correct:8,partial:1,pass_rate:0.8,tier4_score:"4/5",avg_seconds:0.0,model:"deepseek/deepseek-chat"}
 ];
 
 const QUESTIONS = [
@@ -162,15 +187,43 @@ const cards = document.getElementById('stat-cards');
 const totalQ = INDEX.reduce((a,s)=>a+s.total,0);
 const totalC = INDEX.reduce((a,s)=>a+s.correct,0);
 const totalP = INDEX.reduce((a,s)=>a+s.partial,0);
-const bestSession = INDEX.filter(s=>s.total>=5).reduce((best,s)=>s.pass_rate>best.pass_rate?s:best);
+const fullRunSessions = INDEX.filter(s=>s.total===320);
+const bestFullRun = fullRunSessions.reduce((best,s)=>s.pass_rate>best.pass_rate?s:best);
+const tier4Ranked = INDEX.filter(s=>s.tier4_score!=="0/0").sort((a,b)=>{
+  const [ac,at]=a.tier4_score.split('/').map(Number);
+  const [bc,bt]=b.tier4_score.split('/').map(Number);
+  return (bc/bt)-(ac/at);
+});
+const bestTier4 = tier4Ranked[0];
 const models = [...new Set(INDEX.map(s=>s.model))].length;
 
 cards.innerHTML = `
   <div class="card"><h2>Total Sessions</h2><div class="big-num">${INDEX.length}</div><div class="detail">${models} unique models</div></div>
   <div class="card"><h2>Total Questions</h2><div class="big-num">${totalQ}</div><div class="detail">${totalC} correct, ${totalP} partial</div></div>
-  <div class="card"><h2>Best Pass Rate</h2><div class="big-num" style="color:var(--green)">${(bestSession.pass_rate*100).toFixed(0)}%</div><div class="detail">Session ${bestSession.session} (${bestSession.model})</div></div>
-  <div class="card"><h2>Tier 4 (Memory)</h2><div class="big-num" style="color:var(--purple)">${bestSession.tier4_score}</div><div class="detail">Best memory recall</div></div>
+  <div class="card"><h2>Best Full Run</h2><div class="big-num" style="color:var(--green)">${(bestFullRun.pass_rate*100).toFixed(1)}%</div><div class="detail">Session ${bestFullRun.session} (${bestFullRun.correct}/${bestFullRun.total})</div></div>
+  <div class="card"><h2>Best Tier 4</h2><div class="big-num" style="color:var(--purple)">${bestTier4.tier4_score}</div><div class="detail">Session ${bestTier4.session} memory recall</div></div>
 `;
+
+// Full-run comparison
+new Chart(document.getElementById('fullRunChart'), {
+  type: 'bar',
+  data: {
+    labels: fullRunSessions.map(s=>`S${s.session}`),
+    datasets: [{
+      label: 'Full-run pass rate %',
+      data: fullRunSessions.map(s=>(s.pass_rate*100).toFixed(1)),
+      backgroundColor: fullRunSessions.map(s=>s.session===8004?'#3fb950':'#58a6ff'),
+      borderColor: fullRunSessions.map(s=>s.session===8004?'#7ee787':'#79c0ff'),
+      borderWidth: 1,
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: { y: { beginAtZero: true, max: 100, ticks: { color: '#8b949e', callback: v=>v+'%' }, grid: { color: '#21262d' } }, x: { ticks: { color: '#8b949e' }, grid: { color: '#21262d' } } },
+    plugins: { legend: { labels: { color: '#e6edf3' } }, tooltip: { callbacks: { label: ctx => `${ctx.raw}% (${fullRunSessions[ctx.dataIndex].correct}/${fullRunSessions[ctx.dataIndex].total})` } } }
+  }
+});
 
 // Pass Rate Chart
 const validSessions = INDEX.filter(s=>s.total>=5);
