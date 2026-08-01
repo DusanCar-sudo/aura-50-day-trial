@@ -1,373 +1,403 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aura Benchmark Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aura Benchmark Testing Dashboard</title>
 <style>
   :root {
-    --bg: #0d1117; --card: #161b22; --border: #30363d;
-    --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff;
-    --green: #3fb950; --yellow: #d29922; --red: #f85149;
-    --purple: #bc8cff; --orange: #f0883e;
+    --bg:#071016; --panel:#101a27; --panel2:#141f2e; --line:#26384e;
+    --text:#eaf2ff; --muted:#91a4bb; --cyan:#63d9ff; --green:#6ee58a;
+    --yellow:#f2c15b; --red:#ff6b57; --ink:#071016;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; padding: 24px; }
-  h1 { font-size: 28px; margin-bottom: 8px; }
-  .subtitle { color: var(--muted); margin-bottom: 32px; font-size: 14px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-  .card h2 { font-size: 16px; color: var(--muted); margin-bottom: 8px; font-weight: 500; }
-  .card .big-num { font-size: 42px; font-weight: 700; line-height: 1.1; }
-  .card .detail { font-size: 13px; color: var(--muted); margin-top: 4px; }
-  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
-  .chart-card h3 { font-size: 18px; margin-bottom: 16px; }
-  .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
-  @media (max-width: 800px) { .chart-row { grid-template-columns: 1fr; } }
-  canvas { max-height: 350px; }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
-  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-  .badge-green { background: rgba(63,185,80,0.15); color: var(--green); }
-  .badge-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
-  .badge-red { background: rgba(248,81,73,0.15); color: var(--red); }
-  .badge-gray { background: rgba(139,148,158,0.15); color: var(--muted); }
-  .badge-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
-  .progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 8px; }
-  .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
-  .section-title { font-size: 20px; margin: 32px 0 16px; }
-  .announcement { background: linear-gradient(135deg, rgba(63,185,80,0.22), rgba(88,166,255,0.12)); border: 1px solid rgba(63,185,80,0.6); border-radius: 12px; padding: 16px 18px; margin: 0 0 24px; }
-  .announcement h2 { color: var(--green); font-size: 18px; margin-bottom: 8px; }
-  .announcement p { color: var(--text); line-height: 1.5; margin-bottom: 6px; }
-  .announcement strong { color: var(--green); }
-  .comparison-note { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif; }
+  header { border-bottom:1px solid var(--line); background:linear-gradient(180deg,#0d1924,#071016); }
+  .wrap { width:min(1480px, calc(100vw - 40px)); margin:0 auto; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:22px 0 18px; }
+  .brand { display:flex; align-items:center; gap:14px; }
+  .mark { width:42px; height:42px; border:1px solid rgba(99,217,255,.45); border-radius:10px; display:grid; place-items:center; color:var(--cyan); font-weight:800; background:#0b1723; }
+  h1 { margin:0; font-size:25px; letter-spacing:.01em; }
+  .sub { color:var(--muted); font-size:13px; margin-top:4px; }
+  .live { display:flex; align-items:center; gap:8px; color:var(--green); font:700 12px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:.12em; text-transform:uppercase; }
+  .live::before { content:""; width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 18px var(--green); }
+  .hero { padding:22px 0; border-top:1px solid rgba(99,217,255,.08); }
+  .restart { border:1px solid rgba(110,229,138,.55); background:linear-gradient(135deg,rgba(110,229,138,.18),rgba(99,217,255,.08)); border-radius:8px; padding:18px 20px; display:grid; grid-template-columns:1.3fr .7fr; gap:18px; }
+  .restart h2 { margin:0 0 8px; color:var(--green); font-size:22px; }
+  .restart p { margin:0; color:#d5e5f7; line-height:1.5; }
+  .sequence { font:700 13px ui-monospace, SFMono-Regular, Menlo, monospace; color:var(--muted); line-height:1.8; }
+  .sequence strong { color:var(--green); }
+  main { padding:22px 0 44px; }
+  .cards { display:grid; grid-template-columns:repeat(5,minmax(150px,1fr)); gap:12px; margin-bottom:16px; }
+  .card, .panel { background:var(--panel); border:1px solid var(--line); border-radius:8px; }
+  .card { padding:16px; }
+  .label { color:var(--muted); font:700 11px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:.12em; text-transform:uppercase; }
+  .value { font-size:31px; font-weight:800; margin-top:8px; line-height:1; }
+  .hint { color:var(--muted); font-size:12px; margin-top:8px; }
+  .grid { display:grid; grid-template-columns:1.25fr .75fr; gap:16px; margin-bottom:16px; }
+  .panel { padding:18px; overflow:auto; }
+  .panel h3 { margin:0 0 12px; font-size:15px; letter-spacing:.08em; text-transform:uppercase; color:#cfe3f8; }
+  table { width:100%; border-collapse:collapse; min-width:760px; }
+  th,td { border-bottom:1px solid var(--line); padding:10px 11px; text-align:left; font-size:13px; }
+  th { color:var(--muted); font:700 11px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:.1em; text-transform:uppercase; background:#0c1723; }
+  tr.is-hot td { background:rgba(110,229,138,.08); }
+  .pill { display:inline-block; min-width:58px; text-align:center; padding:4px 8px; border-radius:999px; font:800 12px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .pill.good { color:var(--green); background:rgba(110,229,138,.12); border:1px solid rgba(110,229,138,.35); }
+  .pill.warn { color:var(--yellow); background:rgba(242,193,91,.12); border:1px solid rgba(242,193,91,.35); }
+  .pill.bad { color:var(--red); background:rgba(255,107,87,.11); border:1px solid rgba(255,107,87,.32); }
+  .bar { width:130px; height:8px; border-radius:999px; background:#203044; overflow:hidden; }
+  .bar span { display:block; height:100%; border-radius:999px; }
+  svg { width:100%; height:auto; display:block; }
+  .gridline { stroke:#24364b; stroke-width:1; }
+  .axis { fill:var(--muted); font:11px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .trend-line { fill:none; stroke:var(--cyan); stroke-width:3; }
+  .dot { fill:var(--cyan); stroke:#071016; stroke-width:3; }
+  .dot.hot { fill:var(--green); }
+  .point-label { fill:#dcecff; font:700 12px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .matrix-table { min-width:900px; }
+  .matrix-table th:first-child { position:sticky; left:0; z-index:2; }
+  .heat { text-align:center; }
+  .heat span { display:block; color:rgba(234,242,255,.72); font-size:11px; margin-top:2px; }
+  .heat.good { background:rgba(110,229,138,.24); color:#dfffe7; }
+  .heat.warn { background:rgba(242,193,91,.24); color:#fff4d8; }
+  .heat.bad { background:rgba(255,107,87,.22); color:#ffe1dd; }
+  .empty { color:#52667e; text-align:center; }
+  .muted { color:var(--muted); }
+  .footer { color:var(--muted); font-size:12px; padding-top:8px; }
+  @media (max-width: 980px) {
+    .restart, .grid { grid-template-columns:1fr; }
+    .cards { grid-template-columns:repeat(2,1fr); }
+    .wrap { width:min(100vw - 24px, 1480px); }
+  }
 </style>
 </head>
 <body>
-
-<h1>🏆 Aura Benchmark Dashboard</h1>
-<p class="subtitle">Tracking whether Aura improves over sessions — engineering experience should accumulate, not disappear.</p>
-
-<section class="announcement" aria-label="Benchmark restart announcement">
-  <h2>✅ Benchmark testing RESTARTED</h2>
-  <p>Session 8004 completed on 2026-08-01 with <strong>180/320 correct (56.2%)</strong> on granite-4-h-tiny, the best full-run result so far.</p>
-  <p>Healthy tier 3+4 rerun S8005 also completed after scorer fixes: <strong>8/10 correct (80%)</strong>.</p>
-  <p>Full-run trend: S223 31.9% → S9999 11.9% → S10000 11.9% → S10001 38.1% → <strong>S8004 56.2%</strong>.</p>
-</section>
-
-<div class="grid" id="stat-cards"></div>
-
-<div class="chart-card">
-  <h3>🏁 Full-Run Comparison (320 Questions)</h3>
-  <p class="comparison-note">Only complete 320-question benchmark sessions are shown here for apples-to-apples comparison.</p>
-  <canvas id="fullRunChart"></canvas>
-</div>
-
-<div class="chart-row">
-  <div class="chart-card">
-    <h3>📈 Pass Rate Over Sessions</h3>
-    <canvas id="passRateChart"></canvas>
+<header>
+  <div class="wrap top">
+    <div class="brand">
+      <div class="mark">A</div>
+      <div>
+        <h1>Aura Benchmark Testing Dashboard</h1>
+        <div class="sub">Public test runs, scorer health, and full-run comparison for the 50-day trial.</div>
+      </div>
+    </div>
+    <div class="live">Testing restarted</div>
   </div>
-  <div class="chart-card">
-    <h3>📊 Correct / Partial / Incorrect per Session</h3>
-    <canvas id="stackedChart"></canvas>
+  <div class="wrap hero">
+    <section class="restart">
+      <div>
+        <h2>Benchmark testing restarted on 2026-08-01</h2>
+        <p>S8004 completed the full 320-question benchmark with <strong>180/320 correct (56.2%)</strong>, the best full-run result so far. S8005 then reran the healthy tier 3+4 slice after scorer fixes with <strong>8/10 correct (80%)</strong>.</p>
+      </div>
+      <div class="sequence">S223 31.9% -> S9999 11.9% -> S10000 11.9% -> S10001 38.1% -> <strong>S8004 56.2%</strong></div>
+    </section>
   </div>
-</div>
+</header>
+<main class="wrap">
+  <section class="cards">
+    <div class="card"><div class="label">Latest Session</div><div class="value">S8005</div><div class="hint">8/10 correct · 80.0%</div></div>
+    <div class="card"><div class="label">Best Full Run</div><div class="value" style="color:var(--green)">56.2%</div><div class="hint">S8004 · 180/320</div></div>
+    <div class="card"><div class="label">Restart Lift</div><div class="value" style="color:var(--cyan)">+18.1</div><div class="hint">points vs S10001 full run</div></div>
+    <div class="card"><div class="label">Sessions Tracked</div><div class="value">85</div><div class="hint">Newest rows appear first</div></div>
+    <div class="card"><div class="label">Questions Scored</div><div class="value">2360</div><div class="hint">Raw JSON-backed results</div></div>
+  </section>
 
-<div class="chart-row">
-  <div class="chart-card">
-    <h3>🤖 Model Comparison</h3>
-    <canvas id="modelChart"></canvas>
-  </div>
-  <div class="chart-card">
-    <h3>🎯 Tier Performance (Sessions with 20+ questions)</h3>
-    <canvas id="tierChart"></canvas>
-  </div>
-</div>
+  <section class="grid">
+    <div class="panel">
+      <h3>Full-Run Pass Rate Trend</h3>
+      
+      <svg viewBox="0 0 840 220" role="img" aria-label="Full-run pass-rate trend">
+        <line x1="54" x2="816" y1="178.0" y2="178.0" class="gridline"/><text x="12" y="182.0" class="axis">0%</text>
+<line x1="54" x2="816" y1="138.5" y2="138.5" class="gridline"/><text x="12" y="142.5" class="axis">25%</text>
+<line x1="54" x2="816" y1="99.0" y2="99.0" class="gridline"/><text x="12" y="103.0" class="axis">50%</text>
+<line x1="54" x2="816" y1="59.5" y2="59.5" class="gridline"/><text x="12" y="63.5" class="axis">75%</text>
+<line x1="54" x2="816" y1="20.0" y2="20.0" class="gridline"/><text x="12" y="24.0" class="axis">100%</text>
+        <polyline points="54.0,127.6 244.5,159.2 435.0,159.2 625.5,117.8 816.0,89.1" class="trend-line"/>
+        <circle cx="54.0" cy="127.6" r="5" class="dot"><title>S223: 31.9%</title></circle><circle cx="244.5" cy="159.2" r="5" class="dot"><title>S9999: 11.9%</title></circle><circle cx="435.0" cy="159.2" r="5" class="dot"><title>S10000: 11.9%</title></circle><circle cx="625.5" cy="117.8" r="5" class="dot"><title>S10001: 38.1%</title></circle><circle cx="816.0" cy="89.1" r="7" class="dot hot"><title>S8004: 56.2%</title></circle>
+        <text x="54.0" y="204" text-anchor="middle" class="axis">S223</text><text x="54.0" y="115.6" text-anchor="middle" class="point-label">31.9%</text><text x="244.5" y="204" text-anchor="middle" class="axis">S9999</text><text x="244.5" y="147.2" text-anchor="middle" class="point-label">11.9%</text><text x="435.0" y="204" text-anchor="middle" class="axis">S10000</text><text x="435.0" y="147.2" text-anchor="middle" class="point-label">11.9%</text><text x="625.5" y="204" text-anchor="middle" class="axis">S10001</text><text x="625.5" y="105.8" text-anchor="middle" class="point-label">38.1%</text><text x="816.0" y="204" text-anchor="middle" class="axis">S8004</text><text x="816.0" y="77.1" text-anchor="middle" class="point-label">56.2%</text>
+      </svg>
+    
+    </div>
+    <div class="panel">
+      <h3>Restart Run Summary</h3>
+      <table style="min-width:420px">
+        <tbody>
+          <tr><th>Run</th><td>S8004 full benchmark</td></tr>
+          <tr><th>Model</th><td>deepseek/deepseek-chat</td></tr>
+          <tr><th>Correct</th><td>180/320 (56.2%)</td></tr>
+          <tr><th>Partial</th><td>104/320</td></tr>
+          <tr><th>Follow-up</th><td>S8005 tier 3+4: 8/10 correct</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-<div class="chart-card">
-  <h3>🧠 Memory Accumulation Proof (Tier 4)</h3>
-  <canvas id="memoryChart"></canvas>
-</div>
+  <section class="panel">
+    <h3>Comparison Table: Complete 320-Question Runs</h3>
+    <table>
+      <thead><tr><th>Session</th><th>Date</th><th>Model</th><th>Correct</th><th>Partial</th><th>Correct Pass Rate</th><th>Bar</th><th>Interpretation</th></tr></thead>
+      <tbody>
+            <tr class="">
+              <td><strong>S223</strong></td>
+              <td>2026-07-22</td>
+              <td>deepseek-chat</td>
+              <td>102/320</td>
+              <td>160/320</td>
+              <td><span class="pill warn">31.9%</span></td>
+              <td><div class="bar"><span style="width:31.9%;background:var(--cyan)"></span></div></td>
+              <td>Previous full run</td>
+            </tr>
+            
 
-<h2 class="section-title">Session Details</h2>
-<div class="chart-card" style="overflow-x: auto;">
-  <table id="sessionTable">
-    <thead>
-      <tr><th>Session</th><th>Model</th><th>Questions</th><th>Correct</th><th>Partial</th><th>Fail</th><th>Pass Rate</th><th>Tier 4</th><th>Avg Time</th><th>Date</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
+            <tr class="">
+              <td><strong>S9999</strong></td>
+              <td>2026-07-24</td>
+              <td>deepseek-chat</td>
+              <td>38/320</td>
+              <td>197/320</td>
+              <td><span class="pill bad">11.9%</span></td>
+              <td><div class="bar"><span style="width:11.9%;background:var(--cyan)"></span></div></td>
+              <td>Previous full run</td>
+            </tr>
+            
 
-<h2 class="section-title">Question-Level Results</h2>
-<div class="chart-card" style="overflow-x: auto;">
-  <table id="questionTable">
-    <thead>
-      <tr><th>Session</th><th>ID</th><th>Tier</th><th>Question</th><th>Verdict</th><th>Score</th><th>Time (s)</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
+            <tr class="">
+              <td><strong>S10000</strong></td>
+              <td>2026-07-25</td>
+              <td>deepseek-chat</td>
+              <td>38/320</td>
+              <td>195/320</td>
+              <td><span class="pill bad">11.9%</span></td>
+              <td><div class="bar"><span style="width:11.9%;background:var(--cyan)"></span></div></td>
+              <td>Previous full run</td>
+            </tr>
+            
 
-<script>
-const INDEX = [
-  {session:0,timestamp:"2026-07-16T14:10:31",total:5,correct:2,partial:1,pass_rate:0.4,tier4_score:"0/0",avg_seconds:92.78,model:"ollama/granite4.1:3b",zero_memory:true},
-  {session:1,timestamp:"2026-07-16T08:04:12",total:20,correct:1,partial:2,pass_rate:0.05,tier4_score:"1/5",avg_seconds:0.76,model:"unknown"},
-  {session:2,timestamp:"2026-07-17T05:42:35",total:20,correct:3,partial:3,pass_rate:0.15,tier4_score:"0/5",avg_seconds:20.59,model:"ollama/granite4.1:3b"},
-  {session:3,timestamp:"2026-07-17T06:46:01",total:1,correct:1,partial:0,pass_rate:1.0,tier4_score:"0/0",avg_seconds:0.0,model:"deepseek/deepseek-chat"},
-  {session:4,timestamp:"2026-07-17T07:36:22",total:1,correct:1,partial:0,pass_rate:1.0,tier4_score:"0/0",avg_seconds:0.0,model:"deepseek/deepseek-chat"},
-  {session:5,timestamp:"2026-07-17T07:42:08",total:1,correct:0,partial:0,pass_rate:0.0,tier4_score:"0/0",avg_seconds:0.0,model:"deepseek/deepseek-chat"},
-  {session:6,timestamp:"2026-07-17T07:45:43",total:20,correct:0,partial:0,pass_rate:0.0,tier4_score:"0/5",avg_seconds:0.0,model:"deepseek/deepseek-chat"},
-  {session:7,timestamp:"2026-07-17T07:54:18",total:1,correct:0,partial:0,pass_rate:0.0,tier4_score:"0/0",avg_seconds:0.02,model:"deepseek/deepseek-chat"},
-  {session:8,timestamp:"2026-07-17T12:56:18",total:20,correct:6,partial:2,pass_rate:0.3,tier4_score:"3/5",avg_seconds:121.0,model:"deepseek/deepseek-chat"},
-  {session:9,timestamp:"2026-07-18T03:39:30",total:20,correct:0,partial:0,pass_rate:0.0,tier4_score:"0/5",avg_seconds:0.0,model:"deepseek/deepseek-chat"},
-  {session:10,timestamp:"2026-07-18T12:31:18",total:60,correct:0,partial:0,pass_rate:0.0,tier4_score:"0/5",avg_seconds:0.0,model:"zhipu-coding/glm-5.2"},
-  {session:21,timestamp:"2026-07-21T23:00:38",total:170,correct:52,partial:66,pass_rate:0.306,tier4_score:"3/5",avg_seconds:9.48,model:"deepseek/deepseek-chat"},
-  {session:223,timestamp:"2026-07-22T23:00:38",total:320,correct:102,partial:160,pass_rate:0.319,tier4_score:"3/5",avg_seconds:18.1,model:"deepseek/deepseek-chat"},
-  {session:9999,timestamp:"2026-07-24T23:00:44",total:320,correct:38,partial:197,pass_rate:0.119,tier4_score:"0/5",avg_seconds:3.06,model:"deepseek/deepseek-chat"},
-  {session:10000,timestamp:"2026-07-25T23:00:00",total:320,correct:38,partial:195,pass_rate:0.119,tier4_score:"0/5",avg_seconds:2.74,model:"deepseek/deepseek-chat"},
-  {session:10001,timestamp:"2026-07-26T23:00:02",total:320,correct:122,partial:165,pass_rate:0.381,tier4_score:"2/5",avg_seconds:19.65,model:"deepseek/deepseek-chat"},
-  {session:8004,timestamp:"2026-08-01T03:52:45",total:320,correct:180,partial:104,pass_rate:0.5625,tier4_score:"0/5",avg_seconds:51.82,model:"deepseek/deepseek-chat"},
-  {session:8005,timestamp:"2026-08-01T09:27:23",total:10,correct:8,partial:1,pass_rate:0.8,tier4_score:"4/5",avg_seconds:0.0,model:"deepseek/deepseek-chat"}
-];
+            <tr class="">
+              <td><strong>S10001</strong></td>
+              <td>2026-07-26</td>
+              <td>deepseek-chat</td>
+              <td>122/320</td>
+              <td>165/320</td>
+              <td><span class="pill warn">38.1%</span></td>
+              <td><div class="bar"><span style="width:38.1%;background:var(--cyan)"></span></div></td>
+              <td>Previous full run</td>
+            </tr>
+            
 
-const QUESTIONS = [
-  {s:0,id:"t1-01",tier:1,q:"What is the difference between interface and type in TypeScript?",v:"correct",sc:1.0,t:152.5},
-  {s:0,id:"t1-02",tier:1,q:"What does npm stand for?",v:"correct",sc:1.0,t:0.0},
-  {s:0,id:"t1-03",tier:1,q:"What is a closure in JavaScript?",v:"partial",sc:0.67,t:0.0},
-  {s:0,id:"t1-04",tier:1,q:"What is the difference between let and var?",v:"incorrect",sc:0.0,t:0.0},
-  {s:0,id:"t1-05",tier:1,q:"What is REST API?",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t1-01",tier:1,q:"What is the difference between interface and type in TypeScript?",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t1-02",tier:1,q:"What does npm stand for?",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t1-03",tier:1,q:"What is a closure in JavaScript?",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t1-04",tier:1,q:"What is the difference between let and var?",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t1-05",tier:1,q:"What is REST API?",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t2-01",tier:2,q:"Why does this React component re-render infinitely?",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t2-02",tier:2,q:"Diagnose: Node.js memory leak in production",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t2-03",tier:2,q:"Why is this SQL query slow?",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t2-04",tier:2,q:"Why does this Docker build fail?",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t2-05",tier:2,q:"Why does this CI pipeline break?",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t3-01",tier:3,q:"Write a rate limiter middleware",v:"partial",sc:0.5,t:0.0},
-  {s:1,id:"t3-02",tier:3,q:"Implement an LRU cache",v:"partial",sc:0.33,t:0.0},
-  {s:1,id:"t3-03",tier:3,q:"Write a debounced search input",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t3-04",tier:3,q:"Create a binary tree serializer",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t3-05",tier:3,q:"Implement a pub/sub system",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t4-01",tier:4,q:"What custom rules did we define for the linter?",v:"correct",sc:1.0,t:0.0},
-  {s:1,id:"t4-02",tier:4,q:"What is the project's deployment target?",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t4-03",tier:4,q:"What was the architectural decision for auth?",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t4-04",tier:4,q:"What database migrations are pending?",v:"incorrect",sc:0.0,t:0.0},
-  {s:1,id:"t4-05",tier:4,q:"What testing strategy did we agree on?",v:"incorrect",sc:0.0,t:0.0},
-  {s:8,id:"t1-01",tier:1,q:"What is the difference between interface and type in TypeScript?",v:"correct",sc:1.0,t:5.2},
-  {s:8,id:"t1-02",tier:1,q:"What does npm stand for?",v:"correct",sc:1.0,t:3.1},
-  {s:8,id:"t1-03",tier:1,q:"What is a closure in JavaScript?",v:"correct",sc:1.0,t:4.8},
-  {s:8,id:"t1-04",tier:1,q:"What is the difference between let and var?",v:"correct",sc:1.0,t:3.9},
-  {s:8,id:"t1-05",tier:1,q:"What is REST API?",v:"correct",sc:1.0,t:4.1},
-  {s:8,id:"t2-01",tier:2,q:"Why does this React component re-render infinitely?",v:"incorrect",sc:0.0,t:120.0},
-  {s:8,id:"t2-02",tier:2,q:"Diagnose: Node.js memory leak in production",v:"incorrect",sc:0.0,t:120.0},
-  {s:8,id:"t2-03",tier:2,q:"Why is this SQL query slow?",v:"partial",sc:0.5,t:120.0},
-  {s:8,id:"t2-04",tier:2,q:"Why does this Docker build fail?",v:"partial",sc:0.5,t:120.0},
-  {s:8,id:"t2-05",tier:2,q:"Why does this CI pipeline break?",v:"incorrect",sc:0.0,t:120.0},
-  {s:8,id:"t3-01",tier:3,q:"Write a rate limiter middleware",v:"incorrect",sc:0.0,t:120.0},
-  {s:8,id:"t3-02",tier:3,q:"Implement an LRU cache",v:"incorrect",sc:0.0,t:120.0},
-  {s:8,id:"t3-03",tier:3,q:"Write a debounced search input",v:"correct",sc:1.0,t:85.0},
-  {s:8,id:"t3-04",tier:3,q:"Create a binary tree serializer",v:"correct",sc:1.0,t:95.0},
-  {s:8,id:"t3-05",tier:3,q:"Implement a pub/sub system",v:"correct",sc:1.0,t:90.0},
-  {s:8,id:"t4-01",tier:4,q:"What custom rules did we define for the linter?",v:"incorrect",sc:0.0,t:120.0},
-  {s:8,id:"t4-02",tier:4,q:"What is the project's deployment target?",v:"correct",sc:1.0,t:120.0},
-  {s:8,id:"t4-03",tier:4,q:"What was the architectural decision for auth?",v:"incorrect",sc:0.0,t:120.0},
-  {s:8,id:"t4-04",tier:4,q:"What database migrations are pending?",v:"correct",sc:1.0,t:120.0},
-  {s:8,id:"t4-05",tier:4,q:"What testing strategy did we agree on?",v:"correct",sc:1.0,t:120.0}
-];
+            <tr class="is-hot">
+              <td><strong>S8004</strong></td>
+              <td>2026-08-01</td>
+              <td>deepseek-chat</td>
+              <td>180/320</td>
+              <td>104/320</td>
+              <td><span class="pill good">56.2%</span></td>
+              <td><div class="bar"><span style="width:56.2%;background:var(--green)"></span></div></td>
+              <td>Restart baseline, best full run</td>
+            </tr>
+            </tbody>
+    </table>
+  </section>
 
-// Stat cards
-const cards = document.getElementById('stat-cards');
-const totalQ = INDEX.reduce((a,s)=>a+s.total,0);
-const totalC = INDEX.reduce((a,s)=>a+s.correct,0);
-const totalP = INDEX.reduce((a,s)=>a+s.partial,0);
-const fullRunSessions = INDEX.filter(s=>s.total===320);
-const bestFullRun = fullRunSessions.reduce((best,s)=>s.pass_rate>best.pass_rate?s:best);
-const tier4Ranked = INDEX.filter(s=>s.tier4_score!=="0/0").sort((a,b)=>{
-  const [ac,at]=a.tier4_score.split('/').map(Number);
-  const [bc,bt]=b.tier4_score.split('/').map(Number);
-  return (bc/bt)-(ac/at);
-});
-const bestTier4 = tier4Ranked[0];
-const models = [...new Set(INDEX.map(s=>s.model))].length;
+  <section class="panel" style="margin-top:16px">
+    <h3>Latest Benchmark Sessions</h3>
+    <table>
+      <thead><tr><th>Session</th><th>Date</th><th>Model</th><th>Total</th><th>Correct</th><th>Partial</th><th>Incorrect</th><th>Correct Pass Rate</th><th>Weighted</th></tr></thead>
+      <tbody>
+            <tr class="is-hot">
+              <td><strong>S8005</strong></td>
+              <td>2026-08-01</td>
+              <td>deepseek-chat</td>
+              <td>10</td>
+              <td>8</td>
+              <td>1</td>
+              <td>1</td>
+              <td><span class="pill good">80.0%</span></td>
+              <td><span class="muted">85.0%</span></td>
+            </tr>
+            
 
-cards.innerHTML = `
-  <div class="card"><h2>Total Sessions</h2><div class="big-num">${INDEX.length}</div><div class="detail">${models} unique models</div></div>
-  <div class="card"><h2>Total Questions</h2><div class="big-num">${totalQ}</div><div class="detail">${totalC} correct, ${totalP} partial</div></div>
-  <div class="card"><h2>Best Full Run</h2><div class="big-num" style="color:var(--green)">${(bestFullRun.pass_rate*100).toFixed(1)}%</div><div class="detail">Session ${bestFullRun.session} (${bestFullRun.correct}/${bestFullRun.total})</div></div>
-  <div class="card"><h2>Best Tier 4</h2><div class="big-num" style="color:var(--purple)">${bestTier4.tier4_score}</div><div class="detail">Session ${bestTier4.session} memory recall</div></div>
-`;
+            <tr class="is-hot">
+              <td><strong>S8004</strong></td>
+              <td>2026-08-01</td>
+              <td>deepseek-chat</td>
+              <td>320</td>
+              <td>180</td>
+              <td>104</td>
+              <td>36</td>
+              <td><span class="pill good">56.2%</span></td>
+              <td><span class="muted">72.5%</span></td>
+            </tr>
+            
 
-// Full-run comparison
-new Chart(document.getElementById('fullRunChart'), {
-  type: 'bar',
-  data: {
-    labels: fullRunSessions.map(s=>`S${s.session}`),
-    datasets: [{
-      label: 'Full-run pass rate %',
-      data: fullRunSessions.map(s=>(s.pass_rate*100).toFixed(1)),
-      backgroundColor: fullRunSessions.map(s=>s.session===8004?'#3fb950':'#58a6ff'),
-      borderColor: fullRunSessions.map(s=>s.session===8004?'#7ee787':'#79c0ff'),
-      borderWidth: 1,
-      borderRadius: 6
-    }]
-  },
-  options: {
-    responsive: true,
-    scales: { y: { beginAtZero: true, max: 100, ticks: { color: '#8b949e', callback: v=>v+'%' }, grid: { color: '#21262d' } }, x: { ticks: { color: '#8b949e' }, grid: { color: '#21262d' } } },
-    plugins: { legend: { labels: { color: '#e6edf3' } }, tooltip: { callbacks: { label: ctx => `${ctx.raw}% (${fullRunSessions[ctx.dataIndex].correct}/${fullRunSessions[ctx.dataIndex].total})` } } }
-  }
-});
+            <tr class="">
+              <td><strong>S10001</strong></td>
+              <td>2026-07-26</td>
+              <td>deepseek-chat</td>
+              <td>320</td>
+              <td>122</td>
+              <td>165</td>
+              <td>33</td>
+              <td><span class="pill warn">38.1%</span></td>
+              <td><span class="muted">63.9%</span></td>
+            </tr>
+            
 
-// Pass Rate Chart
-const validSessions = INDEX.filter(s=>s.total>=5);
-new Chart(document.getElementById('passRateChart'), {
-  type: 'line',
-  data: {
-    labels: validSessions.map(s=>`S${s.session}`),
-    datasets: [{
-      label: 'Pass Rate',
-      data: validSessions.map(s=>s.pass_rate*100),
-      borderColor: '#58a6ff', backgroundColor: 'rgba(88,166,255,0.1)',
-      fill: true, tension: 0.3, pointRadius: 5
-    }]
-  },
-  options: {
-    responsive: true,
-    scales: { y: { beginAtZero: true, max: 100, ticks: { color: '#8b949e', callback: v=>v+'%' }, grid: { color: '#21262d' } }, x: { ticks: { color: '#8b949e' }, grid: { color: '#21262d' } } },
-    plugins: { legend: { labels: { color: '#e6edf3' } } }
-  }
-});
+            <tr class="">
+              <td><strong>S10000</strong></td>
+              <td>2026-07-25</td>
+              <td>deepseek-chat</td>
+              <td>320</td>
+              <td>38</td>
+              <td>195</td>
+              <td>87</td>
+              <td><span class="pill bad">11.9%</span></td>
+              <td><span class="muted">42.3%</span></td>
+            </tr>
+            
 
-// Stacked bar
-new Chart(document.getElementById('stackedChart'), {
-  type: 'bar',
-  data: {
-    labels: validSessions.map(s=>`S${s.session}`),
-    datasets: [
-      { label: 'Correct', data: validSessions.map(s=>s.correct), backgroundColor: '#3fb950' },
-      { label: 'Partial', data: validSessions.map(s=>s.partial), backgroundColor: '#d29922' },
-      { label: 'Fail', data: validSessions.map(s=>s.total-s.correct-s.partial), backgroundColor: '#f85149' }
-    ]
-  },
-  options: {
-    responsive: true, scales: { x: { stacked: true, ticks: { color: '#8b949e' }, grid: { color: '#21262d' } }, y: { stacked: true, ticks: { color: '#8b949e' }, grid: { color: '#21262d' } } },
-    plugins: { legend: { labels: { color: '#e6edf3' } } }
-  }
-});
+            <tr class="">
+              <td><strong>S9999</strong></td>
+              <td>2026-07-24</td>
+              <td>deepseek-chat</td>
+              <td>320</td>
+              <td>38</td>
+              <td>197</td>
+              <td>85</td>
+              <td><span class="pill bad">11.9%</span></td>
+              <td><span class="muted">42.7%</span></td>
+            </tr>
+            
 
-// Model comparison
-const modelData = {};
-INDEX.filter(s=>s.total>=5).forEach(s=>{
-  if(!modelData[s.model]) modelData[s.model]={correct:0,total:0};
-  modelData[s.model].correct+=s.correct;
-  modelData[s.model].total+=s.total;
-});
-const modelNames = Object.keys(modelData);
-new Chart(document.getElementById('modelChart'), {
-  type: 'bar',
-  data: {
-    labels: modelNames.map(m=>m.split('/').pop()),
-    datasets: [{
-      label: 'Overall Pass Rate %',
-      data: modelNames.map(m=>(modelData[m].correct/modelData[m].total*100).toFixed(1)),
-      backgroundColor: ['#58a6ff','#3fb950','#bc8cff','#f0883e','#d29922','#f85149']
-    }]
-  },
-  options: {
-    responsive: true, indexAxis: 'y',
-    scales: { x: { beginAtZero: true, max: 100, ticks: { color: '#8b949e', callback: v=>v+'%' }, grid: { color: '#21262d' } }, y: { ticks: { color: '#e6edf3', font: {size:11} }, grid: { color: '#21262d' } } },
-    plugins: { legend: { display: false } }
-  }
-});
+            <tr class="">
+              <td><strong>S8003</strong></td>
+              <td>2026-07-23</td>
+              <td>deepseek-chat</td>
+              <td>1</td>
+              <td>1</td>
+              <td>0</td>
+              <td>0</td>
+              <td><span class="pill good">100.0%</span></td>
+              <td><span class="muted">100.0%</span></td>
+            </tr>
+            
 
-// Tier performance
-const tierData = {};
-validSessions.forEach(s=>{
-  const qs = QUESTIONS.filter(q=>q.s===s.session);
-  qs.forEach(q=>{
-    if(!tierData[q.tier]) tierData[q.tier]={correct:0,partial:0,incorrect:0};
-    tierData[q.tier][q.v]++;
-  });
-});
-const tiers = Object.keys(tierData).map(Number).sort();
-new Chart(document.getElementById('tierChart'), {
-  type: 'bar',
-  data: {
-    labels: tiers.map(t=>`Tier ${t}`),
-    datasets: [
-      { label: 'Correct', data: tiers.map(t=>tierData[t].correct), backgroundColor: '#3fb950' },
-      { label: 'Partial', data: tiers.map(t=>tierData[t].partial), backgroundColor: '#d29922' },
-      { label: 'Fail', data: tiers.map(t=>tierData[t].incorrect), backgroundColor: '#f85149' }
-    ]
-  },
-  options: {
-    responsive: true, scales: { x: { stacked: true, ticks: { color: '#8b949e' }, grid: { color: '#21262d' } }, y: { stacked: true, ticks: { color: '#8b949e' }, grid: { color: '#21262d' } } },
-    plugins: { legend: { labels: { color: '#e6edf3' } } }
-  }
-});
+            <tr class="">
+              <td><strong>S8002</strong></td>
+              <td>2026-07-23</td>
+              <td>deepseek-chat</td>
+              <td>1</td>
+              <td>0</td>
+              <td>0</td>
+              <td>1</td>
+              <td><span class="pill bad">0.0%</span></td>
+              <td><span class="muted">0.0%</span></td>
+            </tr>
+            
 
-// Memory chart (Tier 4)
-const tier4Sessions = validSessions.filter(s=>s.tier4_score!=="0/0");
-new Chart(document.getElementById('memoryChart'), {
-  type: 'bar',
-  data: {
-    labels: tier4Sessions.map(s=>`S${s.session} (${s.model.split('/').pop()})`),
-    datasets: [{
-      label: 'Tier 4 Score',
-      data: tier4Sessions.map(s=>{const [c,t]=s.tier4_score.split('/').map(Number);return t?c/t*100:0}),
-      backgroundColor: tier4Sessions.map(s=>{const [c,t]=s.tier4_score.split('/').map(Number);return c/t>=0.6?'#3fb950':c/t>=0.3?'#d29922':'#f85149'}),
-      borderRadius: 6
-    }]
-  },
-  options: {
-    responsive: true,
-    scales: { y: { beginAtZero: true, max: 100, ticks: { color: '#8b949e', callback: v=>v+'%' }, grid: { color: '#21262d' } }, x: { ticks: { color: '#8b949e', font: {size:10} }, grid: { color: '#21262d' } } },
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => tier4Sessions[ctx.dataIndex].tier4_score } } }
-  }
-});
+            <tr class="">
+              <td><strong>S8001</strong></td>
+              <td>2026-07-23</td>
+              <td>deepseek-chat</td>
+              <td>1</td>
+              <td>0</td>
+              <td>0</td>
+              <td>1</td>
+              <td><span class="pill bad">0.0%</span></td>
+              <td><span class="muted">0.0%</span></td>
+            </tr>
+            
 
-// Session table
-const tbody = document.querySelector('#sessionTable tbody');
-INDEX.forEach(s=>{
-  const fail = s.total - s.correct - s.partial;
-  const date = new Date(s.timestamp).toLocaleDateString();
-  const prClass = s.pass_rate>=0.5?'badge-green':s.pass_rate>0?'badge-yellow':'badge-red';
-  tbody.innerHTML += `<tr>
-    <td><strong>S${s.session}</strong></td>
-    <td><span class="badge badge-blue">${(s.model||'unknown').split('/').pop()}</span></td>
-    <td>${s.total}</td>
-    <td style="color:var(--green)">${s.correct}</td>
-    <td style="color:var(--yellow)">${s.partial}</td>
-    <td style="color:var(--red)">${fail}</td>
-    <td><span class="badge ${prClass}">${(s.pass_rate*100).toFixed(0)}%</span></td>
-    <td><strong>${s.tier4_score}</strong></td>
-    <td>${s.avg_seconds.toFixed(1)}s</td>
-    <td>${date}</td>
-  </tr>`;
-});
+            <tr class="">
+              <td><strong>S1004</strong></td>
+              <td>2026-07-23</td>
+              <td>deepseek-chat</td>
+              <td>5</td>
+              <td>1</td>
+              <td>0</td>
+              <td>4</td>
+              <td><span class="pill bad">20.0%</span></td>
+              <td><span class="muted">20.0%</span></td>
+            </tr>
+            
 
-// Question table
-const qtbody = document.querySelector('#questionTable tbody');
-QUESTIONS.forEach(q=>{
-  const vClass = q.v==='correct'?'badge-green':q.v==='partial'?'badge-yellow':'badge-red';
-  qtbody.innerHTML += `<tr>
-    <td>S${q.s}</td>
-    <td><code>${q.id}</code></td>
-    <td>T${q.tier}</td>
-    <td>${q.q.substring(0,60)}${q.q.length>60?'...':''}</td>
-    <td><span class="badge ${vClass}">${q.v}</span></td>
-    <td>${(q.sc*100).toFixed(0)}%</td>
-    <td>${q.t.toFixed(1)}</td>
-  </tr>`;
-});
-</script>
+            <tr class="">
+              <td><strong>S1003</strong></td>
+              <td>2026-07-23</td>
+              <td>deepseek-chat</td>
+              <td>5</td>
+              <td>0</td>
+              <td>0</td>
+              <td>5</td>
+              <td><span class="pill bad">0.0%</span></td>
+              <td><span class="muted">0.0%</span></td>
+            </tr>
+            
 
+            <tr class="">
+              <td><strong>S1002</strong></td>
+              <td>2026-07-23</td>
+              <td>deepseek-chat</td>
+              <td>5</td>
+              <td>2</td>
+              <td>3</td>
+              <td>0</td>
+              <td><span class="pill warn">40.0%</span></td>
+              <td><span class="muted">70.0%</span></td>
+            </tr>
+            
+
+            <tr class="">
+              <td><strong>S1001</strong></td>
+              <td>2026-07-23</td>
+              <td>deepseek-chat</td>
+              <td>5</td>
+              <td>3</td>
+              <td>2</td>
+              <td>0</td>
+              <td><span class="pill good">60.0%</span></td>
+              <td><span class="muted">80.0%</span></td>
+            </tr>
+            
+
+            <tr class="">
+              <td><strong>S9001</strong></td>
+              <td>2026-07-23</td>
+              <td>deepseek-chat</td>
+              <td>1</td>
+              <td>1</td>
+              <td>0</td>
+              <td>0</td>
+              <td><span class="pill good">100.0%</span></td>
+              <td><span class="muted">100.0%</span></td>
+            </tr>
+            
+
+            <tr class="">
+              <td><strong>S9998</strong></td>
+              <td>2026-07-23</td>
+              <td>deepseek-chat</td>
+              <td>1</td>
+              <td>0</td>
+              <td>1</td>
+              <td>0</td>
+              <td><span class="pill bad">0.0%</span></td>
+              <td><span class="muted">50.0%</span></td>
+            </tr>
+            </tbody>
+    </table>
+  </section>
+
+  <section class="panel" style="margin-top:16px">
+    <h3>Tier Coverage Matrix: Full-Run Comparison</h3>
+    
+      <table class="matrix-table">
+        <thead><tr><th>Tier</th><th>S223</th><th>S9999</th><th>S10000</th><th>S10001</th><th>S8004</th></tr></thead>
+        <tbody><tr><th>T1</th><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T2</th><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T3</th><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td></tr><tr><th>T4</th><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td></tr><tr><th>T5</th><td class="heat bad"><strong>10%</strong><span>1/10</span></td><td class="heat bad"><strong>0%</strong><span>0/10</span></td><td class="heat bad"><strong>0%</strong><span>0/10</span></td><td class="heat bad"><strong>20%</strong><span>2/10</span></td><td class="heat bad"><strong>20%</strong><span>2/10</span></td></tr><tr><th>T6</th><td class="heat bad"><strong>0%</strong><span>0/10</span></td><td class="heat bad"><strong>0%</strong><span>0/10</span></td><td class="heat bad"><strong>0%</strong><span>0/10</span></td><td class="heat bad"><strong>10%</strong><span>1/10</span></td><td class="heat bad"><strong>20%</strong><span>2/10</span></td></tr><tr><th>T7</th><td class="heat warn"><strong>30%</strong><span>3/10</span></td><td class="heat bad"><strong>0%</strong><span>0/10</span></td><td class="heat bad"><strong>0%</strong><span>0/10</span></td><td class="heat bad"><strong>20%</strong><span>2/10</span></td><td class="heat bad"><strong>20%</strong><span>2/10</span></td></tr><tr><th>T8</th><td class="heat bad"><strong>20%</strong><span>2/10</span></td><td class="heat bad"><strong>0%</strong><span>0/10</span></td><td class="heat bad"><strong>0%</strong><span>0/10</span></td><td class="heat bad"><strong>10%</strong><span>1/10</span></td><td class="heat bad"><strong>20%</strong><span>2/10</span></td></tr><tr><th>T9</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td></tr><tr><th>T10</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td></tr><tr><th>T11</th><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T12</th><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T13</th><td class="heat good"><strong>80%</strong><span>4/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td><td class="heat good"><strong>100%</strong><span>5/5</span></td></tr><tr><th>T14</th><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T15</th><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td></tr><tr><th>T16</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td></tr><tr><th>T17</th><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T18</th><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T19</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T20</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T21</th><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td></tr><tr><th>T22</th><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td></tr><tr><th>T23</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T24</th><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td></tr><tr><th>T25</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td></tr><tr><th>T26</th><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T27</th><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat good"><strong>100%</strong><span>5/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T28</th><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td></tr><tr><th>T29</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T30</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td></tr><tr><th>T31</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td></tr><tr><th>T32</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T33</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td></tr><tr><th>T34</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T35</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T36</th><td class="heat good"><strong>80%</strong><span>4/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T37</th><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td></tr><tr><th>T38</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T39</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T40</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T41</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T42</th><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T43</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T44</th><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>100%</strong><span>5/5</span></td></tr><tr><th>T45</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T46</th><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T47</th><td class="heat good"><strong>80%</strong><span>4/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td><td class="heat good"><strong>100%</strong><span>5/5</span></td></tr><tr><th>T48</th><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T49</th><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td></tr><tr><th>T50</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat bad"><strong>0%</strong><span>0/5</span></td><td class="heat good"><strong>100%</strong><span>5/5</span></td></tr><tr><th>T51</th><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat good"><strong>100%</strong><span>5/5</span></td></tr><tr><th>T52</th><td class="heat good"><strong>80%</strong><span>4/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat good"><strong>100%</strong><span>5/5</span></td></tr><tr><th>T53</th><td class="heat good"><strong>80%</strong><span>4/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T54</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td></tr><tr><th>T55</th><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T56</th><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td><td class="heat good"><strong>60%</strong><span>3/5</span></td></tr><tr><th>T57</th><td class="heat good"><strong>80%</strong><span>4/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T58</th><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T59</th><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat warn"><strong>40%</strong><span>2/5</span></td><td class="heat good"><strong>80%</strong><span>4/5</span></td></tr><tr><th>T60</th><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat bad"><strong>20%</strong><span>1/5</span></td><td class="heat good"><strong>100%</strong><span>5/5</span></td></tr></tbody>
+      </table>
+    
+  </section>
+  <div class="footer">Generated from results/session_*.json. Correct pass rate is strict correct/total; weighted score counts partial answers as half credit.</div>
+</main>
 </body>
 </html>
