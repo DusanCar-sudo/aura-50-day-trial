@@ -12,19 +12,19 @@
 > The earlier pause notice has been retired. The dashboard now includes the
 > restarted runs so the comparison is visible from the live charts.
 
-Daily, automated, unedited proof: does Aura's Ruby Alternator get
+Daily, automated, unedited proof: does Aura's Archimedes Alternator get
 measurably better over 50 days of real use?
 
 ## 📊 Live Dashboard
 **[View live charts →](https://dusancar-sudo.github.io/aura-50-day-trial/)**
 
-Pass rate trend, verification catch rate, and Ruby competence by category —
+Pass rate trend, verification catch rate, and Archimedes competence by category —
 updated automatically every day. No download needed.
 
 ## Setup
 - **Large model (cloud):** DeepSeek Chat (`deepseek/deepseek-chat`) — the escalation target the benchmark runs against (`runner/run.py`)
-- **Local model (Ruby Alternator):** `gemma-archimedes-gen2` — a local fine-tune of Gemma-4-E2B, 4.6B parameters, Q4_K_M, served by Ollama on an AMD Radeon 680M iGPU (`.aura.json`)
-- **Ruby Alternator:** local model attempts every task first, gets verified by the large model, escalates on failure or low competence
+- **Local model (Archimedes Alternator):** `gemma-archimedes-gen2` — a local fine-tune of Gemma-4-E2B, 4.6B parameters, Q4_K_M, served by Ollama on an AMD Radeon 680M iGPU (`.aura.json`)
+- **Archimedes Alternator:** local model attempts every task first, gets verified by the large model, escalates on failure or low competence
 
 > **Note:** earlier revisions of this README described the setup as GLM-5.2 plus
 > Granite 4.1 3B on CPU. Both changed during the trial — the local model moved to
@@ -35,7 +35,7 @@ updated automatically every day. No download needed.
 
 ## What is this?
 Every day a systemd timer runs the full Aura benchmark suite (115 questions,
-tiers 1-19) against the current state of Ruby Alternator's accumulated
+tiers 1-19) against the current state of Archimedes Alternator's accumulated
 episode/competence history, and commits the raw result here — good day or
 bad day, nothing is cherry-picked.
 
@@ -44,7 +44,7 @@ See [CHARTER.md](CHARTER.md) for the full architecture and success metrics.
 ## Case Studies
 Real incidents — infrastructure failures, bugs found, fixes applied:
 - [2026-07-17 — Ollama port collision: why sessions 002 and 008 scored near zero](case-studies/2026-07-17-ollama-port-collision.md)
-- [2026-07-17 — Catching Ruby fabricating a function that doesn't exist](case-studies/2026-07-17-fabrication-catch.md)
+- [2026-07-17 — Catching Archimedes fabricating a function that doesn't exist](case-studies/2026-07-17-fabrication-catch.md)
 
 ## Structure
 - `logs/` — one dated entry per day

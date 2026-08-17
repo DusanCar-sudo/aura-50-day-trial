@@ -1,7 +1,7 @@
 # Aura Standing Rules
 
 ## The record is the product
-This repo is a dated, public log of whether the Ruby Alternator
+This repo is a dated, public log of whether the Archimedes Alternator
 improves answer quality. Its entire value is that the log is
 untampered. `answers/`, `results/`, `logs/`, `questions/` and
 `case-studies/` are evidence. Append to them; never edit,
