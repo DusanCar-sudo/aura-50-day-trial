@@ -1,0 +1,39 @@
+{
+  "timestamp": "2026-08-26T21:12:16.744Z",
+  "projectRoot": "/run/media/dusan/DATA1/Aura_Benchmark",
+  "episodeStats": {
+    "total": 2249,
+    "archimedesSuccesses": 369,
+    "archimedesFailures": 1492,
+    "largeModelInterventions": 1880,
+    "readyForFineTune": true
+  },
+  "competence": [
+    {
+      "category": "other",
+      "successRate": 0.18945487042001788,
+      "count": 1119
+    },
+    {
+      "category": "implementation",
+      "successRate": 0.22530864197530864,
+      "count": 648
+    },
+    {
+      "category": "review",
+      "successRate": 0.11594202898550725,
+      "count": 69
+    },
+    {
+      "category": "research",
+      "successRate": 0.1111111111111111,
+      "count": 18
+    },
+    {
+      "category": "refactor",
+      "successRate": 0.14285714285714285,
+      "count": 7
+    }
+  ],
+  "verificationCatchRate": 0.8017195056421279
+}

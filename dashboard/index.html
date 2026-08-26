@@ -3,103 +3,50 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aura Benchmark · Ruby Alternator Dashboard</title>
-<meta name="description" content="Daily, automated, unedited benchmark results for Aura's Ruby Alternator. Interactive views, time simulation, tier heatmaps, and interpolation.">
+<title>Aura Benchmark · Archimedes Alternator Dashboard</title>
+<meta name="description" content="Daily, automated, unedited benchmark results for Aura's Archimedes Alternator. Compare full-run pass rates, tier competence, and verification catch rate.">
 <style>
 :root{
-  --bg:#f7f8fb;--surface:#ffffff;--surface2:#fbfcfe;--text:#0f172a;--muted:#5b6b82;
+  --bg:#f5f6f8;--surface:#ffffff;--surface2:#fbfcfe;--text:#0f172a;--muted:#5b6b82;
   --faint:#94a3b8;--border:#e6e9ef;--border2:#eef1f5;--accent:#4f46e5;--accent2:#6366f1;
   --accent-soft:#eef2ff;--green:#16a34a;--green-soft:#dcfce7;--amber:#d97706;--amber-soft:#fef3c7;
   --red:#dc2626;--red-soft:#fee2e2;--grid:rgba(15,23,42,.07);--shadow:0 1px 2px rgba(15,23,42,.04),0 6px 20px rgba(15,23,42,.06);
-  --shadow-lg:0 4px 12px rgba(15,23,42,.06),0 12px 40px rgba(15,23,42,.08);
-  --radius:16px;--radius-sm:10px;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --t-anim:.35s cubic-bezier(.4,0,.2,1);
+  --radius:14px;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
 [data-theme=dark]{
-  --bg:#080d18;--surface:#111a2c;--surface2:#0d1424;--text:#e7eefb;--muted:#93a4bd;--faint:#5d6b82;
-  --border:#1e293f;--border2:#1a2438;--accent:#818cf8;--accent2:#a5b4fc;--accent-soft:#1c2742;
+  --bg:#0a0f1c;--surface:#121a2c;--surface2:#0e1524;--text:#e7eefb;--muted:#93a4bd;--faint:#5d6b82;
+  --border:#233049;--border2:#1b263c;--accent:#818cf8;--accent2:#a5b4fc;--accent-soft:#1c2742;
   --green:#34d399;--green-soft:#0e2c23;--amber:#fbbf24;--amber-soft:#34290c;--red:#f87171;--red-soft:#341717;
-  --grid:rgba(148,163,184,.10);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 26px rgba(0,0,0,.4);
-  --shadow-lg:0 4px 12px rgba(0,0,0,.3),0 12px 40px rgba(0,0,0,.5);
+  --grid:rgba(148,163,184,.12);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 26px rgba(0,0,0,.4);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font:14.5px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;transition:background var(--t-anim),color var(--t-anim)}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
-.wrap{max-width:1240px;margin:0 auto;padding:0 24px 80px}
-
-/* ---- header ---- */
-header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:28px 0 8px;flex-wrap:wrap}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px 80px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 0 6px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:14px}
-.logo{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#fff;font-weight:800;font-size:21px;box-shadow:0 6px 18px rgba(79,70,229,.35)}
-.brand h1{margin:0;font-size:20px;letter-spacing:-.01em}
+.logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#fff;font-weight:800;font-size:20px;box-shadow:0 6px 18px rgba(79,70,229,.35)}
+.brand h1{margin:0;font-size:19px;letter-spacing:-.01em}
 .brand .sub{margin:2px 0 0;color:var(--muted);font-size:13px}
 .topright{display:flex;align-items:center;gap:10px}
 .pill-gen{font:12px var(--mono);color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:7px 11px;border-radius:999px}
-.theme-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-size:16px;display:grid;place-items:center;transition:border-color .2s}
+.theme-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-size:16px;display:grid;place-items:center}
 .theme-btn:hover{border-color:var(--accent)}
-
-/* ---- KPI cards ---- */
-.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:20px 0 24px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 16px 15px;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden}
-.card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:18px 0 22px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 16px 15px;box-shadow:var(--shadow)}
 .card .k{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
-.card .v{font-size:28px;font-weight:800;letter-spacing:-.02em;margin-top:8px;line-height:1}
+.card .v{font-size:27px;font-weight:800;letter-spacing:-.02em;margin-top:8px;line-height:1}
 .card .h{margin-top:7px;font-size:12px;color:var(--faint)}
 .card .v .unit{font-size:15px;font-weight:700;color:var(--muted)}
-.card .sparkbar{position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--border2)}
-.card .sparkbar>i{display:block;height:100%;border-radius:0 3px 3px 0;transition:width .8s cubic-bezier(.4,0,.2,1)}
 .delta-up{color:var(--green)}.delta-down{color:var(--red)}
-
-/* ---- tabs ---- */
-.tabs{display:flex;gap:4px;margin:0 0 22px;padding:4px;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);width:fit-content;max-width:100%;overflow-x:auto}
-.tab{padding:9px 18px;border-radius:10px;cursor:pointer;font-size:13.5px;font-weight:700;color:var(--muted);border:none;background:transparent;transition:all var(--t-anim);white-space:nowrap;display:inline-flex;align-items:center;gap:8px}
-.tab:hover{color:var(--text)}
-.tab.active{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(79,70,229,.3)}
-.tab .ticon{font-size:15px}
-.tabview{display:none;animation:fadeUp .4s ease}
-.tabview.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-/* ---- panels ---- */
-.section{margin-bottom:26px}
+.section{margin-top:26px}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
 .sec-head h2{margin:0;font-size:16px;letter-spacing:-.01em}
 .sec-head .desc{color:var(--muted);font-size:13px}
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
-.panel-inner{padding:0;border:none;box-shadow:none;background:transparent}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
-
-/* ---- controls ---- */
-.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
-.btn{border:1px solid var(--border);background:var(--surface2);color:var(--text);padding:8px 14px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:600;transition:all .15s}
-.btn:hover{border-color:var(--accent);background:var(--surface)}
-.btn.active,.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-.btn.primary:hover{background:var(--accent2)}
-select,input[type=text],input[type=search]{font:inherit;color:var(--text);background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:8px 11px}
-input[type=range]{accent-color:var(--accent)}
-.lbl-inline{font-size:12.5px;color:var(--muted);font-weight:600}
-.range-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-
-/* ---- scrubber ---- */
-.scrubber{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:20px}
-.scrubber-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-.scrubber-head .info{font-size:13px;color:var(--muted)}
-.scrubber-head .info b{color:var(--text);font-weight:700}
-.scrubber-track{position:relative;height:44px}
-.scrubber-track input[type=range]{position:absolute;width:100%;height:44px;top:0;margin:0;opacity:0;cursor:pointer;z-index:3}
-.scrubber-line{position:absolute;top:18px;left:0;right:0;height:8px;background:var(--border2);border-radius:4px;overflow:hidden}
-.scrubber-fill{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .15s}
-.scrubber-knob{position:absolute;top:10px;width:24px;height:24px;border-radius:50%;background:var(--surface);border:3px solid var(--accent);box-shadow:0 2px 8px rgba(79,70,229,.3);transform:translateX(-50%);transition:left .15s;pointer-events:none;z-index:2}
-.scrubber-labels{position:relative;height:16px;margin-top:2px}
-.scrubber-labels span{position:absolute;font:11px var(--mono);color:var(--faint);transform:translateX(-50%);white-space:nowrap}
-.play-btn{width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--accent);cursor:pointer;font-size:14px;display:grid;place-items:center;transition:all .15s;flex-shrink:0}
-.play-btn:hover{border-color:var(--accent);background:var(--accent-soft)}
-
-/* ---- legend / chips ---- */
-.legend{display:flex;flex-wrap:wrap;gap:10px 16px;font-size:12.5px;color:var(--muted);margin-top:14px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.legend{display:flex;flex-wrap:wrap;gap:10px 16px;font-size:12.5px;color:var(--muted)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
@@ -108,8 +55,14 @@ input[type=range]{accent-color:var(--accent)}
 .chip .dot{width:9px;height:9px;border-radius:50%}
 .chip.off{opacity:.42}
 .chip .rt{font-family:var(--mono);font-size:12px;color:var(--muted);font-weight:500}
-
-/* ---- table ---- */
+.row-tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.btn{border:1px solid var(--border);background:var(--surface2);color:var(--text);padding:7px 13px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.primary:hover{background:var(--accent2)}
+select,input[type=text],input[type=search]{font:inherit;color:var(--text);background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:8px 11px}
+input[type=search]{width:220px;max-width:100%}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 table{width:100%;border-collapse:collapse;font-size:13.5px}
 th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--border2);white-space:nowrap}
 th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);cursor:pointer;user-select:none}
@@ -123,118 +76,15 @@ tbody tr:hover{background:var(--surface2)}
 .muted{color:var(--muted)}
 .bar-mini{height:7px;border-radius:4px;background:var(--border2);overflow:hidden;width:90px;display:inline-block;vertical-align:middle;margin-right:8px}
 .bar-mini>i{display:block;height:100%;background:var(--accent)}
-
-/* ---- heatmap ---- */
-.heatmap-grid{display:grid;gap:3px;margin:8px 0}
-.hm-cell{aspect-ratio:1;border-radius:4px;cursor:pointer;transition:transform .12s;position:relative}
-.hm-cell:hover{transform:scale(1.18);z-index:2}
-.hm-cell.empty{background:var(--border2);cursor:default}
-.hm-cell.empty:hover{transform:none}
-.hm-legend{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-top:12px}
-.hm-legend-bar{width:120px;height:10px;border-radius:5px;background:linear-gradient(90deg,#dc2626,#d97706,#16a34a)}
-.hm-axis{font:10px var(--mono);color:var(--faint)}
-
-/* ---- observations ---- */
-.obs-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);margin-bottom:12px;border-left:4px solid var(--accent);transition:transform .15s}
-.obs-card:hover{transform:translateX(2px)}
-.obs-card .obs-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.obs-card .obs-tag{font:11px var(--mono);padding:3px 8px;border-radius:6px;font-weight:700}
-.obs-card .obs-date{font:12px var(--mono);color:var(--faint)}
-.obs-card h3{margin:0 0 6px;font-size:15px}
-.obs-card p{margin:0 0 8px;color:var(--muted);font-size:13.5px;line-height:1.65}
-.obs-card .obs-data{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--faint)}
-.obs-card .obs-data b{color:var(--text)}
-
-/* ---- misc ---- */
-.svg-chart{width:100%;height:auto;display:block;overflow:visible}
+svg.chart{width:100%;height:auto;display:block;overflow:visible}
 .chart-wrap{position:relative}
-.tip{position:absolute;pointer-events:none;background:var(--text);color:var(--bg);padding:7px 10px;border-radius:8px;font-size:12px;font-weight:600;opacity:0;transition:opacity .12s;transform:translate(-50%,-115%);white-space:nowrap;z-index:10;box-shadow:0 4px 14px rgba(0,0,0,.25);pointer-events:none}
+.tip{position:absolute;pointer-events:none;background:var(--text);color:var(--bg);padding:6px 9px;border-radius:7px;font-size:12px;font-weight:600;opacity:0;transition:opacity .1s;transform:translate(-50%,-115%);white-space:nowrap;z-index:5;box-shadow:0 4px 14px rgba(0,0,0,.25)}
 .empty{padding:30px;text-align:center;color:var(--faint)}
-.stat-row{display:flex;gap:20px;flex-wrap:wrap;margin:8px 0}
-.stat-item{text-align:center}
-.stat-item .sv{font-size:22px;font-weight:800;letter-spacing:-.02em}
-.stat-item .sk{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
-.tick{font:11px var(--mono);fill:var(--faint)}
-.gridline{stroke:var(--grid);stroke-width:1}
-.ax{stroke:var(--border);stroke-width:1}
 footer{margin-top:40px;padding-top:22px;border-top:1px solid var(--border);color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-
-/* ---- 2026 experience redesign ---- */
-:root{
-  --bg:#f3f1eb;--surface:#fffefa;--surface2:#f7f5ef;--text:#14201c;--muted:#62716b;
-  --faint:#94a09b;--border:#dedfd8;--border2:#ebeae3;--accent:#ef5b3f;--accent2:#087f78;
-  --accent-soft:#fff0ea;--green:#087f5b;--green-soft:#e1f5ec;--amber:#ac6b08;--amber-soft:#fff2d5;
-  --red:#c54435;--red-soft:#fde8e3;--grid:rgba(20,32,28,.08);
-  --shadow:0 1px 1px rgba(20,32,28,.04),0 12px 32px rgba(20,32,28,.055);
-  --shadow-lg:0 2px 4px rgba(20,32,28,.05),0 22px 54px rgba(20,32,28,.11);
-  --radius:20px;--radius-sm:12px;
-}
-[data-theme=dark]{
-  --bg:#0a0f0d;--surface:#111815;--surface2:#151d19;--text:#f1f3ec;--muted:#9caaa4;--faint:#65716c;
-  --border:#27312d;--border2:#1d2823;--accent:#ff795d;--accent2:#57d5c5;--accent-soft:#332019;
-  --green:#4dd4a0;--green-soft:#153228;--amber:#f4bd62;--amber-soft:#332812;--red:#ff806f;--red-soft:#351c19;
-  --grid:rgba(235,245,239,.075);--shadow:0 1px 1px rgba(0,0,0,.2),0 18px 44px rgba(0,0,0,.22);
-  --shadow-lg:0 3px 8px rgba(0,0,0,.24),0 26px 70px rgba(0,0,0,.38);
-}
-body{
-  background:
-    radial-gradient(circle at 88% 2%,color-mix(in srgb,var(--accent2) 12%,transparent),transparent 28rem),
-    radial-gradient(circle at 4% 18%,color-mix(in srgb,var(--accent) 9%,transparent),transparent 24rem),var(--bg);
-  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.32;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,#000,transparent 48rem);z-index:-1}
-.wrap{max-width:1380px;padding:0 34px 96px}
-header.top{padding:26px 0 22px;border-bottom:1px solid var(--border)}
-.brand{gap:12px}.logo{width:38px;height:38px;border-radius:50%;font-size:0;background:conic-gradient(from 210deg,var(--accent),#ffb15d,var(--accent2),var(--accent));box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 9%,transparent),0 8px 25px color-mix(in srgb,var(--accent) 25%,transparent)}
-.logo:after{content:"";width:14px;height:14px;border-radius:50%;background:var(--surface);box-shadow:0 0 0 1px color-mix(in srgb,var(--text) 12%,transparent)}
-.brand h1{font-size:15px;letter-spacing:-.015em}.brand .sub{font:10px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
-.pill-gen{background:color-mix(in srgb,var(--surface) 72%,transparent);backdrop-filter:blur(14px);font-size:11px;padding:8px 12px}
-.theme-btn{border-radius:999px;background:var(--surface)}
-.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr);gap:54px;min-height:330px;padding:58px 48px;margin:30px 0 18px;border:1px solid var(--border);border-radius:30px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
-.hero:before{content:"";position:absolute;width:430px;height:430px;border:1px solid color-mix(in srgb,var(--accent2) 24%,transparent);border-radius:50%;right:-155px;top:-220px;box-shadow:0 0 0 46px color-mix(in srgb,var(--accent2) 4%,transparent),0 0 0 92px color-mix(in srgb,var(--accent) 3%,transparent)}
-.hero:after{content:"AURA";position:absolute;right:24px;bottom:-48px;font-weight:900;font-size:148px;letter-spacing:-.08em;line-height:1;color:color-mix(in srgb,var(--text) 3.5%,transparent);pointer-events:none}
-.hero-copy,.hero-signal{position:relative;z-index:1}.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:20px;font:700 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent2)}
-.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px color-mix(in srgb,var(--green) 13%,transparent);animation:pulse 2.2s ease-out infinite}
-@keyframes pulse{50%{box-shadow:0 0 0 10px transparent}}
-.hero h2{max-width:780px;margin:0;font-size:clamp(40px,5vw,72px);line-height:.98;letter-spacing:-.065em;font-weight:780;text-wrap:balance}.hero h2 em{font-style:normal;color:var(--accent)}
-.hero-copy>p{max-width:650px;margin:24px 0 0;color:var(--muted);font-size:16px;line-height:1.65}
-.hero-signal{align-self:end;padding:24px;border-left:1px solid var(--border)}
-.signal-label{font:700 10px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--faint)}
-.signal-value{display:flex;align-items:flex-end;gap:12px;margin:12px 0 6px}.signal-value strong{font-size:64px;line-height:.9;letter-spacing:-.065em}.signal-value span{padding:5px 8px;border-radius:999px;background:var(--green-soft);color:var(--green);font:700 11px var(--mono)}
-.signal-meta{color:var(--muted);font-size:12px}.hero-facts{display:flex;gap:22px;margin-top:24px;padding-top:18px;border-top:1px solid var(--border)}.hero-facts span{font:11px var(--mono);color:var(--faint)}.hero-facts b{display:block;margin-bottom:2px;color:var(--text);font-size:16px}
-.kpis{grid-template-columns:repeat(5,1fr);gap:0;margin:0 0 22px;border:1px solid var(--border);border-radius:20px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
-.card{border:0;border-right:1px solid var(--border);border-radius:0;padding:18px 20px;box-shadow:none;background:transparent;min-height:116px}.card:last-child{border-right:0}.card:hover{transform:none;box-shadow:none;background:var(--surface2)}
-.card .k{font:700 9.5px var(--mono);letter-spacing:.11em}.card .v{font-size:30px;margin-top:13px}.card .h{font:10.5px var(--mono)}.card .sparkbar{height:2px}
-.tabs{position:sticky;top:12px;z-index:20;width:100%;justify-content:flex-start;margin:0 0 30px;padding:6px;border-radius:16px;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(18px);box-shadow:0 8px 30px rgba(0,0,0,.08)}
-.tab{flex:0 0 auto;padding:10px 16px;border-radius:11px;font:650 12.5px/1 var(--mono);letter-spacing:-.02em}.tab.active{background:var(--text);color:var(--bg);box-shadow:none}.tab .ticon{color:var(--accent);font-size:13px}
-.section{margin-bottom:40px}.sec-head{align-items:flex-end;margin-bottom:15px}.sec-head h2{font-size:20px;letter-spacing:-.035em}.sec-head .desc{max-width:720px;margin-top:4px;line-height:1.5}
-.panel{border-radius:22px;padding:24px;box-shadow:var(--shadow);background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(10px)}
-.btn{border-radius:999px;padding:8px 14px;font:650 11.5px var(--mono)}.btn.active,.btn.primary{background:var(--text);border-color:var(--text);color:var(--bg)}
-select,input[type=text],input[type=search]{min-height:38px;border-radius:10px;outline:none}select:focus,input:focus{border-color:var(--accent2);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent2) 12%,transparent)}
-
-/* comparison lab */
-.comparison-lab{margin-bottom:42px;border:1px solid var(--border);border-radius:28px;background:var(--surface);box-shadow:var(--shadow-lg);overflow:hidden}
-.compare-top{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:end;padding:24px 28px;border-bottom:1px solid var(--border);background:var(--surface2)}
-.compare-pick label{display:block;margin-bottom:8px;font:700 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
-.compare-pick select{width:100%;font-weight:700;background:var(--surface)}
-.swap-btn{width:40px;height:40px;border:1px solid var(--border);border-radius:50%;background:var(--surface);color:var(--text);cursor:pointer;font-size:17px;transition:.2s}.swap-btn:hover{transform:rotate(180deg);border-color:var(--accent)}
-.compare-body{display:grid;grid-template-columns:minmax(340px,.82fr) minmax(0,1.18fr);min-height:390px}
-.compare-verdict{padding:38px 34px;border-right:1px solid var(--border)}
-.compare-kicker{font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
-.compare-verdict h3{margin:14px 0 10px;font-size:clamp(30px,3vw,48px);line-height:1.02;letter-spacing:-.055em}.compare-verdict>p{margin:0 0 28px;color:var(--muted)}
-.compare-metrics{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border);border-left:1px solid var(--border)}
-.compare-metric{padding:16px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}.compare-metric:nth-child(2n){border-right:0}
-.compare-metric small{display:block;color:var(--faint);font:9px var(--mono);letter-spacing:.09em;text-transform:uppercase}.compare-metric strong{display:block;margin:7px 0 2px;font-size:19px}.compare-metric span{font:10.5px var(--mono);color:var(--muted)}
-.tier-movement{padding:38px 34px}.tier-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.tier-head h3{margin:0 0 6px;font-size:18px;letter-spacing:-.025em}.tier-head p{margin:0;color:var(--muted);font-size:12px}.tier-legend{display:flex;gap:12px;font:10px var(--mono);color:var(--faint)}.tier-legend span:before{content:"";display:inline-block;width:7px;height:7px;border-radius:2px;margin-right:5px;background:var(--green)}.tier-legend span:last-child:before{background:var(--red)}
-.tier-deltas{display:grid;grid-template-columns:repeat(15,1fr);gap:5px;margin:26px 0}.tier-delta{aspect-ratio:1;border:1px solid var(--border2);border-radius:5px;position:relative;cursor:help;transition:.16s}.tier-delta:hover{transform:translateY(-3px) scale(1.12);z-index:2;box-shadow:var(--shadow)}.tier-delta:after{content:attr(data-tier);position:absolute;inset:0;display:grid;place-items:center;font:8px var(--mono);color:color-mix(in srgb,var(--text) 58%,transparent)}
-.movers{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mover{padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:var(--surface2)}.mover small{font:9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}.mover strong{display:block;margin-top:5px;font-size:14px}.mover.gain strong{color:var(--green)}.mover.loss strong{color:var(--red)}
-.focus-note{display:flex;align-items:center;gap:10px;padding:11px 14px;margin-bottom:16px;border-radius:12px;background:var(--accent-soft);color:var(--muted);font-size:12px}.focus-note b{color:var(--accent)}
-.chips{max-height:108px;overflow:auto;padding:2px 2px 8px}.chip{font-size:11.5px;padding:7px 10px}.chip.off{opacity:.34}
-table{font-size:12.5px}th{position:sticky;top:0;background:var(--surface);z-index:1}.obs-card{border-radius:18px;box-shadow:none}.scrubber{border-radius:18px;background:var(--surface)}
-.svg-chart{min-height:220px}.panel .svg-chart{filter:saturate(.9)}
-footer{font-family:var(--mono);font-size:10.5px}
-@media(max-width:1000px){.hero{grid-template-columns:1fr;gap:32px}.hero-signal{border-left:0;border-top:1px solid var(--border);padding:24px 0 0}.compare-body{grid-template-columns:1fr}.compare-verdict{border-right:0;border-bottom:1px solid var(--border)}.kpis{grid-template-columns:repeat(2,1fr)}.card{border-bottom:1px solid var(--border)}.card:nth-child(2n){border-right:0}.card:last-child{grid-column:1/-1}.grid2,.grid3{grid-template-columns:1fr}}
-@media(max-width:680px){.wrap{padding:0 16px 64px}.topright .pill-gen:first-child{display:none}.hero{padding:36px 24px;margin-top:18px;min-height:0;border-radius:22px}.hero h2{font-size:42px}.hero-copy>p{font-size:14px}.hero-facts{gap:14px}.signal-value strong{font-size:52px}.compare-top{grid-template-columns:1fr auto}.compare-pick:last-child{grid-column:1/-1}.compare-body{display:block}.compare-verdict,.tier-movement{padding:28px 22px}.tier-deltas{grid-template-columns:repeat(10,1fr)}.movers{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.card{padding:15px}.card .v{font-size:25px}.tabs{top:6px}.tab{padding:9px 12px}.tab .ticon{display:none}.sec-head h2{font-size:18px}.panel{padding:16px}}
+.tick{font:11px var(--mono);fill:var(--faint)}.gridline{stroke:var(--grid);stroke-width:1}
+.ax{stroke:var(--border);stroke-width:1}
+@media(max-width:920px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+@media(max-width:560px){.kpis{grid-template-columns:1fr 1fr}.brand h1{font-size:16px}}
 </style>
 </head>
 <body>
@@ -243,246 +93,83 @@ footer{font-family:var(--mono);font-size:10.5px}
     <div class="brand">
       <div class="logo">A</div>
       <div>
-        <h1>Aura Benchmark</h1>
-        <div class="sub">Ruby Alternator · Field Lab 01</div>
+        <h1>Aura Benchmark · Archimedes Alternator</h1>
+        <div class="sub">Daily, automated, unedited — does the local model get measurably better?</div>
       </div>
     </div>
     <div class="topright">
-      <span class="pill-gen" id="genPill">updated —</span>
+      <span class="pill-gen">updated 2026-08-27</span>
       <a class="pill-gen" href="https://github.com/dusancar-sudo/aura-50-day-trial" target="_blank" rel="noopener">GitHub ↗</a>
       <button class="theme-btn" id="themeBtn" title="Toggle theme">◐</button>
     </div>
   </header>
 
-  <section class="hero" aria-labelledby="heroTitle">
-    <div class="hero-copy">
-      <div class="eyebrow"><span class="live-dot"></span>50-day field test · evidence, not demos</div>
-      <h2 id="heroTitle">Can a local model learn to <em>earn trust?</em></h2>
-      <p>Every attempt stays on the record. Compare complete benchmark runs, trace where capability moved, and inspect when Ruby knew to escalate.</p>
-    </div>
-    <div class="hero-signal">
-      <div class="signal-label">Latest full-run strict score</div>
-      <div class="signal-value"><strong id="heroLatest">—</strong><span id="heroDelta">—</span></div>
-      <div class="signal-meta" id="heroSession">Latest verified benchmark</div>
-      <div class="hero-facts">
-        <span><b id="heroRuns">—</b>full runs</span>
-        <span><b id="heroQuestions">—</b>graded</span>
-        <span><b id="heroCatch">—</b>catch rate</span>
+  <section class="kpis" id="kpis"></section>
+
+  <section class="section">
+    <div class="sec-head"><div><h2>Full-run pass-rate trend</h2><div class="desc">Apples-to-apples comparison of complete 320-question benchmark runs.</div></div></div>
+    <div class="panel chart-wrap"><svg class="chart" id="trend" viewBox="0 0 1000 300"></svg><div class="tip" id="tip"></div></div>
+  </section>
+
+  <section class="section">
+    <div class="sec-head"><div><h2>Compare runs across tiers</h2><div class="desc">Toggle runs to overlay their pass rate by question tier. Where do runs gain or lose?</div></div></div>
+    <div class="panel">
+      <div class="row-tools">
+        <button class="btn primary" id="allFull">Full runs</button>
+        <button class="btn" id="latest12">Recent slices</button>
+        <button class="btn" id="clearAll">Clear</button>
+        <span class="muted" style="font-size:12.5px;margin-left:auto">add a run:</span>
+        <select id="addRun"></select>
       </div>
+      <div class="chips" id="chips"></div>
+      <div class="panel chart-wrap" style="padding:0;border:none;box-shadow:none"><svg class="chart" id="overlay" viewBox="0 0 1000 320"></svg><div class="tip" id="tip2"></div></div>
+      <div class="legend" id="overlayLegend" style="margin-top:14px"></div>
     </div>
   </section>
 
-  <section class="kpis" id="kpis"></section>
-
-  <nav class="tabs" id="tabNav">
-    <button class="tab active" data-view="overview"><span class="ticon">◎</span> Compare</button>
-    <button class="tab" data-view="timeline"><span class="ticon">⏱</span> Time Simulation</button>
-    <button class="tab" data-view="tiers"><span class="ticon">▤</span> Tier Explorer</button>
-    <button class="tab" data-view="heatmap"><span class="ticon">▦</span> Heatmap</button>
-    <button class="tab" data-view="ruby"><span class="ticon">◆</span> Ruby Alternator</button>
-    <button class="tab" data-view="observations"><span class="ticon">✦</span> Observations</button>
-  </nav>
-
-  <!-- VIEW: OVERVIEW -->
-  <div class="tabview active" id="view-overview">
-    <section class="comparison-lab" aria-labelledby="compareTitle">
-      <div class="compare-top">
-        <div class="compare-pick">
-          <label for="compareA">Reference run · A</label>
-          <select id="compareA"></select>
-        </div>
-        <button class="swap-btn" id="swapRuns" type="button" title="Swap comparison runs" aria-label="Swap comparison runs">⇄</button>
-        <div class="compare-pick">
-          <label for="compareB">Challenger run · B</label>
-          <select id="compareB"></select>
-        </div>
-      </div>
-      <div class="compare-body">
-        <div class="compare-verdict">
-          <div class="compare-kicker">Head-to-head verdict</div>
-          <h3 id="compareTitle"><span id="compareWinner">—</span></h3>
-          <p id="compareSummary">Choose two complete runs to see what really changed.</p>
-          <div class="compare-metrics" id="compareMetrics"></div>
-        </div>
-        <div class="tier-movement">
-          <div class="tier-head">
-            <div>
-              <h3>Where capability moved</h3>
-              <p>Weighted-score change for each of the 60 benchmark tiers.</p>
-            </div>
-            <div class="tier-legend"><span>gain</span><span>loss</span></div>
-          </div>
-          <div class="tier-deltas" id="tierDeltas" aria-label="Tier-by-tier score movement"></div>
-          <div class="movers">
-            <div class="mover gain"><small>Biggest gain</small><strong id="biggestGain">—</strong></div>
-            <div class="mover loss"><small>Biggest regression</small><strong id="biggestLoss">—</strong></div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="section">
-      <div class="sec-head"><div><h2>Full-run pass-rate trend</h2><div class="desc">Apples-to-apples comparison of complete 320-question benchmark runs, with weighted (partial = ½) overlay.</div></div></div>
-      <div class="panel chart-wrap"><svg class="svg-chart" id="trend" viewBox="0 0 1000 320"></svg><div class="tip" id="tip"></div></div>
-    </section>
-    <section class="section">
-      <div class="sec-head"><div><h2>Compare runs across tiers</h2><div class="desc">Toggle runs to overlay their pass rate by question tier. Where do runs gain or lose?</div></div></div>
-      <div class="panel">
-        <div class="focus-note"><b>Focused view</b> Full runs stay visible; add any slice from the selector to inspect it without flooding the canvas.</div>
-        <div class="controls">
-          <button class="btn primary" id="allFull">Full runs</button>
-          <button class="btn" id="latest12">Recent slices</button>
-          <button class="btn" id="clearAll">Clear</button>
-          <span class="muted" style="font-size:12.5px;margin-left:auto">add:</span>
-          <select id="addRun"></select>
-        </div>
-        <div class="chips" id="chips"></div>
-        <div class="panel chart-wrap panel-inner" style="padding:0"><svg class="svg-chart" id="overlay" viewBox="0 0 1000 320"></svg><div class="tip" id="tip2"></div></div>
-        <div class="legend" id="overlayLegend"></div>
-      </div>
-    </section>
-    <section class="section">
-      <div class="sec-head"><div><h2>Verification &amp; escalation</h2><div class="desc">How often the verifier caught a Ruby error, and how Ruby's share of work evolved over time.</div></div></div>
-      <div class="panel chart-wrap"><svg class="svg-chart" id="catchTrend" viewBox="0 0 1000 260"></svg><div class="tip" id="tip5"></div></div>
-    </section>
-  </div>
-
-  <!-- VIEW: TIMELINE -->
-  <div class="tabview" id="view-timeline">
-    <div class="scrubber" id="scrubberBox">
-      <div class="scrubber-head">
-        <div class="info">Simulating through time — <b id="simDate">—</b> · viewing <b id="simLabel">—</b></div>
-        <div class="range-row">
-          <button class="play-btn" id="playBtn" title="Play / Pause">▶</button>
-          <button class="btn" id="simReset" title="Reset to start">⟲</button>
-        </div>
-      </div>
-      <div class="scrubber-track">
-        <div class="scrubber-line"><div class="scrubber-fill" id="simFill"></div></div>
-        <div class="scrubber-knob" id="simKnob"></div>
-        <input type="range" id="simRange" min="0" max="100" value="0" step="1">
-      </div>
-      <div class="scrubber-labels" id="simLabels"></div>
+  <section class="section grid2">
+    <div>
+      <div class="sec-head"><div><h2>Difficulty curve</h2><div class="desc">Average pass rate by tier across all full runs.</div></div></div>
+      <div class="panel chart-wrap"><svg class="chart" id="difficulty" viewBox="0 0 480 300"></svg><div class="tip" id="tip3"></div></div>
     </div>
-    <section class="section">
-      <div class="sec-head"><div><h2>Cumulative pass rate at this point in time</h2><div class="desc">Strict (correct ÷ total) and weighted (partial = ½) rates for all questions graded up to the scrubber date.</div></div></div>
-      <div class="panel chart-wrap"><svg class="svg-chart" id="simCumulative" viewBox="0 0 1000 260"></svg><div class="tip" id="tipSim1"></div></div>
-    </section>
-    <section class="section grid2">
-      <div>
-        <div class="sec-head"><div><h2>Difficulty band progress</h2><div class="desc">Pass rate by question-group at this point in time.</div></div></div>
-        <div class="panel chart-wrap"><svg class="svg-chart" id="simBands" viewBox="0 0 480 280"></svg><div class="tip" id="tipSim2"></div></div>
-      </div>
-      <div>
-        <div class="sec-head"><div><h2>Outcome distribution</h2><div class="desc">Correct / partial / incorrect split for all graded questions so far.</div></div></div>
-        <div class="panel chart-wrap" style="display:grid;place-items:center"><svg class="svg-chart" id="simDonut" viewBox="0 0 280 280" style="max-width:280px"></svg></div>
-      </div>
-    </section>
-  </div>
+    <div>
+      <div class="sec-head"><div><h2>Archimedes Alternator competence</h2><div class="desc">Local model success rate by task category (latest snapshot).</div></div></div>
+      <div class="panel chart-wrap"><svg class="chart" id="competence" viewBox="0 0 480 300"></svg><div class="tip" id="tip4"></div></div>
+    </div>
+  </section>
 
-  <!-- VIEW: TIER EXPLORER -->
-  <div class="tabview" id="view-tiers">
-    <section class="section">
-      <div class="sec-head"><div><h2>Difficulty curve — interpolated</h2><div class="desc">Average pass rate by tier across all full runs, with Catmull-Rom smoothing.</div></div></div>
-      <div class="controls">
-        <span class="lbl-inline">Smoothing:</span>
-        <button class="btn active" data-smooth="catmull">Catmull-Rom</button>
-        <button class="btn" data-smooth="linear">Linear</button>
-        <button class="btn" data-smooth="bezier">Bézier</button>
-      </div>
-      <div class="panel chart-wrap"><svg class="svg-chart" id="difficultySmooth" viewBox="0 0 1000 340"></svg><div class="tip" id="tipD1"></div></div>
-    </section>
-    <section class="section">
-      <div class="sec-head"><div><h2>Hardness distribution</h2><div class="desc">Every tier's average pass rate across full runs — sorted, not by tier number. Reveals where the true difficulty cliffs are.</div></div></div>
-      <div class="panel chart-wrap"><svg class="svg-chart" id="hardnessSorted" viewBox="0 0 1000 280"></svg><div class="tip" id="tipD2"></div></div>
-    </section>
-    <section class="section">
-      <div class="sec-head"><div><h2>All sessions</h2><div class="desc">Every recorded run. Click a column to sort.</div></div>
-        <input type="search" id="search" placeholder="Filter by id, date, model…">
-      </div>
-      <div class="panel" style="overflow:auto">
-        <table id="table"><thead></thead><tbody></tbody></table>
-      </div>
-    </section>
-  </div>
+  <section class="section">
+    <div class="sec-head"><div><h2>Verification &amp; escalation</h2><div class="desc">How often the verifier caught an Archimedes error, and Archimedes's share of work, over time.</div></div></div>
+    <div class="panel chart-wrap"><svg class="chart" id="catchTrend" viewBox="0 0 1000 240"></svg><div class="tip" id="tip5"></div></div>
+  </section>
 
-  <!-- VIEW: HEATMAP -->
-  <div class="tabview" id="view-heatmap">
-    <section class="section">
-      <div class="sec-head"><div><h2>Tier × Run heatmap</h2><div class="desc">Pass rate for every tier (row) across every full run (column). Hover for details. Greener = higher pass rate.</div></div></div>
-      <div class="panel">
-        <div id="heatmapContainer"></div>
-        <div class="hm-legend">
-          <span>0%</span>
-          <div class="hm-legend-bar"></div>
-          <span>100%</span>
-          <span style="margin-left:8px">· empty = not tested</span>
-        </div>
-      </div>
-    </section>
-    <section class="section">
-      <div class="sec-head"><div><h2>Tier competence by difficulty band</h2><div class="desc">Average pass rate grouped into hardness bands across all full runs.</div></div></div>
-      <div class="panel chart-wrap"><svg class="svg-chart" id="bandBars" viewBox="0 0 1000 260"></svg><div class="tip" id="tipH1"></div></div>
-    </section>
-  </div>
-
-  <!-- VIEW: RUBY ALTERNATOR -->
-  <div class="tabview" id="view-ruby">
-    <section class="section">
-      <div class="sec-head"><div><h2>Ruby Alternator competence</h2><div class="desc">Local model success rate by task category — latest snapshot.</div></div></div>
-      <div class="panel chart-wrap"><svg class="svg-chart" id="competence" viewBox="0 0 560 320"></svg><div class="tip" id="tip4"></div></div>
-    </section>
-    <section class="section">
-      <div class="sec-head"><div><h2>Escalation volume over time</h2><div class="desc">How many tasks Ruby handled, passed, failed, and escalated — cumulative growth.</div></div></div>
-      <div class="panel chart-wrap"><svg class="svg-chart" id="escVolume" viewBox="0 0 1000 280"></svg><div class="tip" id="tipR1"></div></div>
-    </section>
-    <section class="section grid2">
-      <div class="panel">
-        <div class="sec-head" style="margin-bottom:8px"><div><h2 style="font-size:15px">Catch-rate trajectory</h2></div></div>
-        <div class="stat-row">
-          <div class="stat-item"><div class="sv" id="catchLatest">—</div><div class="sk">Latest catch</div></div>
-          <div class="stat-item"><div class="sv" id="catchStart">—</div><div class="sk">First catch</div></div>
-          <div class="stat-item"><div class="sv" id="catchDelta">—</div><div class="sk">Change</div></div>
-        </div>
-      </div>
-      <div class="panel">
-        <div class="sec-head" style="margin-bottom:8px"><div><h2 style="font-size:15px">Workload summary</h2></div></div>
-        <div class="stat-row">
-          <div class="stat-item"><div class="sv" id="rubyTotal">—</div><div class="sk">Total tasks</div></div>
-          <div class="stat-item"><div class="sv" id="rubyEsc">—</div><div class="sk">Escalations</div></div>
-          <div class="stat-item"><div class="sv" id="rubyPass">—</div><div class="sk">Ruby passes</div></div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- VIEW: OBSERVATIONS -->
-  <div class="tabview" id="view-observations">
-    <section class="section">
-      <div class="sec-head"><div><h2>Overall observations</h2><div class="desc">Key findings extracted from the benchmark data — progress, failure patterns, and infrastructure notes.</div></div></div>
-      <div id="obsContainer"></div>
-    </section>
-  </div>
+  <section class="section">
+    <div class="sec-head"><div><h2>All sessions</h2><div class="desc">Every recorded run. Click a column to sort.</div></div>
+      <input type="search" id="search" placeholder="Filter by id, date, model…">
+    </div>
+    <div class="panel" style="overflow:auto">
+      <table id="table"><thead></thead><tbody></tbody></table>
+    </div>
+  </section>
 
   <footer>
     <span>Generated from <code>results/session_*.json</code> &amp; <code>ruby-stats-*.json</code>. Strict rate = correct ÷ total; weighted counts partial as ½.</span>
-    <span><a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false">Back to top ↑</a></span>
+    <span><a href="#top">Back to top ↑</a></span>
   </footer>
 </div>
-<script id="datablob" type="application/json">{"generated":"2026-08-02","sessions":[{"id":2,"date":"2026-07-17","model":"granite4.1:3b","n":20,"correct":0,"partial":2,"incorrect":18,"rate":0.0,"weighted":0.05,"tiers":{"1":{"c":0,"p":0,"i":5,"n":5},"2":{"c":0,"p":0,"i":5,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":0,"p":0,"i":5,"n":5}},"full":false},{"id":8,"date":"2026-07-17","model":"deepseek-chat","n":20,"correct":6,"partial":2,"incorrect":12,"rate":0.3,"weighted":0.35,"tiers":{"1":{"c":2,"p":2,"i":1,"n":5},"2":{"c":1,"p":0,"i":4,"n":5},"3":{"c":0,"p":0,"i":5,"n":5},"4":{"c":3,"p":0,"i":2,"n":5}},"full":false},{"id":9,"date":"2026-07-18","model":"deepseek-chat","n":20,"correct":18,"partial":2,"incorrect":0,"rate":0.9,"weighted":0.95,"tiers":{"1":{"c":5,"p":0,"i":0,"n":5},"2":{"c":4,"p":1,"i":0,"n":5},"3":{"c":4,"p":1,"i":0,"n":5},"4":{"c":5,"p":0,"i":0,"n":5}},"full":false},{"id":10,"date":"2026-07-18","model":"glm-5.2","n":60,"correct":49,"partial":10,"incorrect":1,"rate":0.8167,"weighted":0.9,"tiers":{"1":{"c":5,"p":0,"i":0,"n":5},"2":{"c":5,"p":0,"i":0,"n":5},"3":{"c":2,"p":2,"i":1,"n":5},"4":{"c":5,"p":0,"i":0,"n":5},"5":{"c":10,"p":0,"i":0,"n":10},"6":{"c":9,"p":1,"i":0,"n":10},"7":{"c":8,"p":2,"i":0,"n":10},"8":{"c":5,"p":5,"i":0,"n":10}},"full":false},{"id":11,"date":"2026-07-20","model":"deepseek-chat","n":170,"correct":30,"partial":58,"incorrect":82,"rate":0.1765,"weighted":0.3471,"tiers":{"1":{"c":1,"p":1,"i":3,"n":5},"2":{"c":3,"p":1,"i":1,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":0,"p":0,"i":5,"n":5},"5":{"c":2,"p":2,"i":6,"n":10},"6":{"c":3,"p":3,"i":4,"n":10},"7":{"c":1,"p":5,"i":4,"n":10},"8":{"c":0,"p":7,"i":3,"n":10},"9":{"c":1,"p":3,"i":1,"n":5},"10":{"c":3,"p":2,"i":0,"n":5},"11":{"c":1,"p":2,"i":2,"n":5},"12":{"c":0,"p":2,"i":3,"n":5},"13":{"c":0,"p":0,"i":5,"n":5},"14":{"c":2,"p":3,"i":0,"n":5},"15":{"c":0,"p":3,"i":2,"n":5},"16":{"c":0,"p":0,"i":5,"n":5},"17":{"c":0,"p":1,"i":4,"n":5},"18":{"c":0,"p":2,"i":3,"n":5},"19":{"c":0,"p":1,"i":4,"n":5},"20":{"c":0,"p":3,"i":2,"n":5},"21":{"c":1,"p":2,"i":2,"n":5},"22":{"c":3,"p":0,"i":2,"n":5},"23":{"c":1,"p":2,"i":2,"n":5},"24":{"c":2,"p":2,"i":1,"n":5},"25":{"c":0,"p":2,"i":3,"n":5},"26":{"c":1,"p":2,"i":2,"n":5},"27":{"c":1,"p":1,"i":3,"n":5},"28":{"c":1,"p":1,"i":3,"n":5},"29":{"c":2,"p":1,"i":2,"n":5},"30":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":1,"date":"2026-07-21","model":"deepseek-chat","n":10,"correct":10,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"11":{"c":5,"p":0,"i":0,"n":5},"12":{"c":5,"p":0,"i":0,"n":5}},"full":false},{"id":14,"date":"2026-07-21","model":"deepseek-chat","n":5,"correct":3,"partial":0,"incorrect":2,"rate":0.6,"weighted":0.6,"tiers":{"20":{"c":3,"p":0,"i":2,"n":5}},"full":false},{"id":15,"date":"2026-07-21","model":"deepseek-v4-flash + Gemma-4-E2B local","n":5,"correct":5,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"21":{"c":5,"p":0,"i":0,"n":5}},"full":false},{"id":16,"date":"2026-07-21","model":"deepseek-chat","n":5,"correct":4,"partial":1,"incorrect":0,"rate":0.8,"weighted":0.9,"tiers":{"22":{"c":4,"p":1,"i":0,"n":5}},"full":false},{"id":17,"date":"2026-07-21","model":"deepseek-v4-pro + Gemma-4-E2B local","n":5,"correct":4,"partial":1,"incorrect":0,"rate":0.8,"weighted":0.9,"tiers":{"23":{"c":4,"p":1,"i":0,"n":5}},"full":false},{"id":18,"date":"2026-07-21","model":"deepseek-chat","n":5,"correct":2,"partial":3,"incorrect":0,"rate":0.4,"weighted":0.7,"tiers":{"24":{"c":2,"p":3,"i":0,"n":5}},"full":false},{"id":19,"date":"2026-07-21","model":"deepseek-chat","n":5,"correct":5,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"25":{"c":5,"p":0,"i":0,"n":5}},"full":false},{"id":20,"date":"2026-07-21","model":"deepseek-chat","n":5,"correct":3,"partial":2,"incorrect":0,"rate":0.6,"weighted":0.8,"tiers":{"24":{"c":3,"p":2,"i":0,"n":5}},"full":false},{"id":21,"date":"2026-07-21","model":"deepseek-chat","n":170,"correct":52,"partial":66,"incorrect":52,"rate":0.3059,"weighted":0.5,"tiers":{"1":{"c":5,"p":0,"i":0,"n":5},"2":{"c":3,"p":2,"i":0,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":3,"p":0,"i":2,"n":5},"5":{"c":2,"p":2,"i":6,"n":10},"6":{"c":1,"p":3,"i":6,"n":10},"7":{"c":3,"p":6,"i":1,"n":10},"8":{"c":2,"p":7,"i":1,"n":10},"9":{"c":1,"p":4,"i":0,"n":5},"10":{"c":1,"p":2,"i":2,"n":5},"11":{"c":4,"p":0,"i":1,"n":5},"12":{"c":4,"p":0,"i":1,"n":5},"13":{"c":3,"p":0,"i":2,"n":5},"14":{"c":0,"p":5,"i":0,"n":5},"15":{"c":0,"p":2,"i":3,"n":5},"16":{"c":0,"p":4,"i":1,"n":5},"17":{"c":0,"p":3,"i":2,"n":5},"18":{"c":1,"p":1,"i":3,"n":5},"19":{"c":0,"p":4,"i":1,"n":5},"20":{"c":1,"p":2,"i":2,"n":5},"21":{"c":0,"p":2,"i":3,"n":5},"22":{"c":3,"p":2,"i":0,"n":5},"23":{"c":1,"p":1,"i":3,"n":5},"24":{"c":1,"p":4,"i":0,"n":5},"25":{"c":2,"p":1,"i":2,"n":5},"26":{"c":0,"p":3,"i":2,"n":5},"27":{"c":5,"p":0,"i":0,"n":5},"28":{"c":3,"p":0,"i":2,"n":5},"29":{"c":2,"p":2,"i":1,"n":5},"30":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":22,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":1,"incorrect":3,"rate":0.2,"weighted":0.3,"tiers":{"28":{"c":1,"p":1,"i":3,"n":5}},"full":false},{"id":23,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":2,"partial":1,"incorrect":2,"rate":0.4,"weighted":0.5,"tiers":{"29":{"c":2,"p":1,"i":2,"n":5}},"full":false},{"id":24,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":2,"incorrect":2,"rate":0.2,"weighted":0.4,"tiers":{"30":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":25,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":2,"partial":0,"incorrect":3,"rate":0.4,"weighted":0.4,"tiers":{"28":{"c":2,"p":0,"i":3,"n":5}},"full":false},{"id":26,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":3,"incorrect":1,"rate":0.2,"weighted":0.5,"tiers":{"29":{"c":1,"p":3,"i":1,"n":5}},"full":false},{"id":27,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":2,"incorrect":2,"rate":0.2,"weighted":0.4,"tiers":{"30":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":101,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":3,"partial":2,"incorrect":0,"rate":0.6,"weighted":0.8,"tiers":{"1":{"c":3,"p":2,"i":0,"n":5}},"full":false},{"id":102,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":3,"partial":1,"incorrect":1,"rate":0.6,"weighted":0.7,"tiers":{"2":{"c":3,"p":1,"i":1,"n":5}},"full":false},{"id":103,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":0,"incorrect":5,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":5,"n":5}},"full":false},{"id":104,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":2,"partial":0,"incorrect":3,"rate":0.4,"weighted":0.4,"tiers":{"4":{"c":2,"p":0,"i":3,"n":5}},"full":false},{"id":105,"date":"2026-07-22","model":"deepseek-chat","n":10,"correct":1,"partial":2,"incorrect":7,"rate":0.1,"weighted":0.2,"tiers":{"5":{"c":1,"p":2,"i":7,"n":10}},"full":false},{"id":123,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":2,"incorrect":3,"rate":0.0,"weighted":0.2,"tiers":{"23":{"c":0,"p":2,"i":3,"n":5}},"full":false},{"id":124,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":3,"partial":2,"incorrect":0,"rate":0.6,"weighted":0.8,"tiers":{"24":{"c":3,"p":2,"i":0,"n":5}},"full":false},{"id":125,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":3,"partial":1,"incorrect":1,"rate":0.6,"weighted":0.7,"tiers":{"25":{"c":3,"p":1,"i":1,"n":5}},"full":false},{"id":126,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":2,"partial":2,"incorrect":1,"rate":0.4,"weighted":0.6,"tiers":{"26":{"c":2,"p":2,"i":1,"n":5}},"full":false},{"id":127,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":2,"partial":3,"incorrect":0,"rate":0.4,"weighted":0.7,"tiers":{"27":{"c":2,"p":3,"i":0,"n":5}},"full":false},{"id":128,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":4,"partial":1,"incorrect":0,"rate":0.8,"weighted":0.9,"tiers":{"28":{"c":4,"p":1,"i":0,"n":5}},"full":false},{"id":129,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":3,"partial":1,"incorrect":1,"rate":0.6,"weighted":0.7,"tiers":{"29":{"c":3,"p":1,"i":1,"n":5}},"full":false},{"id":130,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":2,"incorrect":2,"rate":0.2,"weighted":0.4,"tiers":{"30":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":206,"date":"2026-07-22","model":"deepseek-chat","n":10,"correct":0,"partial":3,"incorrect":7,"rate":0.0,"weighted":0.15,"tiers":{"6":{"c":0,"p":3,"i":7,"n":10}},"full":false},{"id":207,"date":"2026-07-22","model":"deepseek-chat","n":10,"correct":2,"partial":7,"incorrect":1,"rate":0.2,"weighted":0.55,"tiers":{"7":{"c":2,"p":7,"i":1,"n":10}},"full":false},{"id":208,"date":"2026-07-22","model":"deepseek-chat","n":10,"correct":3,"partial":6,"incorrect":1,"rate":0.3,"weighted":0.6,"tiers":{"8":{"c":3,"p":6,"i":1,"n":10}},"full":false},{"id":209,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":4,"incorrect":1,"rate":0.0,"weighted":0.4,"tiers":{"9":{"c":0,"p":4,"i":1,"n":5}},"full":false},{"id":210,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":2,"incorrect":2,"rate":0.2,"weighted":0.4,"tiers":{"10":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":211,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":4,"incorrect":1,"rate":0.0,"weighted":0.4,"tiers":{"11":{"c":0,"p":4,"i":1,"n":5}},"full":false},{"id":212,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":3,"incorrect":1,"rate":0.2,"weighted":0.5,"tiers":{"12":{"c":1,"p":3,"i":1,"n":5}},"full":false},{"id":213,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":4,"partial":0,"incorrect":1,"rate":0.8,"weighted":0.8,"tiers":{"13":{"c":4,"p":0,"i":1,"n":5}},"full":false},{"id":214,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":4,"incorrect":0,"rate":0.2,"weighted":0.6,"tiers":{"14":{"c":1,"p":4,"i":0,"n":5}},"full":false},{"id":215,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":1,"incorrect":4,"rate":0.0,"weighted":0.1,"tiers":{"15":{"c":0,"p":1,"i":4,"n":5}},"full":false},{"id":216,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":4,"incorrect":1,"rate":0.0,"weighted":0.4,"tiers":{"16":{"c":0,"p":4,"i":1,"n":5}},"full":false},{"id":217,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":3,"incorrect":2,"rate":0.0,"weighted":0.3,"tiers":{"17":{"c":0,"p":3,"i":2,"n":5}},"full":false},{"id":218,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":2,"incorrect":2,"rate":0.2,"weighted":0.4,"tiers":{"18":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":219,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":2,"partial":2,"incorrect":1,"rate":0.4,"weighted":0.6,"tiers":{"19":{"c":2,"p":2,"i":1,"n":5}},"full":false},{"id":220,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":2,"incorrect":2,"rate":0.2,"weighted":0.4,"tiers":{"20":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":221,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":3,"incorrect":2,"rate":0.0,"weighted":0.3,"tiers":{"21":{"c":0,"p":3,"i":2,"n":5}},"full":false},{"id":222,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":2,"partial":2,"incorrect":1,"rate":0.4,"weighted":0.6,"tiers":{"22":{"c":2,"p":2,"i":1,"n":5}},"full":false},{"id":223,"date":"2026-07-22","model":"deepseek-chat","n":320,"correct":102,"partial":160,"incorrect":58,"rate":0.3187,"weighted":0.5687,"tiers":{"1":{"c":3,"p":2,"i":0,"n":5},"2":{"c":3,"p":2,"i":0,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":2,"p":0,"i":3,"n":5},"5":{"c":1,"p":3,"i":6,"n":10},"6":{"c":0,"p":3,"i":7,"n":10},"7":{"c":3,"p":5,"i":2,"n":10},"8":{"c":2,"p":7,"i":1,"n":10},"9":{"c":1,"p":3,"i":1,"n":5},"10":{"c":1,"p":3,"i":1,"n":5},"11":{"c":2,"p":0,"i":3,"n":5},"12":{"c":0,"p":4,"i":1,"n":5},"13":{"c":4,"p":0,"i":1,"n":5},"14":{"c":0,"p":4,"i":1,"n":5},"15":{"c":0,"p":1,"i":4,"n":5},"16":{"c":1,"p":3,"i":1,"n":5},"17":{"c":0,"p":3,"i":2,"n":5},"18":{"c":0,"p":2,"i":3,"n":5},"19":{"c":1,"p":3,"i":1,"n":5},"20":{"c":1,"p":2,"i":2,"n":5},"21":{"c":0,"p":3,"i":2,"n":5},"22":{"c":2,"p":2,"i":1,"n":5},"23":{"c":1,"p":2,"i":2,"n":5},"24":{"c":3,"p":2,"i":0,"n":5},"25":{"c":1,"p":2,"i":2,"n":5},"26":{"c":3,"p":2,"i":0,"n":5},"27":{"c":2,"p":2,"i":1,"n":5},"28":{"c":3,"p":2,"i":0,"n":5},"29":{"c":1,"p":2,"i":2,"n":5},"30":{"c":1,"p":2,"i":2,"n":5},"31":{"c":1,"p":4,"i":0,"n":5},"32":{"c":1,"p":4,"i":0,"n":5},"33":{"c":1,"p":4,"i":0,"n":5},"34":{"c":1,"p":3,"i":1,"n":5},"35":{"c":1,"p":4,"i":0,"n":5},"36":{"c":4,"p":1,"i":0,"n":5},"37":{"c":2,"p":3,"i":0,"n":5},"38":{"c":1,"p":4,"i":0,"n":5},"39":{"c":1,"p":4,"i":0,"n":5},"40":{"c":1,"p":4,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":3,"p":2,"i":0,"n":5},"43":{"c":1,"p":4,"i":0,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":1,"p":4,"i":0,"n":5},"46":{"c":2,"p":3,"i":0,"n":5},"47":{"c":4,"p":0,"i":1,"n":5},"48":{"c":2,"p":2,"i":1,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":1,"p":4,"i":0,"n":5},"51":{"c":3,"p":2,"i":0,"n":5},"52":{"c":4,"p":1,"i":0,"n":5},"53":{"c":4,"p":1,"i":0,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":3,"p":2,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":4,"p":1,"i":0,"n":5},"58":{"c":2,"p":3,"i":0,"n":5},"59":{"c":2,"p":3,"i":0,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":301,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"1":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":302,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"2":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":303,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":304,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"4":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":305,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"5":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":306,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"6":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":307,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"7":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":308,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"8":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":900,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"1":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":901,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":1,"incorrect":0,"rate":0.0,"weighted":0.5,"tiers":{"1":{"c":0,"p":1,"i":0,"n":1}},"full":false},{"id":902,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":1,"incorrect":0,"rate":0.0,"weighted":0.5,"tiers":{"2":{"c":0,"p":1,"i":0,"n":1}},"full":false},{"id":903,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":1,"incorrect":0,"rate":0.0,"weighted":0.5,"tiers":{"2":{"c":0,"p":1,"i":0,"n":1}},"full":false},{"id":904,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":905,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":906,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":907,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":908,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":997,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"21":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":998,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"21":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":999,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"21":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":1001,"date":"2026-07-23","model":"deepseek-chat","n":5,"correct":3,"partial":2,"incorrect":0,"rate":0.6,"weighted":0.8,"tiers":{"1":{"c":3,"p":2,"i":0,"n":5}},"full":false},{"id":1002,"date":"2026-07-23","model":"deepseek-chat","n":5,"correct":2,"partial":3,"incorrect":0,"rate":0.4,"weighted":0.7,"tiers":{"2":{"c":2,"p":3,"i":0,"n":5}},"full":false},{"id":1003,"date":"2026-07-23","model":"deepseek-chat","n":5,"correct":0,"partial":0,"incorrect":5,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":5,"n":5}},"full":false},{"id":1004,"date":"2026-07-23","model":"deepseek-chat","n":5,"correct":1,"partial":0,"incorrect":4,"rate":0.2,"weighted":0.2,"tiers":{"4":{"c":1,"p":0,"i":4,"n":5}},"full":false},{"id":8001,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"17":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":8002,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"21":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":8003,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"25":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":9001,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"21":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":9998,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":1,"incorrect":0,"rate":0.0,"weighted":0.5,"tiers":{"2":{"c":0,"p":1,"i":0,"n":1}},"full":false},{"id":9999,"date":"2026-07-24","model":"deepseek-chat","n":320,"correct":38,"partial":197,"incorrect":85,"rate":0.1187,"weighted":0.4266,"tiers":{"1":{"c":0,"p":0,"i":5,"n":5},"2":{"c":0,"p":0,"i":5,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":0,"p":0,"i":5,"n":5},"5":{"c":0,"p":2,"i":8,"n":10},"6":{"c":0,"p":6,"i":4,"n":10},"7":{"c":0,"p":5,"i":5,"n":10},"8":{"c":0,"p":6,"i":4,"n":10},"9":{"c":0,"p":4,"i":1,"n":5},"10":{"c":0,"p":3,"i":2,"n":5},"11":{"c":0,"p":4,"i":1,"n":5},"12":{"c":0,"p":3,"i":2,"n":5},"13":{"c":3,"p":0,"i":2,"n":5},"14":{"c":1,"p":3,"i":1,"n":5},"15":{"c":0,"p":1,"i":4,"n":5},"16":{"c":0,"p":4,"i":1,"n":5},"17":{"c":0,"p":2,"i":3,"n":5},"18":{"c":0,"p":3,"i":2,"n":5},"19":{"c":0,"p":4,"i":1,"n":5},"20":{"c":0,"p":4,"i":1,"n":5},"21":{"c":0,"p":3,"i":2,"n":5},"22":{"c":1,"p":3,"i":1,"n":5},"23":{"c":0,"p":4,"i":1,"n":5},"24":{"c":0,"p":5,"i":0,"n":5},"25":{"c":0,"p":1,"i":4,"n":5},"26":{"c":0,"p":4,"i":1,"n":5},"27":{"c":0,"p":2,"i":3,"n":5},"28":{"c":0,"p":4,"i":1,"n":5},"29":{"c":0,"p":2,"i":3,"n":5},"30":{"c":1,"p":3,"i":1,"n":5},"31":{"c":0,"p":5,"i":0,"n":5},"32":{"c":0,"p":5,"i":0,"n":5},"33":{"c":0,"p":4,"i":1,"n":5},"34":{"c":1,"p":4,"i":0,"n":5},"35":{"c":0,"p":5,"i":0,"n":5},"36":{"c":2,"p":3,"i":0,"n":5},"37":{"c":0,"p":4,"i":1,"n":5},"38":{"c":0,"p":5,"i":0,"n":5},"39":{"c":0,"p":5,"i":0,"n":5},"40":{"c":0,"p":5,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":2,"p":3,"i":0,"n":5},"43":{"c":1,"p":3,"i":1,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":0,"p":5,"i":0,"n":5},"46":{"c":0,"p":5,"i":0,"n":5},"47":{"c":4,"p":1,"i":0,"n":5},"48":{"c":3,"p":2,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":0,"p":5,"i":0,"n":5},"51":{"c":2,"p":3,"i":0,"n":5},"52":{"c":2,"p":2,"i":1,"n":5},"53":{"c":2,"p":2,"i":1,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":1,"p":3,"i":1,"n":5},"56":{"c":2,"p":3,"i":0,"n":5},"57":{"c":1,"p":3,"i":1,"n":5},"58":{"c":1,"p":4,"i":0,"n":5},"59":{"c":1,"p":3,"i":1,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":10000,"date":"2026-07-25","model":"deepseek-chat","n":320,"correct":38,"partial":195,"incorrect":87,"rate":0.1187,"weighted":0.4234,"tiers":{"1":{"c":0,"p":0,"i":5,"n":5},"2":{"c":0,"p":0,"i":5,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":0,"p":0,"i":5,"n":5},"5":{"c":0,"p":2,"i":8,"n":10},"6":{"c":0,"p":6,"i":4,"n":10},"7":{"c":0,"p":5,"i":5,"n":10},"8":{"c":0,"p":6,"i":4,"n":10},"9":{"c":0,"p":4,"i":1,"n":5},"10":{"c":0,"p":3,"i":2,"n":5},"11":{"c":0,"p":4,"i":1,"n":5},"12":{"c":0,"p":3,"i":2,"n":5},"13":{"c":3,"p":0,"i":2,"n":5},"14":{"c":1,"p":3,"i":1,"n":5},"15":{"c":0,"p":1,"i":4,"n":5},"16":{"c":0,"p":4,"i":1,"n":5},"17":{"c":0,"p":2,"i":3,"n":5},"18":{"c":0,"p":2,"i":3,"n":5},"19":{"c":0,"p":4,"i":1,"n":5},"20":{"c":0,"p":4,"i":1,"n":5},"21":{"c":0,"p":2,"i":3,"n":5},"22":{"c":1,"p":3,"i":1,"n":5},"23":{"c":0,"p":4,"i":1,"n":5},"24":{"c":0,"p":5,"i":0,"n":5},"25":{"c":0,"p":1,"i":4,"n":5},"26":{"c":0,"p":4,"i":1,"n":5},"27":{"c":0,"p":2,"i":3,"n":5},"28":{"c":0,"p":4,"i":1,"n":5},"29":{"c":0,"p":2,"i":3,"n":5},"30":{"c":1,"p":3,"i":1,"n":5},"31":{"c":0,"p":5,"i":0,"n":5},"32":{"c":0,"p":5,"i":0,"n":5},"33":{"c":0,"p":4,"i":1,"n":5},"34":{"c":1,"p":4,"i":0,"n":5},"35":{"c":0,"p":5,"i":0,"n":5},"36":{"c":2,"p":3,"i":0,"n":5},"37":{"c":0,"p":4,"i":1,"n":5},"38":{"c":0,"p":5,"i":0,"n":5},"39":{"c":0,"p":5,"i":0,"n":5},"40":{"c":0,"p":5,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":2,"p":3,"i":0,"n":5},"43":{"c":1,"p":3,"i":1,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":0,"p":5,"i":0,"n":5},"46":{"c":0,"p":5,"i":0,"n":5},"47":{"c":4,"p":1,"i":0,"n":5},"48":{"c":3,"p":2,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":0,"p":5,"i":0,"n":5},"51":{"c":2,"p":3,"i":0,"n":5},"52":{"c":2,"p":2,"i":1,"n":5},"53":{"c":2,"p":2,"i":1,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":1,"p":3,"i":1,"n":5},"56":{"c":2,"p":3,"i":0,"n":5},"57":{"c":1,"p":3,"i":1,"n":5},"58":{"c":1,"p":4,"i":0,"n":5},"59":{"c":1,"p":3,"i":1,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":10001,"date":"2026-07-26","model":"deepseek-chat","n":320,"correct":122,"partial":165,"incorrect":33,"rate":0.3812,"weighted":0.6391,"tiers":{"1":{"c":4,"p":1,"i":0,"n":5},"2":{"c":4,"p":1,"i":0,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":2,"p":0,"i":3,"n":5},"5":{"c":2,"p":4,"i":4,"n":10},"6":{"c":1,"p":5,"i":4,"n":10},"7":{"c":2,"p":6,"i":2,"n":10},"8":{"c":1,"p":8,"i":1,"n":10},"9":{"c":2,"p":3,"i":0,"n":5},"10":{"c":0,"p":3,"i":2,"n":5},"11":{"c":3,"p":2,"i":0,"n":5},"12":{"c":3,"p":1,"i":1,"n":5},"13":{"c":4,"p":0,"i":1,"n":5},"14":{"c":2,"p":3,"i":0,"n":5},"15":{"c":1,"p":3,"i":1,"n":5},"16":{"c":2,"p":3,"i":0,"n":5},"17":{"c":2,"p":2,"i":1,"n":5},"18":{"c":2,"p":2,"i":1,"n":5},"19":{"c":2,"p":2,"i":1,"n":5},"20":{"c":2,"p":3,"i":0,"n":5},"21":{"c":1,"p":2,"i":2,"n":5},"22":{"c":3,"p":2,"i":0,"n":5},"23":{"c":3,"p":2,"i":0,"n":5},"24":{"c":1,"p":4,"i":0,"n":5},"25":{"c":3,"p":1,"i":1,"n":5},"26":{"c":4,"p":0,"i":1,"n":5},"27":{"c":5,"p":0,"i":0,"n":5},"28":{"c":1,"p":3,"i":1,"n":5},"29":{"c":2,"p":2,"i":1,"n":5},"30":{"c":2,"p":3,"i":0,"n":5},"31":{"c":2,"p":3,"i":0,"n":5},"32":{"c":2,"p":3,"i":0,"n":5},"33":{"c":2,"p":3,"i":0,"n":5},"34":{"c":2,"p":3,"i":0,"n":5},"35":{"c":0,"p":5,"i":0,"n":5},"36":{"c":3,"p":2,"i":0,"n":5},"37":{"c":2,"p":2,"i":1,"n":5},"38":{"c":0,"p":5,"i":0,"n":5},"39":{"c":1,"p":4,"i":0,"n":5},"40":{"c":1,"p":4,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":2,"p":3,"i":0,"n":5},"43":{"c":4,"p":1,"i":0,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":2,"p":3,"i":0,"n":5},"46":{"c":0,"p":5,"i":0,"n":5},"47":{"c":4,"p":1,"i":0,"n":5},"48":{"c":3,"p":2,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":0,"p":5,"i":0,"n":5},"51":{"c":3,"p":2,"i":0,"n":5},"52":{"c":3,"p":2,"i":0,"n":5},"53":{"c":3,"p":2,"i":0,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":3,"p":2,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":1,"p":3,"i":1,"n":5},"58":{"c":1,"p":4,"i":0,"n":5},"59":{"c":2,"p":3,"i":0,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":8004,"date":"2026-08-01","model":"deepseek-chat","n":320,"correct":180,"partial":104,"incorrect":36,"rate":0.5625,"weighted":0.725,"tiers":{"1":{"c":4,"p":1,"i":0,"n":5},"2":{"c":3,"p":2,"i":0,"n":5},"3":{"c":0,"p":1,"i":4,"n":5},"4":{"c":0,"p":0,"i":5,"n":5},"5":{"c":2,"p":5,"i":3,"n":10},"6":{"c":2,"p":5,"i":3,"n":10},"7":{"c":2,"p":6,"i":2,"n":10},"8":{"c":2,"p":7,"i":1,"n":10},"9":{"c":2,"p":3,"i":0,"n":5},"10":{"c":1,"p":4,"i":0,"n":5},"11":{"c":3,"p":2,"i":0,"n":5},"12":{"c":3,"p":1,"i":1,"n":5},"13":{"c":5,"p":0,"i":0,"n":5},"14":{"c":3,"p":2,"i":0,"n":5},"15":{"c":0,"p":3,"i":2,"n":5},"16":{"c":1,"p":3,"i":1,"n":5},"17":{"c":3,"p":1,"i":1,"n":5},"18":{"c":4,"p":0,"i":1,"n":5},"19":{"c":4,"p":1,"i":0,"n":5},"20":{"c":3,"p":2,"i":0,"n":5},"21":{"c":1,"p":2,"i":2,"n":5},"22":{"c":2,"p":2,"i":1,"n":5},"23":{"c":4,"p":1,"i":0,"n":5},"24":{"c":2,"p":3,"i":0,"n":5},"25":{"c":2,"p":1,"i":2,"n":5},"26":{"c":4,"p":1,"i":0,"n":5},"27":{"c":3,"p":1,"i":1,"n":5},"28":{"c":2,"p":2,"i":1,"n":5},"29":{"c":3,"p":1,"i":1,"n":5},"30":{"c":2,"p":2,"i":1,"n":5},"31":{"c":2,"p":3,"i":0,"n":5},"32":{"c":3,"p":2,"i":0,"n":5},"33":{"c":2,"p":3,"i":0,"n":5},"34":{"c":3,"p":2,"i":0,"n":5},"35":{"c":3,"p":2,"i":0,"n":5},"36":{"c":4,"p":1,"i":0,"n":5},"37":{"c":2,"p":2,"i":1,"n":5},"38":{"c":3,"p":2,"i":0,"n":5},"39":{"c":3,"p":2,"i":0,"n":5},"40":{"c":3,"p":2,"i":0,"n":5},"41":{"c":3,"p":2,"i":0,"n":5},"42":{"c":4,"p":1,"i":0,"n":5},"43":{"c":4,"p":0,"i":1,"n":5},"44":{"c":5,"p":0,"i":0,"n":5},"45":{"c":4,"p":1,"i":0,"n":5},"46":{"c":4,"p":1,"i":0,"n":5},"47":{"c":5,"p":0,"i":0,"n":5},"48":{"c":4,"p":1,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":5,"p":0,"i":0,"n":5},"51":{"c":5,"p":0,"i":0,"n":5},"52":{"c":5,"p":0,"i":0,"n":5},"53":{"c":4,"p":1,"i":0,"n":5},"54":{"c":2,"p":3,"i":0,"n":5},"55":{"c":4,"p":1,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":4,"p":1,"i":0,"n":5},"58":{"c":4,"p":1,"i":0,"n":5},"59":{"c":4,"p":0,"i":1,"n":5},"60":{"c":5,"p":0,"i":0,"n":5}},"full":true},{"id":8005,"date":"2026-08-01","model":"deepseek-chat","n":10,"correct":8,"partial":1,"incorrect":1,"rate":0.8,"weighted":0.85,"tiers":{"3":{"c":4,"p":1,"i":0,"n":5},"4":{"c":4,"p":0,"i":1,"n":5}},"full":false},{"id":8006,"date":"2026-08-01","model":"deepseek-chat","n":320,"correct":184,"partial":115,"incorrect":21,"rate":0.575,"weighted":0.7547,"tiers":{"1":{"c":2,"p":3,"i":0,"n":5},"2":{"c":3,"p":1,"i":1,"n":5},"3":{"c":2,"p":1,"i":2,"n":5},"4":{"c":3,"p":0,"i":2,"n":5},"5":{"c":3,"p":5,"i":2,"n":10},"6":{"c":3,"p":5,"i":2,"n":10},"7":{"c":1,"p":7,"i":2,"n":10},"8":{"c":3,"p":6,"i":1,"n":10},"9":{"c":1,"p":4,"i":0,"n":5},"10":{"c":0,"p":5,"i":0,"n":5},"11":{"c":4,"p":1,"i":0,"n":5},"12":{"c":3,"p":1,"i":1,"n":5},"13":{"c":4,"p":1,"i":0,"n":5},"14":{"c":3,"p":2,"i":0,"n":5},"15":{"c":1,"p":4,"i":0,"n":5},"16":{"c":2,"p":3,"i":0,"n":5},"17":{"c":3,"p":2,"i":0,"n":5},"18":{"c":3,"p":0,"i":2,"n":5},"19":{"c":3,"p":2,"i":0,"n":5},"20":{"c":3,"p":1,"i":1,"n":5},"21":{"c":1,"p":4,"i":0,"n":5},"22":{"c":2,"p":2,"i":1,"n":5},"23":{"c":2,"p":3,"i":0,"n":5},"24":{"c":3,"p":2,"i":0,"n":5},"25":{"c":3,"p":1,"i":1,"n":5},"26":{"c":4,"p":1,"i":0,"n":5},"27":{"c":3,"p":2,"i":0,"n":5},"28":{"c":2,"p":3,"i":0,"n":5},"29":{"c":2,"p":1,"i":2,"n":5},"30":{"c":3,"p":2,"i":0,"n":5},"31":{"c":4,"p":1,"i":0,"n":5},"32":{"c":4,"p":1,"i":0,"n":5},"33":{"c":4,"p":1,"i":0,"n":5},"34":{"c":5,"p":0,"i":0,"n":5},"35":{"c":3,"p":2,"i":0,"n":5},"36":{"c":4,"p":1,"i":0,"n":5},"37":{"c":2,"p":2,"i":1,"n":5},"38":{"c":2,"p":3,"i":0,"n":5},"39":{"c":3,"p":2,"i":0,"n":5},"40":{"c":3,"p":2,"i":0,"n":5},"41":{"c":4,"p":1,"i":0,"n":5},"42":{"c":4,"p":1,"i":0,"n":5},"43":{"c":3,"p":2,"i":0,"n":5},"44":{"c":5,"p":0,"i":0,"n":5},"45":{"c":4,"p":1,"i":0,"n":5},"46":{"c":3,"p":2,"i":0,"n":5},"47":{"c":5,"p":0,"i":0,"n":5},"48":{"c":5,"p":0,"i":0,"n":5},"49":{"c":3,"p":2,"i":0,"n":5},"50":{"c":5,"p":0,"i":0,"n":5},"51":{"c":5,"p":0,"i":0,"n":5},"52":{"c":4,"p":1,"i":0,"n":5},"53":{"c":4,"p":1,"i":0,"n":5},"54":{"c":2,"p":3,"i":0,"n":5},"55":{"c":3,"p":2,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":2,"p":3,"i":0,"n":5},"58":{"c":4,"p":1,"i":0,"n":5},"59":{"c":4,"p":1,"i":0,"n":5},"60":{"c":3,"p":2,"i":0,"n":5}},"full":true}],"fullRuns":[{"id":223,"date":"2026-07-22","model":"deepseek-chat","n":320,"correct":102,"partial":160,"incorrect":58,"rate":0.3187,"weighted":0.5687,"tiers":{"1":{"c":3,"p":2,"i":0,"n":5},"2":{"c":3,"p":2,"i":0,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":2,"p":0,"i":3,"n":5},"5":{"c":1,"p":3,"i":6,"n":10},"6":{"c":0,"p":3,"i":7,"n":10},"7":{"c":3,"p":5,"i":2,"n":10},"8":{"c":2,"p":7,"i":1,"n":10},"9":{"c":1,"p":3,"i":1,"n":5},"10":{"c":1,"p":3,"i":1,"n":5},"11":{"c":2,"p":0,"i":3,"n":5},"12":{"c":0,"p":4,"i":1,"n":5},"13":{"c":4,"p":0,"i":1,"n":5},"14":{"c":0,"p":4,"i":1,"n":5},"15":{"c":0,"p":1,"i":4,"n":5},"16":{"c":1,"p":3,"i":1,"n":5},"17":{"c":0,"p":3,"i":2,"n":5},"18":{"c":0,"p":2,"i":3,"n":5},"19":{"c":1,"p":3,"i":1,"n":5},"20":{"c":1,"p":2,"i":2,"n":5},"21":{"c":0,"p":3,"i":2,"n":5},"22":{"c":2,"p":2,"i":1,"n":5},"23":{"c":1,"p":2,"i":2,"n":5},"24":{"c":3,"p":2,"i":0,"n":5},"25":{"c":1,"p":2,"i":2,"n":5},"26":{"c":3,"p":2,"i":0,"n":5},"27":{"c":2,"p":2,"i":1,"n":5},"28":{"c":3,"p":2,"i":0,"n":5},"29":{"c":1,"p":2,"i":2,"n":5},"30":{"c":1,"p":2,"i":2,"n":5},"31":{"c":1,"p":4,"i":0,"n":5},"32":{"c":1,"p":4,"i":0,"n":5},"33":{"c":1,"p":4,"i":0,"n":5},"34":{"c":1,"p":3,"i":1,"n":5},"35":{"c":1,"p":4,"i":0,"n":5},"36":{"c":4,"p":1,"i":0,"n":5},"37":{"c":2,"p":3,"i":0,"n":5},"38":{"c":1,"p":4,"i":0,"n":5},"39":{"c":1,"p":4,"i":0,"n":5},"40":{"c":1,"p":4,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":3,"p":2,"i":0,"n":5},"43":{"c":1,"p":4,"i":0,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":1,"p":4,"i":0,"n":5},"46":{"c":2,"p":3,"i":0,"n":5},"47":{"c":4,"p":0,"i":1,"n":5},"48":{"c":2,"p":2,"i":1,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":1,"p":4,"i":0,"n":5},"51":{"c":3,"p":2,"i":0,"n":5},"52":{"c":4,"p":1,"i":0,"n":5},"53":{"c":4,"p":1,"i":0,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":3,"p":2,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":4,"p":1,"i":0,"n":5},"58":{"c":2,"p":3,"i":0,"n":5},"59":{"c":2,"p":3,"i":0,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":9999,"date":"2026-07-24","model":"deepseek-chat","n":320,"correct":38,"partial":197,"incorrect":85,"rate":0.1187,"weighted":0.4266,"tiers":{"1":{"c":0,"p":0,"i":5,"n":5},"2":{"c":0,"p":0,"i":5,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":0,"p":0,"i":5,"n":5},"5":{"c":0,"p":2,"i":8,"n":10},"6":{"c":0,"p":6,"i":4,"n":10},"7":{"c":0,"p":5,"i":5,"n":10},"8":{"c":0,"p":6,"i":4,"n":10},"9":{"c":0,"p":4,"i":1,"n":5},"10":{"c":0,"p":3,"i":2,"n":5},"11":{"c":0,"p":4,"i":1,"n":5},"12":{"c":0,"p":3,"i":2,"n":5},"13":{"c":3,"p":0,"i":2,"n":5},"14":{"c":1,"p":3,"i":1,"n":5},"15":{"c":0,"p":1,"i":4,"n":5},"16":{"c":0,"p":4,"i":1,"n":5},"17":{"c":0,"p":2,"i":3,"n":5},"18":{"c":0,"p":3,"i":2,"n":5},"19":{"c":0,"p":4,"i":1,"n":5},"20":{"c":0,"p":4,"i":1,"n":5},"21":{"c":0,"p":3,"i":2,"n":5},"22":{"c":1,"p":3,"i":1,"n":5},"23":{"c":0,"p":4,"i":1,"n":5},"24":{"c":0,"p":5,"i":0,"n":5},"25":{"c":0,"p":1,"i":4,"n":5},"26":{"c":0,"p":4,"i":1,"n":5},"27":{"c":0,"p":2,"i":3,"n":5},"28":{"c":0,"p":4,"i":1,"n":5},"29":{"c":0,"p":2,"i":3,"n":5},"30":{"c":1,"p":3,"i":1,"n":5},"31":{"c":0,"p":5,"i":0,"n":5},"32":{"c":0,"p":5,"i":0,"n":5},"33":{"c":0,"p":4,"i":1,"n":5},"34":{"c":1,"p":4,"i":0,"n":5},"35":{"c":0,"p":5,"i":0,"n":5},"36":{"c":2,"p":3,"i":0,"n":5},"37":{"c":0,"p":4,"i":1,"n":5},"38":{"c":0,"p":5,"i":0,"n":5},"39":{"c":0,"p":5,"i":0,"n":5},"40":{"c":0,"p":5,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":2,"p":3,"i":0,"n":5},"43":{"c":1,"p":3,"i":1,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":0,"p":5,"i":0,"n":5},"46":{"c":0,"p":5,"i":0,"n":5},"47":{"c":4,"p":1,"i":0,"n":5},"48":{"c":3,"p":2,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":0,"p":5,"i":0,"n":5},"51":{"c":2,"p":3,"i":0,"n":5},"52":{"c":2,"p":2,"i":1,"n":5},"53":{"c":2,"p":2,"i":1,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":1,"p":3,"i":1,"n":5},"56":{"c":2,"p":3,"i":0,"n":5},"57":{"c":1,"p":3,"i":1,"n":5},"58":{"c":1,"p":4,"i":0,"n":5},"59":{"c":1,"p":3,"i":1,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":10000,"date":"2026-07-25","model":"deepseek-chat","n":320,"correct":38,"partial":195,"incorrect":87,"rate":0.1187,"weighted":0.4234,"tiers":{"1":{"c":0,"p":0,"i":5,"n":5},"2":{"c":0,"p":0,"i":5,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":0,"p":0,"i":5,"n":5},"5":{"c":0,"p":2,"i":8,"n":10},"6":{"c":0,"p":6,"i":4,"n":10},"7":{"c":0,"p":5,"i":5,"n":10},"8":{"c":0,"p":6,"i":4,"n":10},"9":{"c":0,"p":4,"i":1,"n":5},"10":{"c":0,"p":3,"i":2,"n":5},"11":{"c":0,"p":4,"i":1,"n":5},"12":{"c":0,"p":3,"i":2,"n":5},"13":{"c":3,"p":0,"i":2,"n":5},"14":{"c":1,"p":3,"i":1,"n":5},"15":{"c":0,"p":1,"i":4,"n":5},"16":{"c":0,"p":4,"i":1,"n":5},"17":{"c":0,"p":2,"i":3,"n":5},"18":{"c":0,"p":2,"i":3,"n":5},"19":{"c":0,"p":4,"i":1,"n":5},"20":{"c":0,"p":4,"i":1,"n":5},"21":{"c":0,"p":2,"i":3,"n":5},"22":{"c":1,"p":3,"i":1,"n":5},"23":{"c":0,"p":4,"i":1,"n":5},"24":{"c":0,"p":5,"i":0,"n":5},"25":{"c":0,"p":1,"i":4,"n":5},"26":{"c":0,"p":4,"i":1,"n":5},"27":{"c":0,"p":2,"i":3,"n":5},"28":{"c":0,"p":4,"i":1,"n":5},"29":{"c":0,"p":2,"i":3,"n":5},"30":{"c":1,"p":3,"i":1,"n":5},"31":{"c":0,"p":5,"i":0,"n":5},"32":{"c":0,"p":5,"i":0,"n":5},"33":{"c":0,"p":4,"i":1,"n":5},"34":{"c":1,"p":4,"i":0,"n":5},"35":{"c":0,"p":5,"i":0,"n":5},"36":{"c":2,"p":3,"i":0,"n":5},"37":{"c":0,"p":4,"i":1,"n":5},"38":{"c":0,"p":5,"i":0,"n":5},"39":{"c":0,"p":5,"i":0,"n":5},"40":{"c":0,"p":5,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":2,"p":3,"i":0,"n":5},"43":{"c":1,"p":3,"i":1,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":0,"p":5,"i":0,"n":5},"46":{"c":0,"p":5,"i":0,"n":5},"47":{"c":4,"p":1,"i":0,"n":5},"48":{"c":3,"p":2,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":0,"p":5,"i":0,"n":5},"51":{"c":2,"p":3,"i":0,"n":5},"52":{"c":2,"p":2,"i":1,"n":5},"53":{"c":2,"p":2,"i":1,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":1,"p":3,"i":1,"n":5},"56":{"c":2,"p":3,"i":0,"n":5},"57":{"c":1,"p":3,"i":1,"n":5},"58":{"c":1,"p":4,"i":0,"n":5},"59":{"c":1,"p":3,"i":1,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":10001,"date":"2026-07-26","model":"deepseek-chat","n":320,"correct":122,"partial":165,"incorrect":33,"rate":0.3812,"weighted":0.6391,"tiers":{"1":{"c":4,"p":1,"i":0,"n":5},"2":{"c":4,"p":1,"i":0,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":2,"p":0,"i":3,"n":5},"5":{"c":2,"p":4,"i":4,"n":10},"6":{"c":1,"p":5,"i":4,"n":10},"7":{"c":2,"p":6,"i":2,"n":10},"8":{"c":1,"p":8,"i":1,"n":10},"9":{"c":2,"p":3,"i":0,"n":5},"10":{"c":0,"p":3,"i":2,"n":5},"11":{"c":3,"p":2,"i":0,"n":5},"12":{"c":3,"p":1,"i":1,"n":5},"13":{"c":4,"p":0,"i":1,"n":5},"14":{"c":2,"p":3,"i":0,"n":5},"15":{"c":1,"p":3,"i":1,"n":5},"16":{"c":2,"p":3,"i":0,"n":5},"17":{"c":2,"p":2,"i":1,"n":5},"18":{"c":2,"p":2,"i":1,"n":5},"19":{"c":2,"p":2,"i":1,"n":5},"20":{"c":2,"p":3,"i":0,"n":5},"21":{"c":1,"p":2,"i":2,"n":5},"22":{"c":3,"p":2,"i":0,"n":5},"23":{"c":3,"p":2,"i":0,"n":5},"24":{"c":1,"p":4,"i":0,"n":5},"25":{"c":3,"p":1,"i":1,"n":5},"26":{"c":4,"p":0,"i":1,"n":5},"27":{"c":5,"p":0,"i":0,"n":5},"28":{"c":1,"p":3,"i":1,"n":5},"29":{"c":2,"p":2,"i":1,"n":5},"30":{"c":2,"p":3,"i":0,"n":5},"31":{"c":2,"p":3,"i":0,"n":5},"32":{"c":2,"p":3,"i":0,"n":5},"33":{"c":2,"p":3,"i":0,"n":5},"34":{"c":2,"p":3,"i":0,"n":5},"35":{"c":0,"p":5,"i":0,"n":5},"36":{"c":3,"p":2,"i":0,"n":5},"37":{"c":2,"p":2,"i":1,"n":5},"38":{"c":0,"p":5,"i":0,"n":5},"39":{"c":1,"p":4,"i":0,"n":5},"40":{"c":1,"p":4,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":2,"p":3,"i":0,"n":5},"43":{"c":4,"p":1,"i":0,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":2,"p":3,"i":0,"n":5},"46":{"c":0,"p":5,"i":0,"n":5},"47":{"c":4,"p":1,"i":0,"n":5},"48":{"c":3,"p":2,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":0,"p":5,"i":0,"n":5},"51":{"c":3,"p":2,"i":0,"n":5},"52":{"c":3,"p":2,"i":0,"n":5},"53":{"c":3,"p":2,"i":0,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":3,"p":2,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":1,"p":3,"i":1,"n":5},"58":{"c":1,"p":4,"i":0,"n":5},"59":{"c":2,"p":3,"i":0,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":8004,"date":"2026-08-01","model":"deepseek-chat","n":320,"correct":180,"partial":104,"incorrect":36,"rate":0.5625,"weighted":0.725,"tiers":{"1":{"c":4,"p":1,"i":0,"n":5},"2":{"c":3,"p":2,"i":0,"n":5},"3":{"c":0,"p":1,"i":4,"n":5},"4":{"c":0,"p":0,"i":5,"n":5},"5":{"c":2,"p":5,"i":3,"n":10},"6":{"c":2,"p":5,"i":3,"n":10},"7":{"c":2,"p":6,"i":2,"n":10},"8":{"c":2,"p":7,"i":1,"n":10},"9":{"c":2,"p":3,"i":0,"n":5},"10":{"c":1,"p":4,"i":0,"n":5},"11":{"c":3,"p":2,"i":0,"n":5},"12":{"c":3,"p":1,"i":1,"n":5},"13":{"c":5,"p":0,"i":0,"n":5},"14":{"c":3,"p":2,"i":0,"n":5},"15":{"c":0,"p":3,"i":2,"n":5},"16":{"c":1,"p":3,"i":1,"n":5},"17":{"c":3,"p":1,"i":1,"n":5},"18":{"c":4,"p":0,"i":1,"n":5},"19":{"c":4,"p":1,"i":0,"n":5},"20":{"c":3,"p":2,"i":0,"n":5},"21":{"c":1,"p":2,"i":2,"n":5},"22":{"c":2,"p":2,"i":1,"n":5},"23":{"c":4,"p":1,"i":0,"n":5},"24":{"c":2,"p":3,"i":0,"n":5},"25":{"c":2,"p":1,"i":2,"n":5},"26":{"c":4,"p":1,"i":0,"n":5},"27":{"c":3,"p":1,"i":1,"n":5},"28":{"c":2,"p":2,"i":1,"n":5},"29":{"c":3,"p":1,"i":1,"n":5},"30":{"c":2,"p":2,"i":1,"n":5},"31":{"c":2,"p":3,"i":0,"n":5},"32":{"c":3,"p":2,"i":0,"n":5},"33":{"c":2,"p":3,"i":0,"n":5},"34":{"c":3,"p":2,"i":0,"n":5},"35":{"c":3,"p":2,"i":0,"n":5},"36":{"c":4,"p":1,"i":0,"n":5},"37":{"c":2,"p":2,"i":1,"n":5},"38":{"c":3,"p":2,"i":0,"n":5},"39":{"c":3,"p":2,"i":0,"n":5},"40":{"c":3,"p":2,"i":0,"n":5},"41":{"c":3,"p":2,"i":0,"n":5},"42":{"c":4,"p":1,"i":0,"n":5},"43":{"c":4,"p":0,"i":1,"n":5},"44":{"c":5,"p":0,"i":0,"n":5},"45":{"c":4,"p":1,"i":0,"n":5},"46":{"c":4,"p":1,"i":0,"n":5},"47":{"c":5,"p":0,"i":0,"n":5},"48":{"c":4,"p":1,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":5,"p":0,"i":0,"n":5},"51":{"c":5,"p":0,"i":0,"n":5},"52":{"c":5,"p":0,"i":0,"n":5},"53":{"c":4,"p":1,"i":0,"n":5},"54":{"c":2,"p":3,"i":0,"n":5},"55":{"c":4,"p":1,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":4,"p":1,"i":0,"n":5},"58":{"c":4,"p":1,"i":0,"n":5},"59":{"c":4,"p":0,"i":1,"n":5},"60":{"c":5,"p":0,"i":0,"n":5}},"full":true},{"id":8006,"date":"2026-08-01","model":"deepseek-chat","n":320,"correct":184,"partial":115,"incorrect":21,"rate":0.575,"weighted":0.7547,"tiers":{"1":{"c":2,"p":3,"i":0,"n":5},"2":{"c":3,"p":1,"i":1,"n":5},"3":{"c":2,"p":1,"i":2,"n":5},"4":{"c":3,"p":0,"i":2,"n":5},"5":{"c":3,"p":5,"i":2,"n":10},"6":{"c":3,"p":5,"i":2,"n":10},"7":{"c":1,"p":7,"i":2,"n":10},"8":{"c":3,"p":6,"i":1,"n":10},"9":{"c":1,"p":4,"i":0,"n":5},"10":{"c":0,"p":5,"i":0,"n":5},"11":{"c":4,"p":1,"i":0,"n":5},"12":{"c":3,"p":1,"i":1,"n":5},"13":{"c":4,"p":1,"i":0,"n":5},"14":{"c":3,"p":2,"i":0,"n":5},"15":{"c":1,"p":4,"i":0,"n":5},"16":{"c":2,"p":3,"i":0,"n":5},"17":{"c":3,"p":2,"i":0,"n":5},"18":{"c":3,"p":0,"i":2,"n":5},"19":{"c":3,"p":2,"i":0,"n":5},"20":{"c":3,"p":1,"i":1,"n":5},"21":{"c":1,"p":4,"i":0,"n":5},"22":{"c":2,"p":2,"i":1,"n":5},"23":{"c":2,"p":3,"i":0,"n":5},"24":{"c":3,"p":2,"i":0,"n":5},"25":{"c":3,"p":1,"i":1,"n":5},"26":{"c":4,"p":1,"i":0,"n":5},"27":{"c":3,"p":2,"i":0,"n":5},"28":{"c":2,"p":3,"i":0,"n":5},"29":{"c":2,"p":1,"i":2,"n":5},"30":{"c":3,"p":2,"i":0,"n":5},"31":{"c":4,"p":1,"i":0,"n":5},"32":{"c":4,"p":1,"i":0,"n":5},"33":{"c":4,"p":1,"i":0,"n":5},"34":{"c":5,"p":0,"i":0,"n":5},"35":{"c":3,"p":2,"i":0,"n":5},"36":{"c":4,"p":1,"i":0,"n":5},"37":{"c":2,"p":2,"i":1,"n":5},"38":{"c":2,"p":3,"i":0,"n":5},"39":{"c":3,"p":2,"i":0,"n":5},"40":{"c":3,"p":2,"i":0,"n":5},"41":{"c":4,"p":1,"i":0,"n":5},"42":{"c":4,"p":1,"i":0,"n":5},"43":{"c":3,"p":2,"i":0,"n":5},"44":{"c":5,"p":0,"i":0,"n":5},"45":{"c":4,"p":1,"i":0,"n":5},"46":{"c":3,"p":2,"i":0,"n":5},"47":{"c":5,"p":0,"i":0,"n":5},"48":{"c":5,"p":0,"i":0,"n":5},"49":{"c":3,"p":2,"i":0,"n":5},"50":{"c":5,"p":0,"i":0,"n":5},"51":{"c":5,"p":0,"i":0,"n":5},"52":{"c":4,"p":1,"i":0,"n":5},"53":{"c":4,"p":1,"i":0,"n":5},"54":{"c":2,"p":3,"i":0,"n":5},"55":{"c":3,"p":2,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":2,"p":3,"i":0,"n":5},"58":{"c":4,"p":1,"i":0,"n":5},"59":{"c":4,"p":1,"i":0,"n":5},"60":{"c":3,"p":2,"i":0,"n":5}},"full":true}],"ruby":[{"date":"2026-07-17","total":69,"rubyPass":0,"rubyFail":0,"escalations":51,"catch":0.3077,"competence":[{"cat":"other","rate":0.6818,"count":22},{"cat":"implementation","rate":0.75,"count":4}]},{"date":"2026-07-18","total":69,"rubyPass":0,"rubyFail":0,"escalations":51,"catch":0.3077,"competence":[{"cat":"other","rate":0.6818,"count":22},{"cat":"implementation","rate":0.75,"count":4}]},{"date":"2026-07-21","total":57,"rubyPass":0,"rubyFail":0,"escalations":41,"catch":0.5,"competence":[]},{"date":"2026-07-22","total":105,"rubyPass":14,"rubyFail":25,"escalations":91,"catch":0.641,"competence":[{"cat":"other","rate":0.3514,"count":37},{"cat":"implementation","rate":0.5,"count":2}]},{"date":"2026-07-23","total":122,"rubyPass":22,"rubyFail":33,"escalations":100,"catch":0.6,"competence":[{"cat":"other","rate":0.3962,"count":53},{"cat":"implementation","rate":0.5,"count":2}]},{"date":"2026-07-25","total":606,"rubyPass":105,"rubyFail":392,"escalations":501,"catch":0.7887,"competence":[{"cat":"other","rate":0.2628,"count":331},{"cat":"implementation","rate":0.1034,"count":145},{"cat":"review","rate":0.1875,"count":16},{"cat":"research","rate":0,"count":4},{"cat":"refactor","rate":0,"count":1}]},{"date":"2026-07-26","total":931,"rubyPass":105,"rubyFail":679,"escalations":826,"catch":0.8661,"competence":[{"cat":"other","rate":0.1832,"count":475},{"cat":"implementation","rate":0.0551,"count":272},{"cat":"review","rate":0.1154,"count":26},{"cat":"research","rate":0,"count":9},{"cat":"refactor","rate":0,"count":2}]},{"date":"2026-07-27","total":1251,"rubyPass":105,"rubyFail":850,"escalations":1146,"catch":0.8901,"competence":[{"cat":"other","rate":0.15,"count":580},{"cat":"implementation","rate":0.0456,"count":329},{"cat":"review","rate":0.0909,"count":33},{"cat":"research","rate":0,"count":10},{"cat":"refactor","rate":0,"count":3}]}],"maxTier":60,"kpi":{"bestRate":0.575,"bestId":8006,"latestRate":0.575,"latestId":8006,"graded":2680,"sessions":86,"fullRuns":6,"delta":0.2563,"firstId":223,"catch":0.8901}}</script>
+
+<script id="datablob" type="application/json">{"generated":"2026-08-27","sessions":[{"id":2,"date":"2026-07-17","model":"granite4.1:3b","n":20,"correct":0,"partial":2,"incorrect":18,"rate":0.0,"weighted":0.05,"tiers":{"1":{"c":0,"p":0,"i":5,"n":5},"2":{"c":0,"p":0,"i":5,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":0,"p":0,"i":5,"n":5}},"full":false},{"id":8,"date":"2026-07-17","model":"deepseek-chat","n":20,"correct":6,"partial":2,"incorrect":12,"rate":0.3,"weighted":0.35,"tiers":{"1":{"c":2,"p":2,"i":1,"n":5},"2":{"c":1,"p":0,"i":4,"n":5},"3":{"c":0,"p":0,"i":5,"n":5},"4":{"c":3,"p":0,"i":2,"n":5}},"full":false},{"id":9,"date":"2026-07-18","model":"deepseek-chat","n":20,"correct":18,"partial":2,"incorrect":0,"rate":0.9,"weighted":0.95,"tiers":{"1":{"c":5,"p":0,"i":0,"n":5},"2":{"c":4,"p":1,"i":0,"n":5},"3":{"c":4,"p":1,"i":0,"n":5},"4":{"c":5,"p":0,"i":0,"n":5}},"full":false},{"id":10,"date":"2026-07-18","model":"glm-5.2","n":60,"correct":49,"partial":10,"incorrect":1,"rate":0.8167,"weighted":0.9,"tiers":{"1":{"c":5,"p":0,"i":0,"n":5},"2":{"c":5,"p":0,"i":0,"n":5},"3":{"c":2,"p":2,"i":1,"n":5},"4":{"c":5,"p":0,"i":0,"n":5},"5":{"c":10,"p":0,"i":0,"n":10},"6":{"c":9,"p":1,"i":0,"n":10},"7":{"c":8,"p":2,"i":0,"n":10},"8":{"c":5,"p":5,"i":0,"n":10}},"full":false},{"id":11,"date":"2026-07-20","model":"deepseek-chat","n":170,"correct":30,"partial":58,"incorrect":82,"rate":0.1765,"weighted":0.3471,"tiers":{"1":{"c":1,"p":1,"i":3,"n":5},"2":{"c":3,"p":1,"i":1,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":0,"p":0,"i":5,"n":5},"5":{"c":2,"p":2,"i":6,"n":10},"6":{"c":3,"p":3,"i":4,"n":10},"7":{"c":1,"p":5,"i":4,"n":10},"8":{"c":0,"p":7,"i":3,"n":10},"9":{"c":1,"p":3,"i":1,"n":5},"10":{"c":3,"p":2,"i":0,"n":5},"11":{"c":1,"p":2,"i":2,"n":5},"12":{"c":0,"p":2,"i":3,"n":5},"13":{"c":0,"p":0,"i":5,"n":5},"14":{"c":2,"p":3,"i":0,"n":5},"15":{"c":0,"p":3,"i":2,"n":5},"16":{"c":0,"p":0,"i":5,"n":5},"17":{"c":0,"p":1,"i":4,"n":5},"18":{"c":0,"p":2,"i":3,"n":5},"19":{"c":0,"p":1,"i":4,"n":5},"20":{"c":0,"p":3,"i":2,"n":5},"21":{"c":1,"p":2,"i":2,"n":5},"22":{"c":3,"p":0,"i":2,"n":5},"23":{"c":1,"p":2,"i":2,"n":5},"24":{"c":2,"p":2,"i":1,"n":5},"25":{"c":0,"p":2,"i":3,"n":5},"26":{"c":1,"p":2,"i":2,"n":5},"27":{"c":1,"p":1,"i":3,"n":5},"28":{"c":1,"p":1,"i":3,"n":5},"29":{"c":2,"p":1,"i":2,"n":5},"30":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":1,"date":"2026-07-21","model":"deepseek-chat","n":10,"correct":10,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"11":{"c":5,"p":0,"i":0,"n":5},"12":{"c":5,"p":0,"i":0,"n":5}},"full":false},{"id":14,"date":"2026-07-21","model":"deepseek-chat","n":5,"correct":3,"partial":0,"incorrect":2,"rate":0.6,"weighted":0.6,"tiers":{"20":{"c":3,"p":0,"i":2,"n":5}},"full":false},{"id":15,"date":"2026-07-21","model":"deepseek-v4-flash + Gemma-4-E2B local","n":5,"correct":5,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"21":{"c":5,"p":0,"i":0,"n":5}},"full":false},{"id":16,"date":"2026-07-21","model":"deepseek-chat","n":5,"correct":4,"partial":1,"incorrect":0,"rate":0.8,"weighted":0.9,"tiers":{"22":{"c":4,"p":1,"i":0,"n":5}},"full":false},{"id":17,"date":"2026-07-21","model":"deepseek-v4-pro + Gemma-4-E2B local","n":5,"correct":4,"partial":1,"incorrect":0,"rate":0.8,"weighted":0.9,"tiers":{"23":{"c":4,"p":1,"i":0,"n":5}},"full":false},{"id":18,"date":"2026-07-21","model":"deepseek-chat","n":5,"correct":2,"partial":3,"incorrect":0,"rate":0.4,"weighted":0.7,"tiers":{"24":{"c":2,"p":3,"i":0,"n":5}},"full":false},{"id":19,"date":"2026-07-21","model":"deepseek-chat","n":5,"correct":5,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"25":{"c":5,"p":0,"i":0,"n":5}},"full":false},{"id":20,"date":"2026-07-21","model":"deepseek-chat","n":5,"correct":3,"partial":2,"incorrect":0,"rate":0.6,"weighted":0.8,"tiers":{"24":{"c":3,"p":2,"i":0,"n":5}},"full":false},{"id":21,"date":"2026-07-21","model":"deepseek-chat","n":170,"correct":52,"partial":66,"incorrect":52,"rate":0.3059,"weighted":0.5,"tiers":{"1":{"c":5,"p":0,"i":0,"n":5},"2":{"c":3,"p":2,"i":0,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":3,"p":0,"i":2,"n":5},"5":{"c":2,"p":2,"i":6,"n":10},"6":{"c":1,"p":3,"i":6,"n":10},"7":{"c":3,"p":6,"i":1,"n":10},"8":{"c":2,"p":7,"i":1,"n":10},"9":{"c":1,"p":4,"i":0,"n":5},"10":{"c":1,"p":2,"i":2,"n":5},"11":{"c":4,"p":0,"i":1,"n":5},"12":{"c":4,"p":0,"i":1,"n":5},"13":{"c":3,"p":0,"i":2,"n":5},"14":{"c":0,"p":5,"i":0,"n":5},"15":{"c":0,"p":2,"i":3,"n":5},"16":{"c":0,"p":4,"i":1,"n":5},"17":{"c":0,"p":3,"i":2,"n":5},"18":{"c":1,"p":1,"i":3,"n":5},"19":{"c":0,"p":4,"i":1,"n":5},"20":{"c":1,"p":2,"i":2,"n":5},"21":{"c":0,"p":2,"i":3,"n":5},"22":{"c":3,"p":2,"i":0,"n":5},"23":{"c":1,"p":1,"i":3,"n":5},"24":{"c":1,"p":4,"i":0,"n":5},"25":{"c":2,"p":1,"i":2,"n":5},"26":{"c":0,"p":3,"i":2,"n":5},"27":{"c":5,"p":0,"i":0,"n":5},"28":{"c":3,"p":0,"i":2,"n":5},"29":{"c":2,"p":2,"i":1,"n":5},"30":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":22,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":1,"incorrect":3,"rate":0.2,"weighted":0.3,"tiers":{"28":{"c":1,"p":1,"i":3,"n":5}},"full":false},{"id":23,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":2,"partial":1,"incorrect":2,"rate":0.4,"weighted":0.5,"tiers":{"29":{"c":2,"p":1,"i":2,"n":5}},"full":false},{"id":24,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":2,"incorrect":2,"rate":0.2,"weighted":0.4,"tiers":{"30":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":25,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":2,"partial":0,"incorrect":3,"rate":0.4,"weighted":0.4,"tiers":{"28":{"c":2,"p":0,"i":3,"n":5}},"full":false},{"id":26,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":3,"incorrect":1,"rate":0.2,"weighted":0.5,"tiers":{"29":{"c":1,"p":3,"i":1,"n":5}},"full":false},{"id":27,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":2,"incorrect":2,"rate":0.2,"weighted":0.4,"tiers":{"30":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":101,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":3,"partial":2,"incorrect":0,"rate":0.6,"weighted":0.8,"tiers":{"1":{"c":3,"p":2,"i":0,"n":5}},"full":false},{"id":102,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":3,"partial":1,"incorrect":1,"rate":0.6,"weighted":0.7,"tiers":{"2":{"c":3,"p":1,"i":1,"n":5}},"full":false},{"id":103,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":0,"incorrect":5,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":5,"n":5}},"full":false},{"id":104,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":2,"partial":0,"incorrect":3,"rate":0.4,"weighted":0.4,"tiers":{"4":{"c":2,"p":0,"i":3,"n":5}},"full":false},{"id":105,"date":"2026-07-22","model":"deepseek-chat","n":10,"correct":1,"partial":2,"incorrect":7,"rate":0.1,"weighted":0.2,"tiers":{"5":{"c":1,"p":2,"i":7,"n":10}},"full":false},{"id":123,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":2,"incorrect":3,"rate":0.0,"weighted":0.2,"tiers":{"23":{"c":0,"p":2,"i":3,"n":5}},"full":false},{"id":124,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":3,"partial":2,"incorrect":0,"rate":0.6,"weighted":0.8,"tiers":{"24":{"c":3,"p":2,"i":0,"n":5}},"full":false},{"id":125,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":3,"partial":1,"incorrect":1,"rate":0.6,"weighted":0.7,"tiers":{"25":{"c":3,"p":1,"i":1,"n":5}},"full":false},{"id":126,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":2,"partial":2,"incorrect":1,"rate":0.4,"weighted":0.6,"tiers":{"26":{"c":2,"p":2,"i":1,"n":5}},"full":false},{"id":127,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":2,"partial":3,"incorrect":0,"rate":0.4,"weighted":0.7,"tiers":{"27":{"c":2,"p":3,"i":0,"n":5}},"full":false},{"id":128,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":4,"partial":1,"incorrect":0,"rate":0.8,"weighted":0.9,"tiers":{"28":{"c":4,"p":1,"i":0,"n":5}},"full":false},{"id":129,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":3,"partial":1,"incorrect":1,"rate":0.6,"weighted":0.7,"tiers":{"29":{"c":3,"p":1,"i":1,"n":5}},"full":false},{"id":130,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":2,"incorrect":2,"rate":0.2,"weighted":0.4,"tiers":{"30":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":206,"date":"2026-07-22","model":"deepseek-chat","n":10,"correct":0,"partial":3,"incorrect":7,"rate":0.0,"weighted":0.15,"tiers":{"6":{"c":0,"p":3,"i":7,"n":10}},"full":false},{"id":207,"date":"2026-07-22","model":"deepseek-chat","n":10,"correct":2,"partial":7,"incorrect":1,"rate":0.2,"weighted":0.55,"tiers":{"7":{"c":2,"p":7,"i":1,"n":10}},"full":false},{"id":208,"date":"2026-07-22","model":"deepseek-chat","n":10,"correct":3,"partial":6,"incorrect":1,"rate":0.3,"weighted":0.6,"tiers":{"8":{"c":3,"p":6,"i":1,"n":10}},"full":false},{"id":209,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":4,"incorrect":1,"rate":0.0,"weighted":0.4,"tiers":{"9":{"c":0,"p":4,"i":1,"n":5}},"full":false},{"id":210,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":2,"incorrect":2,"rate":0.2,"weighted":0.4,"tiers":{"10":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":211,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":4,"incorrect":1,"rate":0.0,"weighted":0.4,"tiers":{"11":{"c":0,"p":4,"i":1,"n":5}},"full":false},{"id":212,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":3,"incorrect":1,"rate":0.2,"weighted":0.5,"tiers":{"12":{"c":1,"p":3,"i":1,"n":5}},"full":false},{"id":213,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":4,"partial":0,"incorrect":1,"rate":0.8,"weighted":0.8,"tiers":{"13":{"c":4,"p":0,"i":1,"n":5}},"full":false},{"id":214,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":4,"incorrect":0,"rate":0.2,"weighted":0.6,"tiers":{"14":{"c":1,"p":4,"i":0,"n":5}},"full":false},{"id":215,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":1,"incorrect":4,"rate":0.0,"weighted":0.1,"tiers":{"15":{"c":0,"p":1,"i":4,"n":5}},"full":false},{"id":216,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":4,"incorrect":1,"rate":0.0,"weighted":0.4,"tiers":{"16":{"c":0,"p":4,"i":1,"n":5}},"full":false},{"id":217,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":3,"incorrect":2,"rate":0.0,"weighted":0.3,"tiers":{"17":{"c":0,"p":3,"i":2,"n":5}},"full":false},{"id":218,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":2,"incorrect":2,"rate":0.2,"weighted":0.4,"tiers":{"18":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":219,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":2,"partial":2,"incorrect":1,"rate":0.4,"weighted":0.6,"tiers":{"19":{"c":2,"p":2,"i":1,"n":5}},"full":false},{"id":220,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":1,"partial":2,"incorrect":2,"rate":0.2,"weighted":0.4,"tiers":{"20":{"c":1,"p":2,"i":2,"n":5}},"full":false},{"id":221,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":0,"partial":3,"incorrect":2,"rate":0.0,"weighted":0.3,"tiers":{"21":{"c":0,"p":3,"i":2,"n":5}},"full":false},{"id":222,"date":"2026-07-22","model":"deepseek-chat","n":5,"correct":2,"partial":2,"incorrect":1,"rate":0.4,"weighted":0.6,"tiers":{"22":{"c":2,"p":2,"i":1,"n":5}},"full":false},{"id":223,"date":"2026-07-22","model":"deepseek-chat","n":320,"correct":102,"partial":160,"incorrect":58,"rate":0.3187,"weighted":0.5687,"tiers":{"1":{"c":3,"p":2,"i":0,"n":5},"2":{"c":3,"p":2,"i":0,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":2,"p":0,"i":3,"n":5},"5":{"c":1,"p":3,"i":6,"n":10},"6":{"c":0,"p":3,"i":7,"n":10},"7":{"c":3,"p":5,"i":2,"n":10},"8":{"c":2,"p":7,"i":1,"n":10},"9":{"c":1,"p":3,"i":1,"n":5},"10":{"c":1,"p":3,"i":1,"n":5},"11":{"c":2,"p":0,"i":3,"n":5},"12":{"c":0,"p":4,"i":1,"n":5},"13":{"c":4,"p":0,"i":1,"n":5},"14":{"c":0,"p":4,"i":1,"n":5},"15":{"c":0,"p":1,"i":4,"n":5},"16":{"c":1,"p":3,"i":1,"n":5},"17":{"c":0,"p":3,"i":2,"n":5},"18":{"c":0,"p":2,"i":3,"n":5},"19":{"c":1,"p":3,"i":1,"n":5},"20":{"c":1,"p":2,"i":2,"n":5},"21":{"c":0,"p":3,"i":2,"n":5},"22":{"c":2,"p":2,"i":1,"n":5},"23":{"c":1,"p":2,"i":2,"n":5},"24":{"c":3,"p":2,"i":0,"n":5},"25":{"c":1,"p":2,"i":2,"n":5},"26":{"c":3,"p":2,"i":0,"n":5},"27":{"c":2,"p":2,"i":1,"n":5},"28":{"c":3,"p":2,"i":0,"n":5},"29":{"c":1,"p":2,"i":2,"n":5},"30":{"c":1,"p":2,"i":2,"n":5},"31":{"c":1,"p":4,"i":0,"n":5},"32":{"c":1,"p":4,"i":0,"n":5},"33":{"c":1,"p":4,"i":0,"n":5},"34":{"c":1,"p":3,"i":1,"n":5},"35":{"c":1,"p":4,"i":0,"n":5},"36":{"c":4,"p":1,"i":0,"n":5},"37":{"c":2,"p":3,"i":0,"n":5},"38":{"c":1,"p":4,"i":0,"n":5},"39":{"c":1,"p":4,"i":0,"n":5},"40":{"c":1,"p":4,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":3,"p":2,"i":0,"n":5},"43":{"c":1,"p":4,"i":0,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":1,"p":4,"i":0,"n":5},"46":{"c":2,"p":3,"i":0,"n":5},"47":{"c":4,"p":0,"i":1,"n":5},"48":{"c":2,"p":2,"i":1,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":1,"p":4,"i":0,"n":5},"51":{"c":3,"p":2,"i":0,"n":5},"52":{"c":4,"p":1,"i":0,"n":5},"53":{"c":4,"p":1,"i":0,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":3,"p":2,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":4,"p":1,"i":0,"n":5},"58":{"c":2,"p":3,"i":0,"n":5},"59":{"c":2,"p":3,"i":0,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":301,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"1":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":302,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"2":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":303,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":304,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"4":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":305,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"5":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":306,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"6":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":307,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"7":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":308,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"8":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":900,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"1":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":901,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":1,"incorrect":0,"rate":0.0,"weighted":0.5,"tiers":{"1":{"c":0,"p":1,"i":0,"n":1}},"full":false},{"id":902,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":1,"incorrect":0,"rate":0.0,"weighted":0.5,"tiers":{"2":{"c":0,"p":1,"i":0,"n":1}},"full":false},{"id":903,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":1,"incorrect":0,"rate":0.0,"weighted":0.5,"tiers":{"2":{"c":0,"p":1,"i":0,"n":1}},"full":false},{"id":904,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":905,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":906,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":907,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":908,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":997,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"21":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":998,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"21":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":999,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"21":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":1001,"date":"2026-07-23","model":"deepseek-chat","n":5,"correct":3,"partial":2,"incorrect":0,"rate":0.6,"weighted":0.8,"tiers":{"1":{"c":3,"p":2,"i":0,"n":5}},"full":false},{"id":1002,"date":"2026-07-23","model":"deepseek-chat","n":5,"correct":2,"partial":3,"incorrect":0,"rate":0.4,"weighted":0.7,"tiers":{"2":{"c":2,"p":3,"i":0,"n":5}},"full":false},{"id":1003,"date":"2026-07-23","model":"deepseek-chat","n":5,"correct":0,"partial":0,"incorrect":5,"rate":0.0,"weighted":0.0,"tiers":{"3":{"c":0,"p":0,"i":5,"n":5}},"full":false},{"id":1004,"date":"2026-07-23","model":"deepseek-chat","n":5,"correct":1,"partial":0,"incorrect":4,"rate":0.2,"weighted":0.2,"tiers":{"4":{"c":1,"p":0,"i":4,"n":5}},"full":false},{"id":8001,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"17":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":8002,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":0,"incorrect":1,"rate":0.0,"weighted":0.0,"tiers":{"21":{"c":0,"p":0,"i":1,"n":1}},"full":false},{"id":8003,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"25":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":9001,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":1,"partial":0,"incorrect":0,"rate":1.0,"weighted":1.0,"tiers":{"21":{"c":1,"p":0,"i":0,"n":1}},"full":false},{"id":9998,"date":"2026-07-23","model":"deepseek-chat","n":1,"correct":0,"partial":1,"incorrect":0,"rate":0.0,"weighted":0.5,"tiers":{"2":{"c":0,"p":1,"i":0,"n":1}},"full":false},{"id":9999,"date":"2026-07-24","model":"deepseek-chat","n":320,"correct":38,"partial":197,"incorrect":85,"rate":0.1187,"weighted":0.4266,"tiers":{"1":{"c":0,"p":0,"i":5,"n":5},"2":{"c":0,"p":0,"i":5,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":0,"p":0,"i":5,"n":5},"5":{"c":0,"p":2,"i":8,"n":10},"6":{"c":0,"p":6,"i":4,"n":10},"7":{"c":0,"p":5,"i":5,"n":10},"8":{"c":0,"p":6,"i":4,"n":10},"9":{"c":0,"p":4,"i":1,"n":5},"10":{"c":0,"p":3,"i":2,"n":5},"11":{"c":0,"p":4,"i":1,"n":5},"12":{"c":0,"p":3,"i":2,"n":5},"13":{"c":3,"p":0,"i":2,"n":5},"14":{"c":1,"p":3,"i":1,"n":5},"15":{"c":0,"p":1,"i":4,"n":5},"16":{"c":0,"p":4,"i":1,"n":5},"17":{"c":0,"p":2,"i":3,"n":5},"18":{"c":0,"p":3,"i":2,"n":5},"19":{"c":0,"p":4,"i":1,"n":5},"20":{"c":0,"p":4,"i":1,"n":5},"21":{"c":0,"p":3,"i":2,"n":5},"22":{"c":1,"p":3,"i":1,"n":5},"23":{"c":0,"p":4,"i":1,"n":5},"24":{"c":0,"p":5,"i":0,"n":5},"25":{"c":0,"p":1,"i":4,"n":5},"26":{"c":0,"p":4,"i":1,"n":5},"27":{"c":0,"p":2,"i":3,"n":5},"28":{"c":0,"p":4,"i":1,"n":5},"29":{"c":0,"p":2,"i":3,"n":5},"30":{"c":1,"p":3,"i":1,"n":5},"31":{"c":0,"p":5,"i":0,"n":5},"32":{"c":0,"p":5,"i":0,"n":5},"33":{"c":0,"p":4,"i":1,"n":5},"34":{"c":1,"p":4,"i":0,"n":5},"35":{"c":0,"p":5,"i":0,"n":5},"36":{"c":2,"p":3,"i":0,"n":5},"37":{"c":0,"p":4,"i":1,"n":5},"38":{"c":0,"p":5,"i":0,"n":5},"39":{"c":0,"p":5,"i":0,"n":5},"40":{"c":0,"p":5,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":2,"p":3,"i":0,"n":5},"43":{"c":1,"p":3,"i":1,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":0,"p":5,"i":0,"n":5},"46":{"c":0,"p":5,"i":0,"n":5},"47":{"c":4,"p":1,"i":0,"n":5},"48":{"c":3,"p":2,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":0,"p":5,"i":0,"n":5},"51":{"c":2,"p":3,"i":0,"n":5},"52":{"c":2,"p":2,"i":1,"n":5},"53":{"c":2,"p":2,"i":1,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":1,"p":3,"i":1,"n":5},"56":{"c":2,"p":3,"i":0,"n":5},"57":{"c":1,"p":3,"i":1,"n":5},"58":{"c":1,"p":4,"i":0,"n":5},"59":{"c":1,"p":3,"i":1,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":10000,"date":"2026-07-25","model":"deepseek-chat","n":320,"correct":38,"partial":195,"incorrect":87,"rate":0.1187,"weighted":0.4234,"tiers":{"1":{"c":0,"p":0,"i":5,"n":5},"2":{"c":0,"p":0,"i":5,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":0,"p":0,"i":5,"n":5},"5":{"c":0,"p":2,"i":8,"n":10},"6":{"c":0,"p":6,"i":4,"n":10},"7":{"c":0,"p":5,"i":5,"n":10},"8":{"c":0,"p":6,"i":4,"n":10},"9":{"c":0,"p":4,"i":1,"n":5},"10":{"c":0,"p":3,"i":2,"n":5},"11":{"c":0,"p":4,"i":1,"n":5},"12":{"c":0,"p":3,"i":2,"n":5},"13":{"c":3,"p":0,"i":2,"n":5},"14":{"c":1,"p":3,"i":1,"n":5},"15":{"c":0,"p":1,"i":4,"n":5},"16":{"c":0,"p":4,"i":1,"n":5},"17":{"c":0,"p":2,"i":3,"n":5},"18":{"c":0,"p":2,"i":3,"n":5},"19":{"c":0,"p":4,"i":1,"n":5},"20":{"c":0,"p":4,"i":1,"n":5},"21":{"c":0,"p":2,"i":3,"n":5},"22":{"c":1,"p":3,"i":1,"n":5},"23":{"c":0,"p":4,"i":1,"n":5},"24":{"c":0,"p":5,"i":0,"n":5},"25":{"c":0,"p":1,"i":4,"n":5},"26":{"c":0,"p":4,"i":1,"n":5},"27":{"c":0,"p":2,"i":3,"n":5},"28":{"c":0,"p":4,"i":1,"n":5},"29":{"c":0,"p":2,"i":3,"n":5},"30":{"c":1,"p":3,"i":1,"n":5},"31":{"c":0,"p":5,"i":0,"n":5},"32":{"c":0,"p":5,"i":0,"n":5},"33":{"c":0,"p":4,"i":1,"n":5},"34":{"c":1,"p":4,"i":0,"n":5},"35":{"c":0,"p":5,"i":0,"n":5},"36":{"c":2,"p":3,"i":0,"n":5},"37":{"c":0,"p":4,"i":1,"n":5},"38":{"c":0,"p":5,"i":0,"n":5},"39":{"c":0,"p":5,"i":0,"n":5},"40":{"c":0,"p":5,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":2,"p":3,"i":0,"n":5},"43":{"c":1,"p":3,"i":1,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":0,"p":5,"i":0,"n":5},"46":{"c":0,"p":5,"i":0,"n":5},"47":{"c":4,"p":1,"i":0,"n":5},"48":{"c":3,"p":2,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":0,"p":5,"i":0,"n":5},"51":{"c":2,"p":3,"i":0,"n":5},"52":{"c":2,"p":2,"i":1,"n":5},"53":{"c":2,"p":2,"i":1,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":1,"p":3,"i":1,"n":5},"56":{"c":2,"p":3,"i":0,"n":5},"57":{"c":1,"p":3,"i":1,"n":5},"58":{"c":1,"p":4,"i":0,"n":5},"59":{"c":1,"p":3,"i":1,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":10001,"date":"2026-07-26","model":"deepseek-chat","n":320,"correct":122,"partial":165,"incorrect":33,"rate":0.3812,"weighted":0.6391,"tiers":{"1":{"c":4,"p":1,"i":0,"n":5},"2":{"c":4,"p":1,"i":0,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":2,"p":0,"i":3,"n":5},"5":{"c":2,"p":4,"i":4,"n":10},"6":{"c":1,"p":5,"i":4,"n":10},"7":{"c":2,"p":6,"i":2,"n":10},"8":{"c":1,"p":8,"i":1,"n":10},"9":{"c":2,"p":3,"i":0,"n":5},"10":{"c":0,"p":3,"i":2,"n":5},"11":{"c":3,"p":2,"i":0,"n":5},"12":{"c":3,"p":1,"i":1,"n":5},"13":{"c":4,"p":0,"i":1,"n":5},"14":{"c":2,"p":3,"i":0,"n":5},"15":{"c":1,"p":3,"i":1,"n":5},"16":{"c":2,"p":3,"i":0,"n":5},"17":{"c":2,"p":2,"i":1,"n":5},"18":{"c":2,"p":2,"i":1,"n":5},"19":{"c":2,"p":2,"i":1,"n":5},"20":{"c":2,"p":3,"i":0,"n":5},"21":{"c":1,"p":2,"i":2,"n":5},"22":{"c":3,"p":2,"i":0,"n":5},"23":{"c":3,"p":2,"i":0,"n":5},"24":{"c":1,"p":4,"i":0,"n":5},"25":{"c":3,"p":1,"i":1,"n":5},"26":{"c":4,"p":0,"i":1,"n":5},"27":{"c":5,"p":0,"i":0,"n":5},"28":{"c":1,"p":3,"i":1,"n":5},"29":{"c":2,"p":2,"i":1,"n":5},"30":{"c":2,"p":3,"i":0,"n":5},"31":{"c":2,"p":3,"i":0,"n":5},"32":{"c":2,"p":3,"i":0,"n":5},"33":{"c":2,"p":3,"i":0,"n":5},"34":{"c":2,"p":3,"i":0,"n":5},"35":{"c":0,"p":5,"i":0,"n":5},"36":{"c":3,"p":2,"i":0,"n":5},"37":{"c":2,"p":2,"i":1,"n":5},"38":{"c":0,"p":5,"i":0,"n":5},"39":{"c":1,"p":4,"i":0,"n":5},"40":{"c":1,"p":4,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":2,"p":3,"i":0,"n":5},"43":{"c":4,"p":1,"i":0,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":2,"p":3,"i":0,"n":5},"46":{"c":0,"p":5,"i":0,"n":5},"47":{"c":4,"p":1,"i":0,"n":5},"48":{"c":3,"p":2,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":0,"p":5,"i":0,"n":5},"51":{"c":3,"p":2,"i":0,"n":5},"52":{"c":3,"p":2,"i":0,"n":5},"53":{"c":3,"p":2,"i":0,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":3,"p":2,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":1,"p":3,"i":1,"n":5},"58":{"c":1,"p":4,"i":0,"n":5},"59":{"c":2,"p":3,"i":0,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":8004,"date":"2026-08-01","model":"deepseek-chat","n":320,"correct":180,"partial":104,"incorrect":36,"rate":0.5625,"weighted":0.725,"tiers":{"1":{"c":4,"p":1,"i":0,"n":5},"2":{"c":3,"p":2,"i":0,"n":5},"3":{"c":0,"p":1,"i":4,"n":5},"4":{"c":0,"p":0,"i":5,"n":5},"5":{"c":2,"p":5,"i":3,"n":10},"6":{"c":2,"p":5,"i":3,"n":10},"7":{"c":2,"p":6,"i":2,"n":10},"8":{"c":2,"p":7,"i":1,"n":10},"9":{"c":2,"p":3,"i":0,"n":5},"10":{"c":1,"p":4,"i":0,"n":5},"11":{"c":3,"p":2,"i":0,"n":5},"12":{"c":3,"p":1,"i":1,"n":5},"13":{"c":5,"p":0,"i":0,"n":5},"14":{"c":3,"p":2,"i":0,"n":5},"15":{"c":0,"p":3,"i":2,"n":5},"16":{"c":1,"p":3,"i":1,"n":5},"17":{"c":3,"p":1,"i":1,"n":5},"18":{"c":4,"p":0,"i":1,"n":5},"19":{"c":4,"p":1,"i":0,"n":5},"20":{"c":3,"p":2,"i":0,"n":5},"21":{"c":1,"p":2,"i":2,"n":5},"22":{"c":2,"p":2,"i":1,"n":5},"23":{"c":4,"p":1,"i":0,"n":5},"24":{"c":2,"p":3,"i":0,"n":5},"25":{"c":2,"p":1,"i":2,"n":5},"26":{"c":4,"p":1,"i":0,"n":5},"27":{"c":3,"p":1,"i":1,"n":5},"28":{"c":2,"p":2,"i":1,"n":5},"29":{"c":3,"p":1,"i":1,"n":5},"30":{"c":2,"p":2,"i":1,"n":5},"31":{"c":2,"p":3,"i":0,"n":5},"32":{"c":3,"p":2,"i":0,"n":5},"33":{"c":2,"p":3,"i":0,"n":5},"34":{"c":3,"p":2,"i":0,"n":5},"35":{"c":3,"p":2,"i":0,"n":5},"36":{"c":4,"p":1,"i":0,"n":5},"37":{"c":2,"p":2,"i":1,"n":5},"38":{"c":3,"p":2,"i":0,"n":5},"39":{"c":3,"p":2,"i":0,"n":5},"40":{"c":3,"p":2,"i":0,"n":5},"41":{"c":3,"p":2,"i":0,"n":5},"42":{"c":4,"p":1,"i":0,"n":5},"43":{"c":4,"p":0,"i":1,"n":5},"44":{"c":5,"p":0,"i":0,"n":5},"45":{"c":4,"p":1,"i":0,"n":5},"46":{"c":4,"p":1,"i":0,"n":5},"47":{"c":5,"p":0,"i":0,"n":5},"48":{"c":4,"p":1,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":5,"p":0,"i":0,"n":5},"51":{"c":5,"p":0,"i":0,"n":5},"52":{"c":5,"p":0,"i":0,"n":5},"53":{"c":4,"p":1,"i":0,"n":5},"54":{"c":2,"p":3,"i":0,"n":5},"55":{"c":4,"p":1,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":4,"p":1,"i":0,"n":5},"58":{"c":4,"p":1,"i":0,"n":5},"59":{"c":4,"p":0,"i":1,"n":5},"60":{"c":5,"p":0,"i":0,"n":5}},"full":true},{"id":8005,"date":"2026-08-01","model":"deepseek-chat","n":10,"correct":8,"partial":1,"incorrect":1,"rate":0.8,"weighted":0.85,"tiers":{"3":{"c":4,"p":1,"i":0,"n":5},"4":{"c":4,"p":0,"i":1,"n":5}},"full":false},{"id":8006,"date":"2026-08-01","model":"deepseek-chat","n":320,"correct":184,"partial":115,"incorrect":21,"rate":0.575,"weighted":0.7547,"tiers":{"1":{"c":2,"p":3,"i":0,"n":5},"2":{"c":3,"p":1,"i":1,"n":5},"3":{"c":2,"p":1,"i":2,"n":5},"4":{"c":3,"p":0,"i":2,"n":5},"5":{"c":3,"p":5,"i":2,"n":10},"6":{"c":3,"p":5,"i":2,"n":10},"7":{"c":1,"p":7,"i":2,"n":10},"8":{"c":3,"p":6,"i":1,"n":10},"9":{"c":1,"p":4,"i":0,"n":5},"10":{"c":0,"p":5,"i":0,"n":5},"11":{"c":4,"p":1,"i":0,"n":5},"12":{"c":3,"p":1,"i":1,"n":5},"13":{"c":4,"p":1,"i":0,"n":5},"14":{"c":3,"p":2,"i":0,"n":5},"15":{"c":1,"p":4,"i":0,"n":5},"16":{"c":2,"p":3,"i":0,"n":5},"17":{"c":3,"p":2,"i":0,"n":5},"18":{"c":3,"p":0,"i":2,"n":5},"19":{"c":3,"p":2,"i":0,"n":5},"20":{"c":3,"p":1,"i":1,"n":5},"21":{"c":1,"p":4,"i":0,"n":5},"22":{"c":2,"p":2,"i":1,"n":5},"23":{"c":2,"p":3,"i":0,"n":5},"24":{"c":3,"p":2,"i":0,"n":5},"25":{"c":3,"p":1,"i":1,"n":5},"26":{"c":4,"p":1,"i":0,"n":5},"27":{"c":3,"p":2,"i":0,"n":5},"28":{"c":2,"p":3,"i":0,"n":5},"29":{"c":2,"p":1,"i":2,"n":5},"30":{"c":3,"p":2,"i":0,"n":5},"31":{"c":4,"p":1,"i":0,"n":5},"32":{"c":4,"p":1,"i":0,"n":5},"33":{"c":4,"p":1,"i":0,"n":5},"34":{"c":5,"p":0,"i":0,"n":5},"35":{"c":3,"p":2,"i":0,"n":5},"36":{"c":4,"p":1,"i":0,"n":5},"37":{"c":2,"p":2,"i":1,"n":5},"38":{"c":2,"p":3,"i":0,"n":5},"39":{"c":3,"p":2,"i":0,"n":5},"40":{"c":3,"p":2,"i":0,"n":5},"41":{"c":4,"p":1,"i":0,"n":5},"42":{"c":4,"p":1,"i":0,"n":5},"43":{"c":3,"p":2,"i":0,"n":5},"44":{"c":5,"p":0,"i":0,"n":5},"45":{"c":4,"p":1,"i":0,"n":5},"46":{"c":3,"p":2,"i":0,"n":5},"47":{"c":5,"p":0,"i":0,"n":5},"48":{"c":5,"p":0,"i":0,"n":5},"49":{"c":3,"p":2,"i":0,"n":5},"50":{"c":5,"p":0,"i":0,"n":5},"51":{"c":5,"p":0,"i":0,"n":5},"52":{"c":4,"p":1,"i":0,"n":5},"53":{"c":4,"p":1,"i":0,"n":5},"54":{"c":2,"p":3,"i":0,"n":5},"55":{"c":3,"p":2,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":2,"p":3,"i":0,"n":5},"58":{"c":4,"p":1,"i":0,"n":5},"59":{"c":4,"p":1,"i":0,"n":5},"60":{"c":3,"p":2,"i":0,"n":5}},"full":true},{"id":10002,"date":"2026-08-26","model":"deepseek-chat","n":160,"correct":71,"partial":68,"incorrect":21,"rate":0.4437,"weighted":0.6562,"tiers":{"1":{"c":3,"p":2,"i":0,"n":5},"2":{"c":4,"p":0,"i":1,"n":5},"3":{"c":1,"p":1,"i":3,"n":5},"4":{"c":3,"p":0,"i":2,"n":5},"5":{"c":1,"p":8,"i":1,"n":10},"6":{"c":2,"p":5,"i":3,"n":10},"7":{"c":2,"p":7,"i":1,"n":10},"8":{"c":3,"p":6,"i":1,"n":10},"9":{"c":0,"p":4,"i":1,"n":5},"10":{"c":1,"p":2,"i":2,"n":5},"11":{"c":4,"p":0,"i":1,"n":5},"12":{"c":4,"p":1,"i":0,"n":5},"13":{"c":3,"p":1,"i":1,"n":5},"14":{"c":4,"p":1,"i":0,"n":5},"15":{"c":1,"p":3,"i":1,"n":5},"16":{"c":3,"p":2,"i":0,"n":5},"17":{"c":1,"p":3,"i":1,"n":5},"18":{"c":3,"p":1,"i":1,"n":5},"19":{"c":3,"p":2,"i":0,"n":5},"20":{"c":3,"p":2,"i":0,"n":5},"21":{"c":0,"p":4,"i":1,"n":5},"22":{"c":2,"p":3,"i":0,"n":5},"23":{"c":3,"p":2,"i":0,"n":5},"24":{"c":4,"p":1,"i":0,"n":5},"25":{"c":3,"p":2,"i":0,"n":5},"26":{"c":5,"p":0,"i":0,"n":5},"27":{"c":4,"p":1,"i":0,"n":5},"28":{"c":1,"p":4,"i":0,"n":5}},"full":false}],"fullRuns":[{"id":223,"date":"2026-07-22","model":"deepseek-chat","n":320,"correct":102,"partial":160,"incorrect":58,"rate":0.3187,"weighted":0.5687,"tiers":{"1":{"c":3,"p":2,"i":0,"n":5},"2":{"c":3,"p":2,"i":0,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":2,"p":0,"i":3,"n":5},"5":{"c":1,"p":3,"i":6,"n":10},"6":{"c":0,"p":3,"i":7,"n":10},"7":{"c":3,"p":5,"i":2,"n":10},"8":{"c":2,"p":7,"i":1,"n":10},"9":{"c":1,"p":3,"i":1,"n":5},"10":{"c":1,"p":3,"i":1,"n":5},"11":{"c":2,"p":0,"i":3,"n":5},"12":{"c":0,"p":4,"i":1,"n":5},"13":{"c":4,"p":0,"i":1,"n":5},"14":{"c":0,"p":4,"i":1,"n":5},"15":{"c":0,"p":1,"i":4,"n":5},"16":{"c":1,"p":3,"i":1,"n":5},"17":{"c":0,"p":3,"i":2,"n":5},"18":{"c":0,"p":2,"i":3,"n":5},"19":{"c":1,"p":3,"i":1,"n":5},"20":{"c":1,"p":2,"i":2,"n":5},"21":{"c":0,"p":3,"i":2,"n":5},"22":{"c":2,"p":2,"i":1,"n":5},"23":{"c":1,"p":2,"i":2,"n":5},"24":{"c":3,"p":2,"i":0,"n":5},"25":{"c":1,"p":2,"i":2,"n":5},"26":{"c":3,"p":2,"i":0,"n":5},"27":{"c":2,"p":2,"i":1,"n":5},"28":{"c":3,"p":2,"i":0,"n":5},"29":{"c":1,"p":2,"i":2,"n":5},"30":{"c":1,"p":2,"i":2,"n":5},"31":{"c":1,"p":4,"i":0,"n":5},"32":{"c":1,"p":4,"i":0,"n":5},"33":{"c":1,"p":4,"i":0,"n":5},"34":{"c":1,"p":3,"i":1,"n":5},"35":{"c":1,"p":4,"i":0,"n":5},"36":{"c":4,"p":1,"i":0,"n":5},"37":{"c":2,"p":3,"i":0,"n":5},"38":{"c":1,"p":4,"i":0,"n":5},"39":{"c":1,"p":4,"i":0,"n":5},"40":{"c":1,"p":4,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":3,"p":2,"i":0,"n":5},"43":{"c":1,"p":4,"i":0,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":1,"p":4,"i":0,"n":5},"46":{"c":2,"p":3,"i":0,"n":5},"47":{"c":4,"p":0,"i":1,"n":5},"48":{"c":2,"p":2,"i":1,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":1,"p":4,"i":0,"n":5},"51":{"c":3,"p":2,"i":0,"n":5},"52":{"c":4,"p":1,"i":0,"n":5},"53":{"c":4,"p":1,"i":0,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":3,"p":2,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":4,"p":1,"i":0,"n":5},"58":{"c":2,"p":3,"i":0,"n":5},"59":{"c":2,"p":3,"i":0,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":9999,"date":"2026-07-24","model":"deepseek-chat","n":320,"correct":38,"partial":197,"incorrect":85,"rate":0.1187,"weighted":0.4266,"tiers":{"1":{"c":0,"p":0,"i":5,"n":5},"2":{"c":0,"p":0,"i":5,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":0,"p":0,"i":5,"n":5},"5":{"c":0,"p":2,"i":8,"n":10},"6":{"c":0,"p":6,"i":4,"n":10},"7":{"c":0,"p":5,"i":5,"n":10},"8":{"c":0,"p":6,"i":4,"n":10},"9":{"c":0,"p":4,"i":1,"n":5},"10":{"c":0,"p":3,"i":2,"n":5},"11":{"c":0,"p":4,"i":1,"n":5},"12":{"c":0,"p":3,"i":2,"n":5},"13":{"c":3,"p":0,"i":2,"n":5},"14":{"c":1,"p":3,"i":1,"n":5},"15":{"c":0,"p":1,"i":4,"n":5},"16":{"c":0,"p":4,"i":1,"n":5},"17":{"c":0,"p":2,"i":3,"n":5},"18":{"c":0,"p":3,"i":2,"n":5},"19":{"c":0,"p":4,"i":1,"n":5},"20":{"c":0,"p":4,"i":1,"n":5},"21":{"c":0,"p":3,"i":2,"n":5},"22":{"c":1,"p":3,"i":1,"n":5},"23":{"c":0,"p":4,"i":1,"n":5},"24":{"c":0,"p":5,"i":0,"n":5},"25":{"c":0,"p":1,"i":4,"n":5},"26":{"c":0,"p":4,"i":1,"n":5},"27":{"c":0,"p":2,"i":3,"n":5},"28":{"c":0,"p":4,"i":1,"n":5},"29":{"c":0,"p":2,"i":3,"n":5},"30":{"c":1,"p":3,"i":1,"n":5},"31":{"c":0,"p":5,"i":0,"n":5},"32":{"c":0,"p":5,"i":0,"n":5},"33":{"c":0,"p":4,"i":1,"n":5},"34":{"c":1,"p":4,"i":0,"n":5},"35":{"c":0,"p":5,"i":0,"n":5},"36":{"c":2,"p":3,"i":0,"n":5},"37":{"c":0,"p":4,"i":1,"n":5},"38":{"c":0,"p":5,"i":0,"n":5},"39":{"c":0,"p":5,"i":0,"n":5},"40":{"c":0,"p":5,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":2,"p":3,"i":0,"n":5},"43":{"c":1,"p":3,"i":1,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":0,"p":5,"i":0,"n":5},"46":{"c":0,"p":5,"i":0,"n":5},"47":{"c":4,"p":1,"i":0,"n":5},"48":{"c":3,"p":2,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":0,"p":5,"i":0,"n":5},"51":{"c":2,"p":3,"i":0,"n":5},"52":{"c":2,"p":2,"i":1,"n":5},"53":{"c":2,"p":2,"i":1,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":1,"p":3,"i":1,"n":5},"56":{"c":2,"p":3,"i":0,"n":5},"57":{"c":1,"p":3,"i":1,"n":5},"58":{"c":1,"p":4,"i":0,"n":5},"59":{"c":1,"p":3,"i":1,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":10000,"date":"2026-07-25","model":"deepseek-chat","n":320,"correct":38,"partial":195,"incorrect":87,"rate":0.1187,"weighted":0.4234,"tiers":{"1":{"c":0,"p":0,"i":5,"n":5},"2":{"c":0,"p":0,"i":5,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":0,"p":0,"i":5,"n":5},"5":{"c":0,"p":2,"i":8,"n":10},"6":{"c":0,"p":6,"i":4,"n":10},"7":{"c":0,"p":5,"i":5,"n":10},"8":{"c":0,"p":6,"i":4,"n":10},"9":{"c":0,"p":4,"i":1,"n":5},"10":{"c":0,"p":3,"i":2,"n":5},"11":{"c":0,"p":4,"i":1,"n":5},"12":{"c":0,"p":3,"i":2,"n":5},"13":{"c":3,"p":0,"i":2,"n":5},"14":{"c":1,"p":3,"i":1,"n":5},"15":{"c":0,"p":1,"i":4,"n":5},"16":{"c":0,"p":4,"i":1,"n":5},"17":{"c":0,"p":2,"i":3,"n":5},"18":{"c":0,"p":2,"i":3,"n":5},"19":{"c":0,"p":4,"i":1,"n":5},"20":{"c":0,"p":4,"i":1,"n":5},"21":{"c":0,"p":2,"i":3,"n":5},"22":{"c":1,"p":3,"i":1,"n":5},"23":{"c":0,"p":4,"i":1,"n":5},"24":{"c":0,"p":5,"i":0,"n":5},"25":{"c":0,"p":1,"i":4,"n":5},"26":{"c":0,"p":4,"i":1,"n":5},"27":{"c":0,"p":2,"i":3,"n":5},"28":{"c":0,"p":4,"i":1,"n":5},"29":{"c":0,"p":2,"i":3,"n":5},"30":{"c":1,"p":3,"i":1,"n":5},"31":{"c":0,"p":5,"i":0,"n":5},"32":{"c":0,"p":5,"i":0,"n":5},"33":{"c":0,"p":4,"i":1,"n":5},"34":{"c":1,"p":4,"i":0,"n":5},"35":{"c":0,"p":5,"i":0,"n":5},"36":{"c":2,"p":3,"i":0,"n":5},"37":{"c":0,"p":4,"i":1,"n":5},"38":{"c":0,"p":5,"i":0,"n":5},"39":{"c":0,"p":5,"i":0,"n":5},"40":{"c":0,"p":5,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":2,"p":3,"i":0,"n":5},"43":{"c":1,"p":3,"i":1,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":0,"p":5,"i":0,"n":5},"46":{"c":0,"p":5,"i":0,"n":5},"47":{"c":4,"p":1,"i":0,"n":5},"48":{"c":3,"p":2,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":0,"p":5,"i":0,"n":5},"51":{"c":2,"p":3,"i":0,"n":5},"52":{"c":2,"p":2,"i":1,"n":5},"53":{"c":2,"p":2,"i":1,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":1,"p":3,"i":1,"n":5},"56":{"c":2,"p":3,"i":0,"n":5},"57":{"c":1,"p":3,"i":1,"n":5},"58":{"c":1,"p":4,"i":0,"n":5},"59":{"c":1,"p":3,"i":1,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":10001,"date":"2026-07-26","model":"deepseek-chat","n":320,"correct":122,"partial":165,"incorrect":33,"rate":0.3812,"weighted":0.6391,"tiers":{"1":{"c":4,"p":1,"i":0,"n":5},"2":{"c":4,"p":1,"i":0,"n":5},"3":{"c":0,"p":2,"i":3,"n":5},"4":{"c":2,"p":0,"i":3,"n":5},"5":{"c":2,"p":4,"i":4,"n":10},"6":{"c":1,"p":5,"i":4,"n":10},"7":{"c":2,"p":6,"i":2,"n":10},"8":{"c":1,"p":8,"i":1,"n":10},"9":{"c":2,"p":3,"i":0,"n":5},"10":{"c":0,"p":3,"i":2,"n":5},"11":{"c":3,"p":2,"i":0,"n":5},"12":{"c":3,"p":1,"i":1,"n":5},"13":{"c":4,"p":0,"i":1,"n":5},"14":{"c":2,"p":3,"i":0,"n":5},"15":{"c":1,"p":3,"i":1,"n":5},"16":{"c":2,"p":3,"i":0,"n":5},"17":{"c":2,"p":2,"i":1,"n":5},"18":{"c":2,"p":2,"i":1,"n":5},"19":{"c":2,"p":2,"i":1,"n":5},"20":{"c":2,"p":3,"i":0,"n":5},"21":{"c":1,"p":2,"i":2,"n":5},"22":{"c":3,"p":2,"i":0,"n":5},"23":{"c":3,"p":2,"i":0,"n":5},"24":{"c":1,"p":4,"i":0,"n":5},"25":{"c":3,"p":1,"i":1,"n":5},"26":{"c":4,"p":0,"i":1,"n":5},"27":{"c":5,"p":0,"i":0,"n":5},"28":{"c":1,"p":3,"i":1,"n":5},"29":{"c":2,"p":2,"i":1,"n":5},"30":{"c":2,"p":3,"i":0,"n":5},"31":{"c":2,"p":3,"i":0,"n":5},"32":{"c":2,"p":3,"i":0,"n":5},"33":{"c":2,"p":3,"i":0,"n":5},"34":{"c":2,"p":3,"i":0,"n":5},"35":{"c":0,"p":5,"i":0,"n":5},"36":{"c":3,"p":2,"i":0,"n":5},"37":{"c":2,"p":2,"i":1,"n":5},"38":{"c":0,"p":5,"i":0,"n":5},"39":{"c":1,"p":4,"i":0,"n":5},"40":{"c":1,"p":4,"i":0,"n":5},"41":{"c":1,"p":4,"i":0,"n":5},"42":{"c":2,"p":3,"i":0,"n":5},"43":{"c":4,"p":1,"i":0,"n":5},"44":{"c":2,"p":3,"i":0,"n":5},"45":{"c":2,"p":3,"i":0,"n":5},"46":{"c":0,"p":5,"i":0,"n":5},"47":{"c":4,"p":1,"i":0,"n":5},"48":{"c":3,"p":2,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":0,"p":5,"i":0,"n":5},"51":{"c":3,"p":2,"i":0,"n":5},"52":{"c":3,"p":2,"i":0,"n":5},"53":{"c":3,"p":2,"i":0,"n":5},"54":{"c":1,"p":4,"i":0,"n":5},"55":{"c":3,"p":2,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":1,"p":3,"i":1,"n":5},"58":{"c":1,"p":4,"i":0,"n":5},"59":{"c":2,"p":3,"i":0,"n":5},"60":{"c":1,"p":4,"i":0,"n":5}},"full":true},{"id":8004,"date":"2026-08-01","model":"deepseek-chat","n":320,"correct":180,"partial":104,"incorrect":36,"rate":0.5625,"weighted":0.725,"tiers":{"1":{"c":4,"p":1,"i":0,"n":5},"2":{"c":3,"p":2,"i":0,"n":5},"3":{"c":0,"p":1,"i":4,"n":5},"4":{"c":0,"p":0,"i":5,"n":5},"5":{"c":2,"p":5,"i":3,"n":10},"6":{"c":2,"p":5,"i":3,"n":10},"7":{"c":2,"p":6,"i":2,"n":10},"8":{"c":2,"p":7,"i":1,"n":10},"9":{"c":2,"p":3,"i":0,"n":5},"10":{"c":1,"p":4,"i":0,"n":5},"11":{"c":3,"p":2,"i":0,"n":5},"12":{"c":3,"p":1,"i":1,"n":5},"13":{"c":5,"p":0,"i":0,"n":5},"14":{"c":3,"p":2,"i":0,"n":5},"15":{"c":0,"p":3,"i":2,"n":5},"16":{"c":1,"p":3,"i":1,"n":5},"17":{"c":3,"p":1,"i":1,"n":5},"18":{"c":4,"p":0,"i":1,"n":5},"19":{"c":4,"p":1,"i":0,"n":5},"20":{"c":3,"p":2,"i":0,"n":5},"21":{"c":1,"p":2,"i":2,"n":5},"22":{"c":2,"p":2,"i":1,"n":5},"23":{"c":4,"p":1,"i":0,"n":5},"24":{"c":2,"p":3,"i":0,"n":5},"25":{"c":2,"p":1,"i":2,"n":5},"26":{"c":4,"p":1,"i":0,"n":5},"27":{"c":3,"p":1,"i":1,"n":5},"28":{"c":2,"p":2,"i":1,"n":5},"29":{"c":3,"p":1,"i":1,"n":5},"30":{"c":2,"p":2,"i":1,"n":5},"31":{"c":2,"p":3,"i":0,"n":5},"32":{"c":3,"p":2,"i":0,"n":5},"33":{"c":2,"p":3,"i":0,"n":5},"34":{"c":3,"p":2,"i":0,"n":5},"35":{"c":3,"p":2,"i":0,"n":5},"36":{"c":4,"p":1,"i":0,"n":5},"37":{"c":2,"p":2,"i":1,"n":5},"38":{"c":3,"p":2,"i":0,"n":5},"39":{"c":3,"p":2,"i":0,"n":5},"40":{"c":3,"p":2,"i":0,"n":5},"41":{"c":3,"p":2,"i":0,"n":5},"42":{"c":4,"p":1,"i":0,"n":5},"43":{"c":4,"p":0,"i":1,"n":5},"44":{"c":5,"p":0,"i":0,"n":5},"45":{"c":4,"p":1,"i":0,"n":5},"46":{"c":4,"p":1,"i":0,"n":5},"47":{"c":5,"p":0,"i":0,"n":5},"48":{"c":4,"p":1,"i":0,"n":5},"49":{"c":2,"p":3,"i":0,"n":5},"50":{"c":5,"p":0,"i":0,"n":5},"51":{"c":5,"p":0,"i":0,"n":5},"52":{"c":5,"p":0,"i":0,"n":5},"53":{"c":4,"p":1,"i":0,"n":5},"54":{"c":2,"p":3,"i":0,"n":5},"55":{"c":4,"p":1,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":4,"p":1,"i":0,"n":5},"58":{"c":4,"p":1,"i":0,"n":5},"59":{"c":4,"p":0,"i":1,"n":5},"60":{"c":5,"p":0,"i":0,"n":5}},"full":true},{"id":8006,"date":"2026-08-01","model":"deepseek-chat","n":320,"correct":184,"partial":115,"incorrect":21,"rate":0.575,"weighted":0.7547,"tiers":{"1":{"c":2,"p":3,"i":0,"n":5},"2":{"c":3,"p":1,"i":1,"n":5},"3":{"c":2,"p":1,"i":2,"n":5},"4":{"c":3,"p":0,"i":2,"n":5},"5":{"c":3,"p":5,"i":2,"n":10},"6":{"c":3,"p":5,"i":2,"n":10},"7":{"c":1,"p":7,"i":2,"n":10},"8":{"c":3,"p":6,"i":1,"n":10},"9":{"c":1,"p":4,"i":0,"n":5},"10":{"c":0,"p":5,"i":0,"n":5},"11":{"c":4,"p":1,"i":0,"n":5},"12":{"c":3,"p":1,"i":1,"n":5},"13":{"c":4,"p":1,"i":0,"n":5},"14":{"c":3,"p":2,"i":0,"n":5},"15":{"c":1,"p":4,"i":0,"n":5},"16":{"c":2,"p":3,"i":0,"n":5},"17":{"c":3,"p":2,"i":0,"n":5},"18":{"c":3,"p":0,"i":2,"n":5},"19":{"c":3,"p":2,"i":0,"n":5},"20":{"c":3,"p":1,"i":1,"n":5},"21":{"c":1,"p":4,"i":0,"n":5},"22":{"c":2,"p":2,"i":1,"n":5},"23":{"c":2,"p":3,"i":0,"n":5},"24":{"c":3,"p":2,"i":0,"n":5},"25":{"c":3,"p":1,"i":1,"n":5},"26":{"c":4,"p":1,"i":0,"n":5},"27":{"c":3,"p":2,"i":0,"n":5},"28":{"c":2,"p":3,"i":0,"n":5},"29":{"c":2,"p":1,"i":2,"n":5},"30":{"c":3,"p":2,"i":0,"n":5},"31":{"c":4,"p":1,"i":0,"n":5},"32":{"c":4,"p":1,"i":0,"n":5},"33":{"c":4,"p":1,"i":0,"n":5},"34":{"c":5,"p":0,"i":0,"n":5},"35":{"c":3,"p":2,"i":0,"n":5},"36":{"c":4,"p":1,"i":0,"n":5},"37":{"c":2,"p":2,"i":1,"n":5},"38":{"c":2,"p":3,"i":0,"n":5},"39":{"c":3,"p":2,"i":0,"n":5},"40":{"c":3,"p":2,"i":0,"n":5},"41":{"c":4,"p":1,"i":0,"n":5},"42":{"c":4,"p":1,"i":0,"n":5},"43":{"c":3,"p":2,"i":0,"n":5},"44":{"c":5,"p":0,"i":0,"n":5},"45":{"c":4,"p":1,"i":0,"n":5},"46":{"c":3,"p":2,"i":0,"n":5},"47":{"c":5,"p":0,"i":0,"n":5},"48":{"c":5,"p":0,"i":0,"n":5},"49":{"c":3,"p":2,"i":0,"n":5},"50":{"c":5,"p":0,"i":0,"n":5},"51":{"c":5,"p":0,"i":0,"n":5},"52":{"c":4,"p":1,"i":0,"n":5},"53":{"c":4,"p":1,"i":0,"n":5},"54":{"c":2,"p":3,"i":0,"n":5},"55":{"c":3,"p":2,"i":0,"n":5},"56":{"c":3,"p":2,"i":0,"n":5},"57":{"c":2,"p":3,"i":0,"n":5},"58":{"c":4,"p":1,"i":0,"n":5},"59":{"c":4,"p":1,"i":0,"n":5},"60":{"c":3,"p":2,"i":0,"n":5}},"full":true}],"ruby":[{"date":"2026-07-17","total":69,"rubyPass":0,"rubyFail":0,"escalations":51,"catch":0.3077,"competence":[{"cat":"other","rate":0.6818,"count":22},{"cat":"implementation","rate":0.75,"count":4}]},{"date":"2026-07-18","total":69,"rubyPass":0,"rubyFail":0,"escalations":51,"catch":0.3077,"competence":[{"cat":"other","rate":0.6818,"count":22},{"cat":"implementation","rate":0.75,"count":4}]},{"date":"2026-07-21","total":57,"rubyPass":0,"rubyFail":0,"escalations":41,"catch":0.5,"competence":[]},{"date":"2026-07-22","total":105,"rubyPass":14,"rubyFail":25,"escalations":91,"catch":0.641,"competence":[{"cat":"other","rate":0.3514,"count":37},{"cat":"implementation","rate":0.5,"count":2}]},{"date":"2026-07-23","total":122,"rubyPass":22,"rubyFail":33,"escalations":100,"catch":0.6,"competence":[{"cat":"other","rate":0.3962,"count":53},{"cat":"implementation","rate":0.5,"count":2}]},{"date":"2026-07-25","total":606,"rubyPass":105,"rubyFail":392,"escalations":501,"catch":0.7887,"competence":[{"cat":"other","rate":0.2628,"count":331},{"cat":"implementation","rate":0.1034,"count":145},{"cat":"review","rate":0.1875,"count":16},{"cat":"research","rate":0,"count":4},{"cat":"refactor","rate":0,"count":1}]},{"date":"2026-07-26","total":931,"rubyPass":105,"rubyFail":679,"escalations":826,"catch":0.8661,"competence":[{"cat":"other","rate":0.1832,"count":475},{"cat":"implementation","rate":0.0551,"count":272},{"cat":"review","rate":0.1154,"count":26},{"cat":"research","rate":0,"count":9},{"cat":"refactor","rate":0,"count":2}]},{"date":"2026-07-27","total":1251,"rubyPass":105,"rubyFail":850,"escalations":1146,"catch":0.8901,"competence":[{"cat":"other","rate":0.15,"count":580},{"cat":"implementation","rate":0.0456,"count":329},{"cat":"review","rate":0.0909,"count":33},{"cat":"research","rate":0,"count":10},{"cat":"refactor","rate":0,"count":3}]}],"maxTier":60,"kpi":{"bestRate":0.575,"bestId":8006,"latestRate":0.575,"latestId":8006,"graded":2840,"sessions":87,"fullRuns":6,"delta":0.2563,"firstId":223,"catch":0.8901}}</script>
 <script>
 "use strict";
 const DATA = JSON.parse(document.getElementById("datablob").textContent);
 const $ = (id) => document.getElementById(id);
-const PALETTE = ["#ff795d","#57d5c5","#f4bd62","#70a7ff","#c38fff","#4dd4a0","#f38bb7","#9abf5b","#ff9e63","#78c8e8"];
+const PALETTE = ["#6366f1","#06b6d4","#10b981","#f59e0b","#f43f5e","#8b5cf6","#3b82f6","#14b8a6","#ec4899","#84cc16"];
 const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const rateColor = (r) => r>=.5?css("--green"):r>=.25?css("--amber"):css("--red");
 const pct = (r,d=1)=>(r*100).toFixed(d)+"%";
 const fmt = (n)=>n.toLocaleString();
 const E = (tag,cls,txt)=>{const e=document.createElementNS("http://www.w3.org/2000/svg",tag);if(cls)e.setAttribute("class",cls);if(txt!=null)e.textContent=txt;return e;};
 function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
-const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-const lerp=(a,b,t)=>a+(b-a)*t;
-const signedPts=(r,d=1)=>(r>=0?"+":"")+(r*100).toFixed(d)+" pts";
 
 /* ---------- theme ---------- */
 function initTheme(){
@@ -492,93 +179,15 @@ function initTheme(){
   $("themeBtn").onclick=()=>{const cur=document.documentElement.getAttribute("data-theme");const nx=cur==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",nx);localStorage.setItem("aura-theme",nx);rerender();};
 }
 
-/* ---------- hero + head-to-head comparison ---------- */
-function renderHero(){
-  const k=DATA.kpi||{};
-  $("heroLatest").textContent=pct(k.latestRate||0);
-  $("heroDelta").textContent=signedPts(k.delta||0);
-  $("heroSession").textContent="Session S"+(k.latestId||"—")+" · "+((DATA.fullRuns||[]).at(-1)?.date||DATA.generated||"—");
-  $("heroRuns").textContent=fmt(k.fullRuns||0);
-  $("heroQuestions").textContent=fmt(k.graded||0);
-  $("heroCatch").textContent=pct(k.catch||0,0);
-}
-
-let compareAId=null,compareBId=null;
-function tierWeighted(run,tier){
-  const td=run&&run.tiers&&run.tiers[String(tier)];
-  return td&&td.n?(td.c+td.p*.5)/td.n:null;
-}
-function initComparison(){
-  const runs=DATA.fullRuns||[];
-  if(!runs.length)return;
-  compareAId=runs[0].id;
-  compareBId=runs[runs.length-1].id;
-  ["compareA","compareB"].forEach(id=>{
-    const sel=$(id);sel.innerHTML="";
-    runs.forEach(r=>{
-      const o=el("option");
-      o.value=r.id;
-      o.textContent="S"+r.id+" · "+r.date+" · "+pct(r.rate)+" strict";
-      sel.appendChild(o);
-    });
-    sel.onchange=()=>{compareAId=parseInt($("compareA").value);compareBId=parseInt($("compareB").value);renderComparison();};
-  });
-  $("compareA").value=compareAId;
-  $("compareB").value=compareBId;
-  $("swapRuns").onclick=()=>{
-    [compareAId,compareBId]=[compareBId,compareAId];
-    $("compareA").value=compareAId;$("compareB").value=compareBId;
-    renderComparison();
-  };
-  renderComparison();
-}
-function renderComparison(){
-  const runs=DATA.fullRuns||[];
-  const a=runs.find(r=>r.id===compareAId),b=runs.find(r=>r.id===compareBId);
-  if(!a||!b)return;
-  const strict=b.rate-a.rate,weighted=b.weighted-a.weighted;
-  const correct=b.correct-a.correct,errorsAvoided=a.incorrect-b.incorrect;
-  const lead=Math.abs(strict);
-  $("compareWinner").textContent=lead<.0005?"The runs are level":(strict>0?"Run B leads by ":"Run A leads by ")+Math.abs(strict*100).toFixed(1)+" points";
-  $("compareSummary").textContent="S"+b.id+" records "+Math.abs(correct)+" "+(correct>=0?"more":"fewer")+" correct answers and "+Math.abs(errorsAvoided)+" "+(errorsAvoided>=0?"fewer":"more")+" misses than S"+a.id+".";
-  const metrics=[
-    ["Strict score",pct(a.rate)+" → "+pct(b.rate),signedPts(strict)],
-    ["Weighted score",pct(a.weighted)+" → "+pct(b.weighted),signedPts(weighted)],
-    ["Correct answers",fmt(a.correct)+" → "+fmt(b.correct),(correct>=0?"+":"")+fmt(correct)],
-    ["Incorrect answers",fmt(a.incorrect)+" → "+fmt(b.incorrect),errorsAvoided>=0?fmt(errorsAvoided)+" avoided":fmt(Math.abs(errorsAvoided))+" added"]
-  ];
-  $("compareMetrics").innerHTML=metrics.map(m=>'<div class="compare-metric"><small>'+m[0]+'</small><strong>'+m[1]+'</strong><span>'+m[2]+'</span></div>').join("");
-
-  const deltas=[];
-  const strip=$("tierDeltas");strip.innerHTML="";
-  for(let t=1;t<=DATA.maxTier;t++){
-    const ar=tierWeighted(a,t),br=tierWeighted(b,t);
-    const cell=el("div","tier-delta");cell.dataset.tier=t;
-    if(ar==null||br==null){cell.title="Tier "+t+" · not measured in both runs";}
-    else{
-      const d=br-ar;deltas.push({t,d,ar,br});
-      const strength=clamp(18+Math.abs(d)*105,18,88);
-      const tone=d>.001?"var(--green)":d<-.001?"var(--red)":"var(--faint)";
-      cell.style.background="color-mix(in srgb,"+tone+" "+strength+"%,transparent)";
-      cell.title="Tier "+t+" · "+pct(ar)+" → "+pct(br)+" ("+signedPts(d)+")";
-    }
-    strip.appendChild(cell);
-  }
-  const sorted=[...deltas].sort((x,y)=>y.d-x.d);
-  const gain=sorted[0],loss=sorted[sorted.length-1];
-  $("biggestGain").textContent=gain?"Tier "+gain.t+" · "+signedPts(gain.d):"—";
-  $("biggestLoss").textContent=loss?"Tier "+loss.t+" · "+signedPts(loss.d):"—";
-}
-
 /* ---------- KPI cards ---------- */
 function renderKPIs(){
   const k=DATA.kpi||{};
   const cards=[
-    {k:"Best full run",v:pct(k.bestRate),h:"session S"+k.bestId,cls:rateColor(k.bestRate),bar:k.bestRate},
-    {k:"Latest full run",v:pct(k.latestRate),h:"session S"+k.latestId,cls:rateColor(k.latestRate),bar:k.latestRate},
-    {k:"Improvement",v:(k.delta>=0?"+":"")+pct(k.delta),h:"S"+k.firstId+" → S"+k.bestId,cls:k.delta>=0?"delta-up":"delta-down",bar:Math.abs(k.delta)},
-    {k:"Verif. catch rate",v:pct(k.catch),h:"latest Ruby snapshot",cls:"",bar:k.catch},
-    {k:"Questions graded",v:fmt(k.graded),h:fmt(k.sessions)+" sessions · "+fmt(k.fullRuns)+" full",cls:"",bar:0}
+    {k:"Best full run",v:pct(k.bestRate),h:"session S"+k.bestId,cls:rateColor(k.bestRate)},
+    {k:"Latest full run",v:pct(k.latestRate),h:"session S"+k.latestId,cls:rateColor(k.latestRate)},
+    {k:"Improvement",v:(k.delta>=0?"+":"")+pct(k.delta),h:"S"+k.firstId+" → S"+k.bestId,cls:k.delta>=0?"delta-up":"delta-down"},
+    {k:"Verif. catch rate",v:pct(k.catch),h:"latest Archimedes snapshot",cls:""},
+    {k:"Questions graded",v:fmt(k.graded),h:fmt(k.sessions)+" sessions · "+fmt(k.fullRuns)+" full",cls:""}
   ];
   $("kpis").innerHTML="";
   cards.forEach(c=>{
@@ -586,106 +195,63 @@ function renderKPIs(){
     d.appendChild(el("div","k",c.k));
     const v=el("div","v");v.style.color=c.cls||"";v.innerHTML=c.v;d.appendChild(v);
     d.appendChild(el("div","h",c.h));
-    const sb=el("div","sparkbar");const si=el("i");si.style.width=(c.bar*100)+"%";si.style.background=c.cls||css("--accent");sb.appendChild(si);d.appendChild(sb);
     $("kpis").appendChild(d);
   });
-  $("genPill").textContent="updated "+(DATA.generated||"—");
 }
 
-/* ---------- chart frame builder ---------- */
-function chartFrame(svg,vb,padL,padR,padT,padB,yMin,yMax,yticks){
-  const [W,H]=vb;const cw=W-padL-padR,ch=H-padT-padB;
+/* ---------- generic line/band chart builder ---------- */
+function chartFrame(svg, vb, padL, padR, padT, padB, yMin, yMax, yticks){
+  const [W,H]=vb; const cw=W-padL-padR, ch=H-padT-padB;
   svg.innerHTML="";
-  const g=E("g");svg.appendChild(g);
+  const g=E("g"); svg.appendChild(g);
   yticks.forEach(t=>{
     const y=padT+ch*(1-(t-yMin)/(yMax-yMin));
     const ln=E("line","gridline");ln.setAttribute("x1",padL);ln.setAttribute("x2",W-padR);ln.setAttribute("y1",y);ln.setAttribute("y2",y);g.appendChild(ln);
     const tx=E("text","tick",t+(typeof t==="number"?"%":""));tx.setAttribute("x",padL-8);tx.setAttribute("y",y+3.5);tx.setAttribute("text-anchor","end");g.appendChild(tx);
   });
-  return{g,W,H,padL,padR,padT,padB,cw,ch,yMin,yMax};
+  return {g,W,H,padL,padR,padT,padB,cw,ch,yMin,yMax};
 }
-function px(frame,i,n){return frame.padL+frame.cw*(n<=1?.5:i/(n-1));}
-function py(frame,v){return frame.padT+frame.ch*(1-(v-frame.yMin)/(frame.yMax-frame.yMin));}
+function px(frame, i, n){return frame.padL+frame.cw*(n<=1?.5:i/(n-1));}
+function py(frame, v){return frame.padT+frame.ch*(1-(v-frame.yMin)/(frame.yMax-frame.yMin));}
 
-/* smooth path generators */
-function catmullRom2bezier(pts){
-  if(pts.length<2)return"";
-  let d=`M ${pts[0][0]} ${pts[0][1]}`;
-  for(let i=0;i<pts.length-1;i++){
-    const p0=pts[i-1]||pts[i],p1=pts[i],p2=pts[i+1],p3=pts[i+2]||pts[i+1];
-    const c1x=p1[0]+(p2[0]-p0[0])/6,c1y=p1[1]+(p2[1]-p0[1])/6;
-    const c2x=p2[0]-(p3[0]-p1[0])/6,c2y=p2[1]-(p3[1]-p1[1])/6;
-    d+=` C ${c1x} ${c1y} ${c2x} ${c2y} ${p2[0]} ${p2[1]}`;
-  }
-  return d;
-}
-function smoothPath(pts,mode){
-  if(mode==="linear")return pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
-  if(mode==="bezier")return catmullRom2bezier(pts);
-  return catmullRom2bezier(pts);
-}
-
-/* tooltip helper */
-function bindTip(circle,svg,tipEl,text){
-  circle.addEventListener("mouseenter",()=>{const b=svg.getBoundingClientRect(),sb=svg.viewBox.baseVal;tipEl.style.left=(circle.cx.baseVal.value/sb.width*b.width)+"px";tipEl.style.top=(circle.cy.baseVal.value/sb.height*b.height)+"px";tipEl.textContent=text;tipEl.style.opacity=1;});
-  circle.addEventListener("mouseleave",()=>tipEl.style.opacity=0);
-}
-
-
-/* ========== OVERVIEW: trend ========== */
+/* ---------- trend (full runs) ---------- */
 function renderTrend(){
-  const svg=$("trend"),tip=$("tip");
-  const runs=DATA.fullRuns||[];
-  if(runs.length<2){svg.innerHTML="";return;}
-  const f=chartFrame(svg,[1000,320],54,28,24,50,0,100,[0,25,50,75,100]);
-  const pts=runs.map((r,i)=>[px(f,i,runs.length),py(f,r.rate*100)]);
-  // weighted line
-  const ptsW=runs.map((r,i)=>[px(f,i,runs.length),py(f,r.weighted*100)]);
-  // area under strict
+  const svg=$("trend"); const runs=DATA.fullRuns||[];
+  if(runs.length<2){svg.innerHTML="";svg.parentElement.insertAdjacentHTML("beforeend",'<div class="empty">Need at least two full runs.</div>');return;}
+  const f=chartFrame(svg,[1000,300],52,28,24,46,0,100,[0,25,50,75,100]);
+  // line
+  const path=runs.map((r,i)=>(i?"L":"M")+px(f,i,runs.length).toFixed(1)+" "+py(f,r.rate*100).toFixed(1)).join(" ");
+  const area=runs.map((r,i)=>(i?"L":"M")+px(f,i,runs.length).toFixed(1)+" "+py(f,r.rate*100).toFixed(1)).join(" ");
   const baseY=py(f,0);
-  const ap=E("path");ap.setAttribute("d","M "+pts.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" L ")+` L ${pts[pts.length-1][0].toFixed(1)} ${baseY} L ${pts[0][0].toFixed(1)} ${baseY} Z`);ap.setAttribute("fill",css("--accent"));ap.setAttribute("fill-opacity","0.08");f.g.appendChild(ap);
-  // weighted dashed
-  const wPath=catmullRom2bezier(ptsW);
-  const wl=E("path");wl.setAttribute("d",wPath);wl.setAttribute("fill","none");wl.setAttribute("stroke",css("--accent2"));wl.setAttribute("stroke-width","1.8");wl.setAttribute("stroke-dasharray","5 4");wl.setAttribute("opacity","0.7");f.g.appendChild(wl);
-  // strict line
-  const ln=E("path");ln.setAttribute("d",catmullRom2bezier(pts));ln.setAttribute("fill","none");ln.setAttribute("stroke",css("--accent"));ln.setAttribute("stroke-width","2.5");ln.setAttribute("stroke-linejoin","round");f.g.appendChild(ln);
+  const ap=E("path");ap.setAttribute("d",area+` L ${px(f,runs.length-1,runs.length).toFixed(1)} ${baseY} L ${px(f,0,runs.length).toFixed(1)} ${baseY} Z`);
+  ap.setAttribute("fill",css("--accent"));ap.setAttribute("fill-opacity","0.10");f.g.appendChild(ap);
+  const ln=E("path");ln.setAttribute("d",path);ln.setAttribute("fill","none");ln.setAttribute("stroke",css("--accent"));ln.setAttribute("stroke-width","2.5");ln.setAttribute("stroke-linejoin","round");f.g.appendChild(ln);
+  const tip=$("tip");
   runs.forEach((r,i)=>{
-    const x=pts[i][0],y=pts[i][1];
+    const x=px(f,i,runs.length), y=py(f,r.rate*100);
     const c=E("circle");c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r",6);c.setAttribute("fill",css("--surface"));c.setAttribute("stroke",rateColor(r.rate));c.setAttribute("stroke-width","3");
     c.style.cursor="pointer";
-    bindTip(c,svg,tip,`S${r.id} · strict ${pct(r.rate)} (${r.correct}/${r.n}) · weighted ${pct(r.weighted)}`);
+    c.addEventListener("mouseenter",(e)=>{const b=svg.getBoundingClientRect(),sb=svg.viewBox.baseVal;tip.style.left=(x/sb.width*b.width)+"px";tip.style.top=(y/sb.height*b.height)+"px";tip.textContent=`S${r.id} · ${pct(r.rate)} (${r.correct}/${r.n})`;tip.style.opacity=1;});
+    c.addEventListener("mouseleave",()=>tip.style.opacity=0);
     f.g.appendChild(c);
-    // weighted dot
-    const cw2=E("circle");cw2.setAttribute("cx",ptsW[i][0]);cw2.setAttribute("cy",ptsW[i][1]);cw2.setAttribute("r",3);cw2.setAttribute("fill",css("--accent2"));cw2.setAttribute("opacity","0.7");
-    bindTip(cw2,svg,tip,`S${r.id} weighted · ${pct(r.weighted)}`);
-    f.g.appendChild(cw2);
     const lab=E("text","tick",pct(r.rate));lab.setAttribute("x",x);lab.setAttribute("y",y-13);lab.setAttribute("text-anchor","middle");lab.setAttribute("fill",rateColor(r.rate));lab.style.fontWeight="700";f.g.appendChild(lab);
-    const xl=E("text","tick","S"+r.id);xl.setAttribute("x",x);xl.setAttribute("y",f.H-18);xl.setAttribute("text-anchor","middle");f.g.appendChild(xl);
-    const dl=E("text","tick",r.date.slice(5));dl.setAttribute("x",x);dl.setAttribute("y",f.H-4);dl.setAttribute("text-anchor","middle");dl.setAttribute("fill",css("--faint"));f.g.appendChild(dl);
+    const xl=E("text","tick","S"+r.id);xl.setAttribute("x",x);xl.setAttribute("y",f.H-16);xl.setAttribute("text-anchor","middle");f.g.appendChild(xl);
+    const dl=E("text","tick",r.date);dl.setAttribute("x",x);dl.setAttribute("y",f.H-3);dl.setAttribute("text-anchor","middle");dl.setAttribute("fill",css("--faint"));f.g.appendChild(dl);
   });
-  // legend
-  const lg=E("g");
-  const lr=E("rect");lr.setAttribute("x",f.W-190);lr.setAttribute("y",8);lr.setAttribute("width",180);lr.setAttribute("height",42);lr.setAttribute("rx",8);lr.setAttribute("fill",css("--surface"));lr.setAttribute("stroke",css("--border"));lg.appendChild(lr);
-  const ls=E("line");ls.setAttribute("x1",f.W-178);ls.setAttribute("y1",20);ls.setAttribute("x2",f.W-160);ls.setAttribute("y2",20);ls.setAttribute("stroke",css("--accent"));ls.setAttribute("stroke-width","2.5");lg.appendChild(ls);
-  const ts=E("text","tick","strict");ts.setAttribute("x",f.W-154);ts.setAttribute("y",23);ts.setAttribute("fill",css("--text"));lg.appendChild(ts);
-  const ls2=E("line");ls2.setAttribute("x1",f.W-178);ls2.setAttribute("y1",38);ls2.setAttribute("x2",f.W-160);ls2.setAttribute("y2",38);ls2.setAttribute("stroke",css("--accent2"));ls2.setAttribute("stroke-width","1.8");ls2.setAttribute("stroke-dasharray","4 3");lg.appendChild(ls2);
-  const ts2=E("text","tick","weighted");ts2.setAttribute("x",f.W-154);ts2.setAttribute("y",41);ts2.setAttribute("fill",css("--text"));lg.appendChild(ts2);
-  f.g.appendChild(lg);
 }
 
-/* ========== OVERVIEW: overlay ========== */
+/* ---------- overlay (tier comparison) ---------- */
 let selected=new Set();
 function seedDefault(){selected=new Set((DATA.fullRuns||[]).map(r=>r.id));}
 function renderChips(){
-  const wrap=$("chips");wrap.innerHTML="";
-  const full=DATA.fullRuns||[];
-  const fullIds=new Set(full.map(s=>s.id));
-  const added=DATA.sessions.filter(s=>selected.has(s.id)&&!fullIds.has(s.id));
-  const list=[...full,...added].filter((s,i,a)=>a.findIndex(x=>x.id===s.id)===i);
-  list.forEach(s=>{
-    const col=PALETTE[s.id%PALETTE.length];
-    const c=el("div","chip");
-    if(!selected.has(s.id))c.classList.add("off");
+  const wrap=$("chips"); wrap.innerHTML="";
+  const all=[...(DATA.fullRuns||[]),...DATA.sessions.filter(s=>!s.full)];
+  // de-dup by id, keep full first
+  const seen=new Set();const list=[];
+  all.forEach(s=>{if(!seen.has(s.id)){seen.add(s.id);list.push(s);}});
+  list.slice(0,40).forEach(s=>{
+    const on=selected.has(s.id); const col=PALETTE[s.id%PALETTE.length];
+    const c=el("button","chip"+(on?"":" off"));
     c.innerHTML=`<span class="dot" style="background:${col}"></span>S${s.id} <span class="rt">${pct(s.rate)}</span>${s.full?'<span class="tag full" style="margin-left:2px">full</span>':''}`;
     c.onclick=()=>{if(selected.has(s.id))selected.delete(s.id);else selected.add(s.id);renderChips();renderOverlay();renderOverlayLegend();};
     wrap.appendChild(c);
@@ -695,249 +261,106 @@ function renderOverlayLegend(){
   const lg=$("overlayLegend");lg.innerHTML="";
   const picks=DATA.sessions.filter(s=>selected.has(s.id));
   if(!picks.length){lg.innerHTML='<span class="muted">No runs selected — pick some above.</span>';return;}
-  picks.forEach((s)=>{const col=PALETTE[s.id%PALETTE.length];const sp=el("span");sp.innerHTML=`<i style="background:${col}"></i>S${s.id} · ${pct(s.rate)} (${s.correct}/${s.n})`;lg.appendChild(sp);});
+  picks.forEach((s,i)=>{const col=PALETTE[s.id%PALETTE.length];const sp=el("span");sp.innerHTML=`<i style="background:${col}"></i>S${s.id} · ${pct(s.rate)} (${s.correct}/${s.n})`;lg.appendChild(sp);});
 }
 function renderOverlay(){
-  const svg=$("overlay"),tip=$("tip2");
+  const svg=$("overlay");const tip=$("tip2");
   const picks=DATA.sessions.filter(s=>selected.has(s.id));
   if(picks.length<1){svg.innerHTML="";return;}
-  const tiers=[];for(let t=1;t<=DATA.maxTier;t++)tiers.push(t);
-  const f=chartFrame(svg,[1000,320],46,20,22,44,0,100,[0,25,50,75,100]);
+  const tiers=[];for(let t=1;t<=DATA.maxTier;t++)tiers.push(String(t));
+  const f=chartFrame(svg,[1000,320],46,20,22,40,0,100,[0,25,50,75,100]);
+  const tip2=$("tip2");
   picks.forEach(s=>{
     const col=PALETTE[s.id%PALETTE.length];
-    const pts=[];
+    const pts=[];let xs="";
     tiers.forEach((t,i)=>{
-      const td=s.tiers[String(t)];if(!td)return;
-      const rate=(td.c+td.p*0.5)/td.n;
-      const x=px(f,i,tiers.length),y=py(f,rate*100);
-      pts.push([x,y]);
+      const td=s.tiers[t]; const rate=td?(td.c+td.p*0.5)/td.n:null;
+      if(rate==null)return;
+      const x=px(f,i,tiers.length),y=py(f,rate*100);pts.push([x,y,t,rate,s]);
+      xs+=(xs?" L":"M")+x.toFixed(1)+" "+y.toFixed(1);
     });
-    if(pts.length>1){
-      const ln=E("path");ln.setAttribute("d",catmullRom2bezier(pts));ln.setAttribute("fill","none");ln.setAttribute("stroke",col);ln.setAttribute("stroke-width","2");ln.setAttribute("stroke-opacity","0.85");ln.setAttribute("stroke-linejoin","round");f.g.appendChild(ln);
-    }
-    tiers.forEach((t,i)=>{
-      const td=s.tiers[String(t)];if(!td)return;
-      const rate=(td.c+td.p*0.5)/td.n;
-      const x=px(f,i,tiers.length),y=py(f,rate*100);
-      const c=E("circle");c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r",3.5);c.setAttribute("fill",col);c.style.cursor="pointer";
-      bindTip(c,svg,tip,`S${s.id} · T${t} · ${pct(rate)}`);
+    const ln=E("path");ln.setAttribute("d",xs);ln.setAttribute("fill","none");ln.setAttribute("stroke",col);ln.setAttribute("stroke-width","2");ln.setAttribute("stroke-opacity","0.9");ln.setAttribute("stroke-linejoin","round");f.g.appendChild(ln);
+    pts.forEach(p=>{
+      const c=E("circle");c.setAttribute("cx",p[0]);c.setAttribute("cy",p[1]);c.setAttribute("r",3);c.setAttribute("fill",col);
+      c.addEventListener("mouseenter",()=>{const b=svg.getBoundingClientRect(),sb=svg.viewBox.baseVal;tip2.style.left=(p[0]/sb.width*b.width)+"px";tip2.style.top=(p[1]/sb.height*b.height)+"px";tip2.textContent=`S${p[4].id} · T${p[2]} · ${pct(p[3])}`;tip2.style.opacity=1;});
+      c.addEventListener("mouseleave",()=>tip2.style.opacity=0);
       f.g.appendChild(c);
     });
   });
-  const step=Math.max(1,Math.ceil(tiers.length/12));
-  tiers.forEach((t,i)=>{if(i%step!==0&&i!==tiers.length-1)return;const x=px(f,i,tiers.length);const tx=E("text","tick",t);tx.setAttribute("x",x);tx.setAttribute("y",f.H-16);tx.setAttribute("text-anchor","middle");f.g.appendChild(tx);});
-  const ax=E("text","tick","tier →");ax.setAttribute("x",f.W/2);ax.setAttribute("y",f.H-2);ax.setAttribute("text-anchor","middle");ax.setAttribute("fill",css("--faint"));f.g.appendChild(ax);
+  // x labels: show ~8
+  const tiersN=[];for(let t=1;t<=DATA.maxTier;t++)tiersN.push(t);
+  const step=Math.max(1,Math.ceil(tiersN.length/10));
+  tiersN.forEach((t,i)=>{if(i%step!==0&&i!==tiersN.length-1)return;const x=px(f,i,tiersN.length);const tx=E("text","tick",t);tx.setAttribute("x",x);tx.setAttribute("y",f.H-16);tx.setAttribute("text-anchor","middle");f.g.appendChild(tx);});
+  const ax=E("text","tick","tier");ax.setAttribute("x",f.W/2);ax.setAttribute("y",f.H-2);ax.setAttribute("text-anchor","middle");ax.setAttribute("fill",css("--faint"));f.g.appendChild(ax);
 }
 
-/* ========== OVERVIEW: catch trend ========== */
+/* ---------- difficulty curve (avg across full runs) ---------- */
+function renderDifficulty(){
+  const svg=$("difficulty");const tip=$("tip3");
+  const runs=DATA.fullRuns||[]; if(!runs.length){svg.innerHTML="";return;}
+  const tiers=[];for(let t=1;t<=DATA.maxTier;t++)tiers.push(t);
+  const pts=[];tiers.forEach(t=>{
+    const vals=runs.map(r=>r.tiers[String(t)]).filter(td=>td).map(td=>(td.c+td.p*0.5)/td.n);
+    if(!vals.length)return;
+    pts.push({t,rate:vals.reduce((a,b)=>a+b,0)/vals.length,n:vals.length});
+  });
+  if(pts.length<2){svg.innerHTML="";return;}
+  const f=chartFrame(svg,[480,300],40,16,22,40,0,100,[0,25,50,75,100]);
+  const path=pts.map((p,i)=>(i?"L":"M")+px(f,i,pts.length).toFixed(1)+" "+py(f,p.rate*100).toFixed(1)).join(" ");
+  const ln=E("path");ln.setAttribute("d",path);ln.setAttribute("fill","none");ln.setAttribute("stroke",css("--accent"));ln.setAttribute("stroke-width","2");f.g.appendChild(ln);
+  pts.forEach((p,i)=>{
+    const x=px(f,i,pts.length),y=py(f,p.rate*100);
+    const c=E("circle");c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r",3.5);c.setAttribute("fill",rateColor(p.rate));
+    c.addEventListener("mouseenter",()=>{const b=svg.getBoundingClientRect(),sb=svg.viewBox.baseVal;tip.style.left=(x/sb.width*b.width)+"px";tip.style.top=(y/sb.height*b.height)+"px";tip.textContent=`Tier ${p.t} · ${pct(p.rate)}`;tip.style.opacity=1;});
+    c.addEventListener("mouseleave",()=>tip.style.opacity=0);
+    f.g.appendChild(c);
+  });
+  const step=Math.max(1,Math.ceil(pts.length/8));
+  pts.forEach((p,i)=>{if(i%step!==0&&i!==pts.length-1)return;const x=px(f,i,pts.length);const tx=E("text","tick",p.t);tx.setAttribute("x",x);tx.setAttribute("y",f.H-16);tx.setAttribute("text-anchor","middle");f.g.appendChild(tx);});
+}
+
+/* ---------- competence bars ---------- */
+function renderCompetence(){
+  const svg=$("competence");const tip=$("tip4");
+  const snap=(DATA.ruby||[])[DATA.ruby.length-1]; if(!snap||!snap.competence){svg.innerHTML="";return;}
+  const comp=snap.competence.filter(c=>c.count>0).sort((a,b)=>b.rate-a.rate);
+  if(!comp.length){svg.innerHTML="";return;}
+  const W=480,H=300,padL=96,padR=18,padT=12,padB=14,rowH=(H-padT-padB)/comp.length;
+  svg.innerHTML="";const g=E("g");svg.appendChild(g);
+  comp.forEach((c,i)=>{
+    const y=padT+i*rowH; const bw=(W-padL-padR)*c.rate;
+    const lab=E("text","tick",c.cat);lab.setAttribute("x",padL-10);lab.setAttribute("y",y+rowH/2+3);lab.setAttribute("text-anchor","end");g.appendChild(lab);
+    const bg=E("rect");bg.setAttribute("x",padL);bg.setAttribute("y",y+rowH*0.22);bg.setAttribute("width",W-padL-padR);bg.setAttribute("height",rowH*0.56);bg.setAttribute("rx",5);bg.setAttribute("fill",css("--border2"));g.appendChild(bg);
+    const b=E("rect");b.setAttribute("x",padL);b.setAttribute("y",y+rowH*0.22);b.setAttribute("width",Math.max(2,bw));b.setAttribute("height",rowH*0.56);b.setAttribute("rx",5);b.setAttribute("fill",rateColor(c.rate));
+    b.style.cursor="pointer";
+    b.addEventListener("mouseenter",()=>{tip.style.left=(padL+bw)+"px";tip.style.top=(y+rowH*0.5)+"px";tip.textContent=`${c.cat}: ${pct(c.rate)} · ${c.count} tasks`;tip.style.opacity=1;});
+    b.addEventListener("mouseleave",()=>tip.style.opacity=0);
+    g.appendChild(b);
+    const vt=E("text","tick",pct(c.rate));vt.setAttribute("x",padL+Math.max(2,bw)+5);vt.setAttribute("y",y+rowH/2+3);vt.setAttribute("fill",rateColor(c.rate));vt.style.fontWeight="700";g.appendChild(vt);
+  });
+}
+
+/* ---------- catch-rate trend ---------- */
 function renderCatch(){
-  const svg=$("catchTrend"),tip=$("tip5");
-  const snaps=DATA.ruby||[];if(snaps.length<2){svg.innerHTML="";return;}
-  const f=chartFrame(svg,[1000,260],52,28,24,44,0,100,[0,25,50,75,100]);
-  const pts=snaps.map((s,i)=>[px(f,i,snaps.length),py(f,s.catch*100)]);
-  const ln=E("path");ln.setAttribute("d",catmullRom2bezier(pts));ln.setAttribute("fill","none");ln.setAttribute("stroke",css("--accent2"));ln.setAttribute("stroke-width","2.5");ln.setAttribute("stroke-linejoin","round");f.g.appendChild(ln);
+  const svg=$("catchTrend");const tip=$("tip5");
+  const snaps=DATA.ruby||[]; if(snaps.length<2){svg.innerHTML="";return;}
+  const f=chartFrame(svg,[1000,240],52,28,24,42,0,100,[0,25,50,75,100]);
+  const path=snaps.map((s,i)=>(i?"L":"M")+px(f,i,snaps.length).toFixed(1)+" "+py(f,s.catch*100).toFixed(1)).join(" ");
+  const ln=E("path");ln.setAttribute("d",path);ln.setAttribute("fill","none");ln.setAttribute("stroke",css("--accent2"));ln.setAttribute("stroke-width","2.5");ln.setAttribute("stroke-linejoin","round");f.g.appendChild(ln);
   snaps.forEach((s,i)=>{
-    const x=pts[i][0],y=pts[i][1];
+    const x=px(f,i,snaps.length),y=py(f,s.catch*100);
     const c=E("circle");c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r",5);c.setAttribute("fill",css("--surface"));c.setAttribute("stroke",css("--accent2"));c.setAttribute("stroke-width","2.5");
-    bindTip(c,svg,tip,`${s.date} · catch ${pct(s.catch)} · ${s.escalations} escalations`);
+    c.addEventListener("mouseenter",()=>{const b=svg.getBoundingClientRect(),sb=svg.viewBox.baseVal;tip.style.left=(x/sb.width*b.width)+"px";tip.style.top=(y/sb.height*b.height)+"px";tip.textContent=`${s.date} · catch ${pct(s.catch)} · ${s.escalations} escalations`;tip.style.opacity=1;});
+    c.addEventListener("mouseleave",()=>tip.style.opacity=0);
     f.g.appendChild(c);
     const xl=E("text","tick",s.date.slice(5));xl.setAttribute("x",x);xl.setAttribute("y",f.H-16);xl.setAttribute("text-anchor","middle");f.g.appendChild(xl);
   });
 }
 
-/* ========== TIMELINE: time simulation ========== */
-function getTimelineDates(){
-  // Build ordered list of unique dates from sessions + ruby snapshots
-  const dates=new Set();
-  (DATA.sessions||[]).forEach(s=>dates.add(s.date));
-  (DATA.ruby||[]).forEach(r=>dates.add(r.date));
-  return [...dates].sort();
-}
-function cumulativeAt(date){
-  // Aggregate all session results up to and including `date`
-  const ss=DATA.sessions.filter(s=>s.date<=date);
-  let c=0,p=0,i=0,n=0;
-  const tierAgg={};
-  ss.forEach(s=>{c+=s.correct;p+=s.partial;i+=s.incorrect;n+=s.n;
-    Object.entries(s.tiers||{}).forEach(([t,td])=>{if(!tierAgg[t])tierAgg[t]={c:0,p:0,i:0,n:0};tierAgg[t].c+=td.c;tierAgg[t].p+=td.p;tierAgg[t].i+=td.i;tierAgg[t].n+=td.n;});
-  });
-  return{c,p,i,n,rate:n?c/n:0,weighted:n?(c+p*0.5)/n:0,tiers:tierAgg,sessionCount:ss.length};
-}
-function difficultyBands(tierAgg){
-  // Group tiers into bands
-  const bands=[{name:"Easy (1–8)",min:1,max:8},{name:"Medium (9–20)",min:9,max:20},{name:"Hard (21–40)",min:21,max:40},{name:"Expert (41–60)",min:41,max:60}];
-  return bands.map(b=>{
-    let c=0,p=0,n=0;
-    for(let t=b.min;t<=b.max;t++){const td=tierAgg[String(t)];if(td){c+=td.c;p+=td.p;n+=td.n;}}
-    return{name:b.name,rate:n?(c+p*0.5)/n:0,c,p,n};
-  });
-}
-
-let simDates=[],simIdx=0,simPlaying=false,simTimer=null;
-function initTimeline(){
-  simDates=getTimelineDates();
-  const range=$("simRange");
-  range.max=simDates.length-1;
-  range.value=0;
-  // labels
-  const lbl=$("simLabels");lbl.innerHTML="";
-  const show=[0,Math.floor(simDates.length/3),Math.floor(simDates.length*2/3),simDates.length-1];
-  show.forEach(idx=>{if(idx>=0&&idx<simDates.length){const sp=el("span");sp.textContent=simDates[idx];sp.style.left=(simDates.length>1?idx/(simDates.length-1)*100:0)+"%";lbl.appendChild(sp);}});
-  range.oninput=()=>{simIdx=parseInt(range.value);updateTimelineView();};
-  $("simReset").onclick=()=>{simIdx=0;range.value=0;updateTimelineView();if(simPlaying)togglePlay();};
-  $("playBtn").onclick=togglePlay;
-  updateTimelineView();
-}
-function togglePlay(){
-  simPlaying=!simPlaying;
-  $("playBtn").textContent=simPlaying?"⏸":"▶";
-  if(simPlaying){
-    if(simIdx>=simDates.length-1){simIdx=0;$("simRange").value=0;}
-    simTimer=setInterval(()=>{
-      simIdx++;
-      if(simIdx>=simDates.length-1){simIdx=simDates.length-1;$("simRange").value=simIdx;updateTimelineView();togglePlay();return;}
-      $("simRange").value=simIdx;updateTimelineView();
-    },800);
-  }else{clearInterval(simTimer);}
-}
-function updateTimelineView(){
-  if(!simDates.length)return;
-  const date=simDates[simIdx];
-  const data=cumulativeAt(date);
-  $("simDate").textContent=date;
-  $("simLabel").textContent=`${data.sessionCount} sessions · ${data.n} questions graded`;
-  const pctPos=simDates.length>1?simIdx/(simDates.length-1)*100:0;
-  $("simFill").style.width=pctPos+"%";
-  $("simKnob").style.left=pctPos+"%";
-  renderSimCumulative(data,simDates,simIdx);
-  renderSimBands(data);
-  renderSimDonut(data);
-}
-function renderSimCumulative(data,dates,idx){
-  const svg=$("simCumulative"),tip=$("tipSim1");
-  // Compute cumulative for ALL dates up to current, draw the full curve
-  const f=chartFrame(svg,[1000,260],54,28,24,44,0,100,[0,25,50,75,100]);
-  const cumul=dates.map(d=>cumulativeAt(d));
-  const pts=cumul.map((d,i)=>[px(f,i,dates.length),py(f,d.rate*100)]);
-  const ptsW=cumul.map((d,i)=>[px(f,i,dates.length),py(f,d.weighted*100)]);
-  const ln=E("path");ln.setAttribute("d",catmullRom2bezier(pts));ln.setAttribute("fill","none");ln.setAttribute("stroke",css("--accent"));ln.setAttribute("stroke-width","2.5");ln.setAttribute("stroke-linejoin","round");f.g.appendChild(ln);
-  const wl=E("path");wl.setAttribute("d",catmullRom2bezier(ptsW));wl.setAttribute("fill","none");wl.setAttribute("stroke",css("--accent2"));wl.setAttribute("stroke-width","1.8");wl.setAttribute("stroke-dasharray","5 4");wl.setAttribute("opacity","0.7");f.g.appendChild(wl);
-  // highlight current point
-  const x=pts[idx][0],y=pts[idx][1];
-  // vertical guide
-  const guide=E("line");guide.setAttribute("x1",x);guide.setAttribute("x2",x);guide.setAttribute("y1",f.padT);guide.setAttribute("y2",f.H-f.padB);guide.setAttribute("stroke",css("--accent"));guide.setAttribute("stroke-width","1");guide.setAttribute("stroke-dasharray","3 3");guide.setAttribute("opacity","0.4");f.g.appendChild(guide);
-  const c=E("circle");c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r",7);c.setAttribute("fill",css("--surface"));c.setAttribute("stroke",rateColor(data.rate));c.setAttribute("stroke-width","3");
-  bindTip(c,svg,tip,`${dates[idx]} · strict ${pct(data.rate)} · weighted ${pct(data.weighted)} · ${data.n}q`);
-  f.g.appendChild(c);
-  const lab=E("text","tick",pct(data.rate));lab.setAttribute("x",x);lab.setAttribute("y",y-14);lab.setAttribute("text-anchor","middle");lab.setAttribute("fill",rateColor(data.rate));lab.style.fontWeight="700";f.g.appendChild(lab);
-  dates.forEach((d,i)=>{if(i%Math.ceil(dates.length/8)!==0&&i!==dates.length-1)return;const xl=E("text","tick",d.slice(5));xl.setAttribute("x",px(f,i,dates.length));xl.setAttribute("y",f.H-16);xl.setAttribute("text-anchor","middle");f.g.appendChild(xl);});
-}
-function renderSimBands(data){
-  const svg=$("simBands"),tip=$("tipSim2");
-  const bands=difficultyBands(data.tiers);
-  const W=480,H=280,padL=100,padR=18,padT=18,padB=30;
-  svg.innerHTML="";const g=E("g");svg.appendChild(g);
-  const rowH=(H-padT-padB)/bands.length;
-  bands.forEach((b,i)=>{
-    const y=padT+i*rowH;
-    const bw=(W-padL-padR)*b.rate;
-    const lab=E("text","tick",b.name);lab.setAttribute("x",padL-10);lab.setAttribute("y",y+rowH/2+3);lab.setAttribute("text-anchor","end");g.appendChild(lab);
-    const bg=E("rect");bg.setAttribute("x",padL);bg.setAttribute("y",y+rowH*0.2);bg.setAttribute("width",W-padL-padR);bg.setAttribute("height",rowH*0.6);bg.setAttribute("rx",6);bg.setAttribute("fill",css("--border2"));g.appendChild(bg);
-    const b2=E("rect");b2.setAttribute("x",padL);b2.setAttribute("y",y+rowH*0.2);b2.setAttribute("width",Math.max(2,bw));b2.setAttribute("height",rowH*0.6);b2.setAttribute("rx",6);b2.setAttribute("fill",rateColor(b.rate));b2.style.cursor="pointer";
-    b2.addEventListener("mouseenter",()=>{tip.style.left=(padL+bw)+"px";tip.style.top=(y+rowH*0.5)+"px";tip.textContent=`${b.name}: ${pct(b.rate)} · ${b.c}/${b.n}`;tip.style.opacity=1;});
-    b2.addEventListener("mouseleave",()=>tip.style.opacity=0);
-    g.appendChild(b2);
-    const vt=E("text","tick",pct(b.rate));vt.setAttribute("x",padL+Math.max(2,bw)+5);vt.setAttribute("y",y+rowH/2+3);vt.setAttribute("fill",rateColor(b.rate));vt.style.fontWeight="700";g.appendChild(vt);
-  });
-}
-function renderSimDonut(data){
-  const svg=$("simDonut");
-  svg.innerHTML="";const g=E("g");svg.appendChild(g);
-  const cx=140,cy=140,R=95,r=58;
-  const total=data.n||1;
-  const segs=[
-    {val:data.c,color:css("--green"),label:"correct"},
-    {val:data.p,color:css("--amber"),label:"partial"},
-    {val:data.i,color:css("--red"),label:"incorrect"}
-  ].filter(s=>s.val>0);
-  if(segs.length===0)return;
-  let angle=-90;
-  segs.forEach(s=>{
-    const frac=s.val/total;
-    const a2=angle+frac*360;
-    const large=frac>0.5?1:0;
-    const x1=cx+R*Math.cos(angle*Math.PI/180),y1=cy+R*Math.sin(angle*Math.PI/180);
-    const x2=cx+R*Math.cos(a2*Math.PI/180),y2=cy+R*Math.sin(a2*Math.PI/180);
-    const x3=cx+r*Math.cos(a2*Math.PI/180),y3=cy+r*Math.sin(a2*Math.PI/180);
-    const x4=cx+r*Math.cos(angle*Math.PI/180),y4=cy+r*Math.sin(angle*Math.PI/180);
-    const p=E("path");p.setAttribute("d",`M ${x1} ${y1} A ${R} ${R} 0 ${large} 1 ${x2} ${y2} L ${x3} ${y3} A ${r} ${r} 0 ${large} 0 ${x4} ${y4} Z`);p.setAttribute("fill",s.color);p.setAttribute("opacity","0.85");g.appendChild(p);
-    angle=a2;
-  });
-  const t1=E("text","tick",pct(data.rate));t1.setAttribute("x",cx);t1.setAttribute("y",cy-2);t1.setAttribute("text-anchor","middle");t1.style.fontSize="20px";t1.style.fontWeight="800";t1.setAttribute("fill",css("--text"));g.appendChild(t1);
-  const t2=E("text","tick",data.n+"q");t2.setAttribute("x",cx);t2.setAttribute("y",cy+16);t2.setAttribute("text-anchor","middle");t2.setAttribute("fill",css("--muted"));g.appendChild(t2);
-}
-
-/* ========== TIER EXPLORER ========== */
-let smoothMode="catmull";
-function renderDifficultySmooth(){
-  const svg=$("difficultySmooth"),tip=$("tipD1");
-  const runs=DATA.fullRuns||[];if(!runs.length){svg.innerHTML="";return;}
-  const tiers=[];for(let t=1;t<=DATA.maxTier;t++)tiers.push(t);
-  const pts=[];
-  tiers.forEach(t=>{
-    const vals=runs.map(r=>r.tiers[String(t)]).filter(td=>td).map(td=>(td.c+td.p*0.5)/td.n);
-    if(vals.length){pts.push({t,rate:vals.reduce((a,b)=>a+b,0)/vals.length,n:vals.length,x:0,y:0});}
-  });
-  if(pts.length<2){svg.innerHTML="";return;}
-  const f=chartFrame(svg,[1000,340],48,20,24,48,0,100,[0,25,50,75,100]);
-  const xy=pts.map((p,i)=>{p.x=px(f,i,pts.length);p.y=py(f,p.rate*100);return[p.x,p.y];});
-  // area
-  const baseY=py(f,0);
-  const ap=E("path");ap.setAttribute("d","M "+xy.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" L ")+` L ${xy[xy.length-1][0].toFixed(1)} ${baseY} L ${xy[0][0].toFixed(1)} ${baseY} Z`);ap.setAttribute("fill",css("--accent"));ap.setAttribute("fill-opacity","0.06");f.g.appendChild(ap);
-  // smoothed line
-  const ln=E("path");ln.setAttribute("d",smoothPath(xy,smoothMode));ln.setAttribute("fill","none");ln.setAttribute("stroke",css("--accent"));ln.setAttribute("stroke-width","2.5");ln.setAttribute("stroke-linejoin","round");f.g.appendChild(ln);
-  pts.forEach((p)=>{
-    const c=E("circle");c.setAttribute("cx",p.x);c.setAttribute("cy",p.y);c.setAttribute("r",3.5);c.setAttribute("fill",rateColor(p.rate));c.style.cursor="pointer";
-    bindTip(c,svg,tip,`Tier ${p.t} · ${pct(p.rate)} avg (${p.n} runs)`);
-    f.g.appendChild(c);
-  });
-  const step=Math.max(1,Math.ceil(pts.length/12));
-  pts.forEach((p,i)=>{if(i%step!==0&&i!==pts.length-1)return;const tx=E("text","tick",p.t);tx.setAttribute("x",p.x);tx.setAttribute("y",f.H-18);tx.setAttribute("text-anchor","middle");f.g.appendChild(tx);});
-  const ax=E("text","tick","tier →");ax.setAttribute("x",f.W/2);ax.setAttribute("y",f.H-2);ax.setAttribute("text-anchor","middle");ax.setAttribute("fill",css("--faint"));f.g.appendChild(ax);
-}
-function renderHardnessSorted(){
-  const svg=$("hardnessSorted"),tip=$("tipD2");
-  const runs=DATA.fullRuns||[];if(!runs.length){svg.innerHTML="";return;}
-  const tiers=[];for(let t=1;t<=DATA.maxTier;t++)tiers.push(t);
-  const pts=[];
-  tiers.forEach(t=>{
-    const vals=runs.map(r=>r.tiers[String(t)]).filter(td=>td).map(td=>(td.c+td.p*0.5)/td.n);
-    if(vals.length)pts.push({t,rate:vals.reduce((a,b)=>a+b,0)/vals.length});
-  });
-  pts.sort((a,b)=>b.rate-a.rate);
-  const f=chartFrame(svg,[1000,280],80,20,20,40,0,100,[0,25,50,75,100]);
-  const bw=(f.cw/pts.length)*0.75;
-  pts.forEach((p,i)=>{
-    const x=px(f,i,pts.length)-bw/2;
-    const h=f.ch*p.rate;
-    const b=E("rect");b.setAttribute("x",x);b.setAttribute("y",py(f,p.rate*100)-h+0);b.setAttribute("width",bw);b.setAttribute("height",h);b.setAttribute("rx",3);b.setAttribute("fill",rateColor(p.rate));b.style.cursor="pointer";
-    // Use bar from bottom
-    const bottomY=py(f,0);
-    b.setAttribute("y",bottomY-h);
-    b.setAttribute("height",h);
-    b.addEventListener("mouseenter",()=>{const bRect=svg.getBoundingClientRect(),sb=svg.viewBox.baseVal;tip.style.left=((x+bw/2)/sb.width*bRect.width)+"px";tip.style.top=((bottomY-h)/sb.height*bRect.height)+"px";tip.textContent=`T${p.t} · ${pct(p.rate)}`;tip.style.opacity=1;});
-    b.addEventListener("mouseleave",()=>tip.style.opacity=0);
-    f.g.appendChild(b);
-  });
-  // x-axis: show ~10 tier labels
-  const step=Math.max(1,Math.ceil(pts.length/10));
-  pts.forEach((p,i)=>{if(i%step!==0&&i!==pts.length-1)return;const x=px(f,i,pts.length);const tx=E("text","tick","T"+p.t);tx.setAttribute("x",x);tx.setAttribute("y",f.H-16);tx.setAttribute("text-anchor","middle");f.g.appendChild(tx);});
-}
-
-/* ========== TABLE ========== */
+/* ---------- sessions table ---------- */
 let sortKey="id",sortDir=1,filter="";
 function renderTable(){
-  const tb=$("table"),thead=tb.querySelector("thead"),tbody=tb.querySelector("tbody");
+  const tb=$("table");const thead=tb.querySelector("thead");const tbody=tb.querySelector("tbody");
   const cols=[["id","Session"],["date","Date"],["model","Model"],["n","Q"],["correct","Correct"],["rate","Rate"]];
   thead.innerHTML="<tr>"+cols.map(c=>`<th data-k="${c[0]}">${c[1]}</th>`).join("")+"</tr>";
   thead.querySelectorAll("th").forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(sortKey===k)sortDir=-sortDir;else{sortKey=k;sortDir=1;}renderTable();});
@@ -952,233 +375,22 @@ function renderTable(){
   if(!rows.length)tbody.innerHTML='<tr><td colspan="6" class="empty">No sessions match.</td></tr>';
 }
 
-/* ========== HEATMAP ========== */
-function renderHeatmap(){
-  const c=$("heatmapContainer");
-  const runs=DATA.fullRuns||[];
-  if(!runs.length){c.innerHTML='<div class="empty">No full runs.</div>';return;}
-  const tiers=[];for(let t=1;t<=DATA.maxTier;t++)tiers.push(t);
-  // grid: rows=tiers, cols=runs
-  const cols=runs.length;
-  c.innerHTML="";
-  const grid=el("div","heatmap-grid");
-  grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
-  // header row
-  const hdr=el("div","hm-axis");hdr.style.gridColumn=`1 / -1`;hdr.style.marginBottom="4px";
-  hdr.innerHTML=runs.map((r,i)=>`<span style="display:inline-block;width:${100/cols}%;text-align:center;font-weight:700;color:var(--text)">S${r.id}</span>`).join("");
-  grid.appendChild(hdr);
-  tiers.forEach(t=>{
-    runs.forEach((r,ci)=>{
-      const td=r.tiers[String(t)];
-      const cell=el("div","hm-cell");
-      if(!td||!td.n){cell.classList.add("empty");grid.appendChild(cell);return;}
-      const rate=(td.c+td.p*0.5)/td.n;
-      const col=rateColor(rate);
-      cell.style.background=col;
-      cell.style.opacity=(0.25+rate*0.75).toFixed(2);
-      cell.title=`S${r.id} · T${t}: ${pct(rate)} (${td.c}c ${td.p}p ${td.i}i)`;
-      grid.appendChild(cell);
-    });
-  });
-  c.appendChild(grid);
-  // tier labels on left
-  const labelCol=el("div");labelCol.style.cssText="position:absolute";
-}
-function renderBandBars(){
-  const svg=$("bandBars"),tip=$("tipH1");
-  const runs=DATA.fullRuns||[];if(!runs.length){svg.innerHTML="";return;}
-  const bands=[{name:"Easy (1–8)",min:1,max:8},{name:"Medium (9–20)",min:9,max:20},{name:"Hard (21–40)",min:21,max:40},{name:"Expert (41–60)",min:41,max:60}];
-  const bandData=bands.map(b=>{
-    let c=0,p=0,n=0;
-    runs.forEach(r=>{for(let t=b.min;t<=b.max;t++){const td=r.tiers[String(t)];if(td){c+=td.c;p+=td.p;n+=td.n;}}});
-    return{name:b.name,rate:n?(c+p*0.5)/n:0,c,p,n};
-  });
-  const f=chartFrame(svg,[1000,260],100,28,20,40,0,100,[0,25,50,75,100]);
-  const bw=f.cw/bandData.length*0.6;
-  bandData.forEach((b,i)=>{
-    const x=px(f,i,bandData.length)-bw/2;
-    const h=f.ch*b.rate;
-    const bottomY=py(f,0);
-    const bar=E("rect");bar.setAttribute("x",x);bar.setAttribute("y",bottomY-h);bar.setAttribute("width",bw);bar.setAttribute("height",h);bar.setAttribute("rx",6);bar.setAttribute("fill",rateColor(b.rate));bar.style.cursor="pointer";
-    bar.addEventListener("mouseenter",()=>{const bR=svg.getBoundingClientRect(),sb=svg.viewBox.baseVal;tip.style.left=((x+bw/2)/sb.width*bR.width)+"px";tip.style.top=((bottomY-h)/sb.height*bR.height)+"px";tip.textContent=`${b.name}: ${pct(b.rate)} · ${b.c}/${b.n}`;tip.style.opacity=1;});
-    bar.addEventListener("mouseleave",()=>tip.style.opacity=0);
-    f.g.appendChild(bar);
-    const lab=E("text","tick",b.name);lab.setAttribute("x",x+bw/2);lab.setAttribute("y",f.H-16);lab.setAttribute("text-anchor","middle");f.g.appendChild(lab);
-    const vt=E("text","tick",pct(b.rate));vt.setAttribute("x",x+bw/2);vt.setAttribute("y",bottomY-h-6);vt.setAttribute("text-anchor","middle");vt.setAttribute("fill",rateColor(b.rate));vt.style.fontWeight="700";f.g.appendChild(vt);
-  });
-}
-
-/* ========== RUBY ========== */
-function renderCompetence(){
-  const svg=$("competence"),tip=$("tip4");
-  const snap=(DATA.ruby||[])[DATA.ruby.length-1];if(!snap||!snap.competence){svg.innerHTML="";return;}
-  const comp=snap.competence.filter(c=>c.count>0).sort((a,b)=>b.rate-a.rate);
-  if(!comp.length){svg.innerHTML="";return;}
-  const W=560,H=320,padL=104,padR=24,padT=14,padB=14,rowH=(H-padT-padB)/comp.length;
-  svg.innerHTML="";const g=E("g");svg.appendChild(g);
-  comp.forEach((c,i)=>{
-    const y=padT+i*rowH;const bw=(W-padL-padR)*c.rate;
-    const lab=E("text","tick",c.cat);lab.setAttribute("x",padL-10);lab.setAttribute("y",y+rowH/2+3);lab.setAttribute("text-anchor","end");g.appendChild(lab);
-    const bg=E("rect");bg.setAttribute("x",padL);bg.setAttribute("y",y+rowH*0.22);bg.setAttribute("width",W-padL-padR);bg.setAttribute("height",rowH*0.56);bg.setAttribute("rx",5);bg.setAttribute("fill",css("--border2"));g.appendChild(bg);
-    const b=E("rect");b.setAttribute("x",padL);b.setAttribute("y",y+rowH*0.22);b.setAttribute("width",Math.max(2,bw));b.setAttribute("height",rowH*0.56);b.setAttribute("rx",5);b.setAttribute("fill",rateColor(c.rate));b.style.cursor="pointer";
-    b.addEventListener("mouseenter",()=>{tip.style.left=(padL+bw)+"px";tip.style.top=(y+rowH*0.5)+"px";tip.textContent=`${c.cat}: ${pct(c.rate)} · ${c.count} tasks`;tip.style.opacity=1;});
-    b.addEventListener("mouseleave",()=>tip.style.opacity=0);
-    g.appendChild(b);
-    const vt=E("text","tick",pct(c.rate));vt.setAttribute("x",padL+Math.max(2,bw)+5);vt.setAttribute("y",y+rowH/2+3);vt.setAttribute("fill",rateColor(c.rate));vt.style.fontWeight="700";g.appendChild(vt);
-  });
-}
-function renderEscVolume(){
-  const svg=$("escVolume"),tip=$("tipR1");
-  const snaps=DATA.ruby||[];if(snaps.length<2){svg.innerHTML="";return;}
-  const f=chartFrame(svg,[1000,280],56,28,24,44,0,Math.max(...snaps.map(s=>s.total)),[0,Math.round(Math.max(...snaps.map(s=>s.total))/4),Math.round(Math.max(...snaps.map(s=>s.total))/2),Math.round(Math.max(...snaps.map(s=>s.total))*3/4),Math.max(...snaps.map(s=>s.total))]);
-  // stacked bars: rubyPass + rubyFail + escalations up to total
-  const maxTotal=Math.max(...snaps.map(s=>s.total));
-  snaps.forEach((s,i)=>{
-    const x=px(f,i,snaps.length)-12,w=24;
-    const totalH=f.ch*(s.total/f.yMax);
-    const passH=f.ch*(s.rubyPass/f.yMax);
-    const failH=f.ch*(s.rubyFail/f.yMax);
-    const escH=f.ch*(s.escalations/f.yMax);
-    const baseY=py(f,0);
-    // stack: pass at bottom, fail middle, esc top
-    const rPass=E("rect");rPass.setAttribute("x",x);rPass.setAttribute("y",baseY-totalH);rPass.setAttribute("width",w);rPass.setAttribute("height",passH);rPass.setAttribute("rx",3);rPass.setAttribute("fill",css("--green"));rPass.setAttribute("opacity","0.7");rPass.style.cursor="pointer";
-    bindTip(rPass,svg,tip,`${s.date} · pass ${s.rubyPass} · fail ${s.rubyFail} · esc ${s.escalations} · total ${s.total}`);
-    f.g.appendChild(rPass);
-    const rFail=E("rect");rFail.setAttribute("x",x);rFail.setAttribute("y",baseY-totalH+passH);rFail.setAttribute("width",w);rFail.setAttribute("height",failH);rFail.setAttribute("fill",css("--red"));rFail.setAttribute("opacity","0.5");f.g.appendChild(rFail);
-    const rEsc=E("rect");rEsc.setAttribute("x",x);rEsc.setAttribute("y",baseY-totalH+passH+failH);rEsc.setAttribute("width",w);rEsc.setAttribute("height",escH);rEsc.setAttribute("rx",3);rEsc.setAttribute("fill",css("--accent2"));rEsc.setAttribute("opacity","0.45");f.g.appendChild(rEsc);
-    const xl=E("text","tick",s.date.slice(5));xl.setAttribute("x",x+w/2);xl.setAttribute("y",f.H-16);xl.setAttribute("text-anchor","middle");f.g.appendChild(xl);
-  });
-  // legend
-  const lg=E("g");
-  [["Ruby pass",css("--green"),0.7],["Ruby fail",css("--red"),0.5],["Escalated",css("--accent2"),0.45]].forEach((item,j)=>{
-    const r=E("rect");r.setAttribute("x",f.W-150);r.setAttribute("y",10+j*18);r.setAttribute("width",12);r.setAttribute("height",12);r.setAttribute("rx",3);r.setAttribute("fill",item[1]);r.setAttribute("opacity",item[2]);lg.appendChild(r);
-    const t=E("text","tick",item[0]);t.setAttribute("x",f.W-132);t.setAttribute("y",20+j*18);t.setAttribute("fill",css("--text"));lg.appendChild(t);
-  });
-  f.g.appendChild(lg);
-}
-function renderRubyStats(){
-  const snaps=DATA.ruby||[];
-  if(!snaps.length)return;
-  const last=snaps[snaps.length-1],first=snaps[0];
-  $("catchLatest").textContent=pct(last.catch);
-  $("catchStart").textContent=pct(first.catch);
-  const delta=last.catch-first.catch;
-  $("catchDelta").innerHTML=`<span class="${delta>=0?'delta-up':'delta-down'}">${delta>=0?"+":""}${pct(delta)}</span>`;
-  $("rubyTotal").textContent=fmt(last.total);
-  $("rubyEsc").textContent=fmt(last.escalations);
-  $("rubyPass").textContent=fmt(last.rubyPass);
-}
-
-/* ========== OBSERVATIONS ========== */
-function renderObservations(){
-  const c=$("obsContainer");
-  const k=DATA.kpi||{};
-  const snaps=DATA.ruby||[];
-  const lastRuby=snaps[snaps.length-1],firstRuby=snaps[0];
-  const runs=DATA.fullRuns||[];
-  const bestRun=runs.reduce((a,b)=>a.rate>b.rate?a:b,runs[0]||{});
-  const firstRun=runs[0]||{};
-  const catchDelta=lastRuby&&firstRuby?lastRuby.catch-firstRuby.catch:0;
-
-  // Compute tier insights
-  const tierAvgs=[];
-  for(let t=1;t<=DATA.maxTier;t++){
-    const vals=runs.map(r=>r.tiers[String(t)]).filter(td=>td).map(td=>(td.c+td.p*0.5)/td.n);
-    if(vals.length)tierAvgs.push({t,rate:vals.reduce((a,b)=>a+b,0)/vals.length});
-  }
-  const hardest=[...tierAvgs].sort((a,b)=>a.rate-b.rate)[0];
-  const easiest=[...tierAvgs].sort((a,b)=>b.rate-a.rate)[0];
-  const midRate=tierAvgs.reduce((a,b)=>a+b.rate,0)/tierAvgs.length;
-
-  // Competence insight
-  const comp=(lastRuby&&lastRuby.competence||[]).filter(c=>c.count>0).sort((a,b)=>b.rate-a.rate);
-  const bestCat=comp[0],worstCat=comp[comp.length-1];
-
-  const obs=[
-    {tag:"progress",tagColor:css("--green-soft"),tagText:css("--green"),date:"overall",
-     title:`Best run improved to ${pct(k.bestRate)} — a ${k.delta>=0?"+":""}${pct(k.delta)} swing from S${k.firstId}`,
-     body:`The strongest full-run result is session S${k.bestId} at ${pct(bestRun.rate||0)} strict (${bestRun.correct}/${bestRun.n} correct). Across ${k.sessions} sessions and ${k.graded} graded questions, the trend is positive. The weighted rate (counting partial credit as half) for the best run is ${pct(bestRun.weighted||0)}, suggesting many near-misses that closer scoring could convert.`,
-     data:[["Best strict",pct(bestRun.rate||0)],["Best weighted",pct(bestRun.weighted||0)],["Improvement",`${k.delta>=0?"+":""}${pct(k.delta)}`]]},
-
-    {tag:"verification",tagColor:css("--accent-soft"),tagText:css("--accent"),date:firstRuby.date+" → "+lastRuby.date,
-     title:`Verifier catch rate climbed from ${pct(firstRuby.catch)} to ${pct(lastRuby.catch)}`,
-     body:`The escalation-verification system improved dramatically over the trial. Starting at ${pct(firstRuby.catch)} catch rate on ${firstRuby.date}, it reached ${pct(lastRuby.catch)} by ${lastRuby.date} — a ${catchDelta>=0?"+":""}${pct(catchDelta)} improvement. This means the system became progressively better at catching Ruby's errors before they propagate. ${lastRuby.total} total tasks were processed by the latest snapshot, with ${lastRuby.escalations} escalated to the large model.`,
-     data:[["Start catch",pct(firstRuby.catch)],["Latest catch",pct(lastRuby.catch)],["Total tasks",fmt(lastRuby.total)],["Escalations",fmt(lastRuby.escalations)]]},
-
-    {tag:"difficulty",tagColor:css("--amber-soft"),tagText:css("--amber"),date:"tier analysis",
-     title:`Hardest tier is T${hardest.t} at ${pct(hardest.rate)}; easiest is T${easiest.t} at ${pct(easiest.rate)}`,
-     body:`Across all full runs, the average pass rate per tier varies enormously. The difficulty is not monotonic — some high-numbered tiers (like T${easiest.t}) are easier than low ones. This suggests tier number does not strictly map to hardness; question type and domain matter more. The mean tier pass rate is ${pct(midRate)}.`,
-     data:[["Hardest",`T${hardest.t} (${pct(hardest.rate)})`],["Easiest",`T${easiest.t} (${pct(easiest.rate)})`],["Mean",pct(midRate)]]},
-
-    {tag:"competence",tagColor:css("--red-soft"),tagText:css("--red"),date:"ruby snapshot",
-     title:`Ruby's best category is "${bestCat?bestCat.cat:"—"}" (${pct(bestCat?bestCat.rate:0)}); weakest is "${worstCat?worstCat.cat:"—"}" (${pct(worstCat?worstCat.rate:0)})`,
-     body:`The local model (gemma-archimedes-gen2) shows a clear competence split. It handles "${bestCat?bestCat.cat:"—"}" tasks best (${bestCat?bestCat.count:0} attempted) but nearly fails at "${worstCat?worstCat.cat:"—"}" (${pct(worstCat?worstCat.rate:0)} across ${worstCat?worstCat.count:0} tasks). This pattern — strong on knowledge recall, weak on multi-step implementation — is the core bottleneck the escalation system exists to compensate for.`,
-     data:comp.map(c=>[c.cat,`${pct(c.rate)} (${c.count} tasks)`])},
-
-    {tag:"infrastructure",tagColor:css("--border2"),tagText:css("--muted"),date:"2026-07-26",
-     title:`Trial was paused 2026-07-26 due to infrastructure, not model failure`,
-     body:`The pause was caused by two infrastructure issues: the systemd unit \`node-app.service\` ran with an empty environment so \`aura\` was not on \`PATH\`, and the AMD Radeon 680M iGPU serving the local model was unstable. Neither is a model or methodology failure. Benchmark testing restarted 2026-08-01, and session S8006 achieved the best result yet (${pct(0.575)}).`,
-     data:[["Pause date","2026-07-26"],["Restart","2026-08-01"],["Cause","infra, not model"],["Best post-restart",pct(0.575)]]},
-
-    {tag:"model evolution",tagColor:css("--accent-soft"),tagText:css("--accent"),date:"trial timeline",
-     title:`Model stack evolved: granite → GLM → DeepSeek Chat + Gemma fine-tune`,
-     body:`The trial's model configuration changed during its run. The local model moved from Granite 4.1 3B on CPU to a custom \`gemma-archimedes-gen2\` fine-tune (4.6B, Q4_K_M) served by Ollama on the AMD iGPU. The escalation target moved from GLM-5.2 to DeepSeek Chat. Early sessions with Granite (S2) scored 0% — the fine-tuned Gemma + DeepSeek escalation combination now achieves ${pct(bestRun.rate||0)}.`,
-     data:[["Original local","granite4.1:3b (CPU)"],["Current local","gemma-archimedes-gen2 (iGPU)"],["Escalation","deepseek-chat"],["S2 (granite)","0%"],[`S${bestRun.id} (current)`,pct(bestRun.rate||0)]]},
-  ];
-  c.innerHTML="";
-  obs.forEach(o=>{
-    const card=el("div","obs-card");
-    card.style.borderLeftColor=o.tagText;
-    let dataHtml=o.data.map(d=>`<span><b>${d[1]}</b> ${d[0]}</span>`).join("");
-    card.innerHTML=`
-      <div class="obs-head">
-        <span class="obs-tag" style="background:${o.tagColor};color:${o.tagText}">${o.tag.toUpperCase()}</span>
-        <span class="obs-date">${o.date}</span>
-      </div>
-      <h3>${o.title}</h3>
-      <p>${o.body}</p>
-      <div class="obs-data">${dataHtml}</div>`;
-    c.appendChild(card);
-  });
-}
-
-/* ========== TAB SYSTEM ========== */
-let currentView="overview";
-function switchView(view){
-  currentView=view;
-  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.view===view));
-  document.querySelectorAll(".tabview").forEach(v=>v.classList.toggle("active",v.id==="view-"+view));
-  // lazy-render
-  if(view==="timeline"&&!simDates.length)initTimeline();
-  if(view==="timeline"&&simDates.length)updateTimelineView();
-  if(view==="tiers")renderDifficultySmooth();
-  if(view==="heatmap")renderHeatmap();
-  if(view==="ruby")renderRubyStats();
-  if(view==="observations")renderObservations();
-}
-
-/* ========== WIRING & INIT ========== */
+/* ---------- wiring ---------- */
 function populateAddRun(){
   const sel=$("addRun");sel.innerHTML="";
   DATA.sessions.forEach(s=>{const o=el("option");o.value=s.id;o.textContent=`S${s.id} · ${s.date} · ${pct(s.rate)}${s.full?" (full)":""}`;sel.appendChild(o);});
   sel.onchange=()=>{selected.add(parseInt(sel.value));renderChips();renderOverlay();renderOverlayLegend();};
 }
-function rerender(){
-  renderHero();renderKPIs();renderComparison();renderTrend();renderOverlay();renderDifficultySmooth();renderHardnessSorted();renderCompetence();renderCatch();renderEscVolume();renderBandBars();renderTable();renderRubyStats();renderObservations();
-  if(currentView==="timeline"&&simDates.length)updateTimelineView();
-  if(currentView==="heatmap")renderHeatmap();
-}
+function rerender(){renderTrend();renderOverlay();renderDifficulty();renderCompetence();renderCatch();}
 function init(){
-  initTheme();renderHero();renderKPIs();initComparison();
+  initTheme();renderKPIs();
   seedDefault();
-  document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>switchView(t.dataset.view));
   $("allFull").onclick=()=>{seedDefault();renderChips();renderOverlay();renderOverlayLegend();};
   $("latest12").onclick=()=>{selected=new Set(DATA.sessions.slice(-12).map(s=>s.id));renderChips();renderOverlay();renderOverlayLegend();};
   $("clearAll").onclick=()=>{selected.clear();renderChips();renderOverlay();renderOverlayLegend();};
   $("search").oninput=(e)=>{filter=e.target.value;renderTable();};
-  document.querySelectorAll("[data-smooth]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-smooth]").forEach(x=>x.classList.remove("active"));b.classList.add("active");smoothMode=b.dataset.smooth;renderDifficultySmooth();});
   populateAddRun();renderChips();renderOverlayLegend();
-  renderTrend();renderOverlay();renderCatch();
+  rerender();renderTable();
 }
 init();
 </script>
