@@ -382,6 +382,7 @@ def run_benchmark(session_number: int, tier=None, question_id=None, zero_memory=
     results = {
         "session": session_number,
         "model": MODEL,
+        "archimedes": _archimedes_model(),
         "zero_memory": zero_memory,
         "timestamp": datetime.utcnow().isoformat(),
         "questions": [],
