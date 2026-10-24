@@ -980,6 +980,28 @@
     "avg_seconds": 70.92
   },
   {
+    "file": "session_11010.json",
+    "session": 11010,
+    "timestamp": "2026-10-24T03:08:39.266410",
+    "total": 32,
+    "correct": 16,
+    "partial": 13,
+    "pass_rate": 0.5,
+    "tier4_score": "0/0",
+    "avg_seconds": 29.32
+  },
+  {
+    "file": "session_11011.json",
+    "session": 11011,
+    "timestamp": "2026-10-24T03:24:40.405464",
+    "total": 32,
+    "correct": 14,
+    "partial": 17,
+    "pass_rate": 0.438,
+    "tier4_score": "0/0",
+    "avg_seconds": 78.41
+  },
+  {
     "file": "session_99001.json",
     "session": 99001,
     "timestamp": "2026-08-26T03:40:01.511555",

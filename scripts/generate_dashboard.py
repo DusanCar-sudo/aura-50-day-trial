@@ -149,6 +149,8 @@ SAMPLE_NOTES = {
     11007: "broken setup: source code outside the project folder",
     11008: "clean setup",
     11009: "stopped at 21/32: machine ran out of memory",
+    11010: "LFM 2.5 1.2B: fast, but its own answers were nearly all rejected",
+    11011: "granite 4.1 3B xLAM function-calling: no local answer accepted",
 }
 
 
