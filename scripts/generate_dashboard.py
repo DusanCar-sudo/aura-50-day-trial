@@ -417,7 +417,7 @@ footer code{color:var(--muted)}
   </section>
 
   <section class="cell c8">
-    <h3>Full-run pass rate <small>apples-to-apples · 320 questions</small></h3>
+    <h3>Full-run pass rate <small>apples-to-apples · 320 questions · dashed = projected from 32-question sample</small></h3>
     <div style="position:relative"><svg id="trend" viewBox="0 0 1000 320" style="width:100%;height:auto"></svg></div>
   </section>
 
@@ -588,8 +588,9 @@ function renderKPIs(){
 function renderTrend(){
   const svg=$("trend"),runs=DATA.fullRuns||[];
   if(runs.length<2)return;
-  const f=frame(svg,[1000,320],50,26,22,44,0,100,[0,25,50,75,100]);
-  const pts=runs.map((r,i)=>[fx(f,i,runs.length),fy(f,r.rate*100)]);
+  const proj=[...(DATA.projections||[])].sort((a,b)=>a.id-b.id),N=runs.length+proj.length;
+  const f=frame(svg,[1000,320],50,proj.length?70:26,22,44,0,100,[0,25,50,75,100]);
+  const pts=runs.map((r,i)=>[fx(f,i,N),fy(f,r.rate*100)]);
   const d=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
   const area=E("path");area.setAttribute("d",d+` L ${pts[pts.length-1][0]} ${fy(f,0)} L ${pts[0][0]} ${fy(f,0)} Z`);
   area.setAttribute("fill",css("--acc"));area.setAttribute("fill-opacity",".08");f.g.appendChild(area);
@@ -607,6 +608,23 @@ function renderTrend(){
     lab.setAttribute("fill",rateColor(r.rate));lab.style.fontWeight="700";f.g.appendChild(lab);
     const xl=E("text","tick","S"+r.id);xl.setAttribute("x",x);xl.setAttribute("y",f.H-26);xl.setAttribute("text-anchor","middle");f.g.appendChild(xl);
     const dl=E("text","tick",r.date.slice(5));dl.setAttribute("x",x);dl.setAttribute("y",f.H-12);dl.setAttribute("text-anchor","middle");f.g.appendChild(dl);
+  });
+  // sample runs: projected to 320, drawn apart from measured full runs with their ±95% margin
+  proj.forEach((r,j)=>{
+    const rate=r.projected/100,x=fx(f,runs.length+j,N),y=fy(f,r.projected),col=rateColor(rate);
+    const bar=E("line");bar.setAttribute("x1",x);bar.setAttribute("x2",x);
+    bar.setAttribute("y1",fy(f,Math.min(100,r.projected+r.margin)));bar.setAttribute("y2",fy(f,Math.max(0,r.projected-r.margin)));
+    bar.setAttribute("stroke",col);bar.setAttribute("stroke-opacity",".35");bar.setAttribute("stroke-width","2");f.g.appendChild(bar);
+    const c=E("circle");c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r",4);
+    c.setAttribute("fill",css("--surface"));c.setAttribute("stroke",col);c.setAttribute("stroke-width","1.6");c.setAttribute("stroke-dasharray","2 2");
+    c.style.cursor="pointer";
+    c.addEventListener("mouseenter",e=>{tipShow(`S${r.id} · ${r.date} · ${esc(r.arch)}<br>projected ${r.projected}% ±${r.margin} (~${r.of320}/320)<br>from ${r.answered}/${r.planned} sample questions${r.note?"<br>"+esc(r.note):""}`,e);});
+    c.addEventListener("mousemove",tipMove);c.addEventListener("mouseleave",tipHide);
+    f.g.appendChild(c);
+    const lab=E("text","axl","≈"+r.projected.toFixed(1)+"%");lab.setAttribute("x",x+8);lab.setAttribute("y",y+4);lab.setAttribute("text-anchor","start");
+    lab.setAttribute("fill",col);lab.style.fontWeight="700";f.g.appendChild(lab);
+    const xl=E("text","tick","S"+r.id);xl.setAttribute("x",x);xl.setAttribute("y",f.H-26);xl.setAttribute("text-anchor","middle");f.g.appendChild(xl);
+    const dl=E("text","tick",r.arch.replace(/^lfm2\.5-/,"lfm ").replace(/^meta-llama-3\.1-8b.*/,"llama 8b").replace(/^granite-xlam-/,"granite ").slice(0,10));dl.setAttribute("x",x);dl.setAttribute("y",f.H-12);dl.setAttribute("text-anchor","middle");f.g.appendChild(dl);
   });
 }
 
