@@ -224,7 +224,8 @@ def load_questions(tier=None, question_id=None):
         tiers = [int(t.strip()) for t in str(tier).split(",") if t.strip()]
         questions = [q for q in questions if q["tier"] in tiers]
     if question_id:
-        questions = [q for q in questions if q["id"] == question_id]
+        ids = {i.strip() for i in str(question_id).split(",")}
+        questions = [q for q in questions if q["id"] in ids]
     return questions
 
 
@@ -502,7 +503,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--session", type=int, required=True)
     ap.add_argument("--tier", default=None, help="Tier number or comma list, e.g. 3,4")
-    ap.add_argument("--question", default=None)
+    ap.add_argument("--question", default=None, help="Question id or comma list, e.g. t4-01,t30-02")
     ap.add_argument("--zero-memory", action="store_true", help="Use --new-session to force Aura to ignore accumulated memory (Session 0 baseline)")
     ap.add_argument("--trace", action="store_true", help="Log PTY bytes/sec windows (stall detection with /proc dumps is always on)")
     ap.add_argument("--resume", action="store_true", help="Skip questions already answered in results/session_NNN.json (finished an interrupted run)")

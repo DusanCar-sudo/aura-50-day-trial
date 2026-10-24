@@ -1,0 +1,541 @@
+{
+  "session": 11005,
+  "source": "answers_aura.json (interactive Aura, not runner)",
+  "questions": [
+    {
+      "id": "t1-03",
+      "tier": 1,
+      "answer": "process.execPath returns the absolute path of the Node.js executable that is running the current process (e.g. /usr/bin/node or a version-manager path). Its purpose: (1) identify the exact Node binary in use, (2) reliably spawn/fork child Node processes with the same runtime via child_process.spawn(process.execPath, [...]), guaranteeing version consistency instead of hardcoding a path.",
+      "score": {
+        "verdict": "partial",
+        "hits": [
+          "path to node binary"
+        ],
+        "missed": [
+          "not cwd",
+          "spawn subprocess"
+        ],
+        "score": 0.33
+      }
+    },
+    {
+      "id": "t2-01",
+      "tier": 2,
+      "answer": "Check the service's logs and exit reason first, because a 30s restart loop usually means the unit is configured with Restart=on-failure (or always) and the process keeps exiting non-zero. Run `journalctl -u <unit> --since \"10 min ago\" -n 200` (and `-p err`) to see the crash trace, and verify the exit code/status. Next look for the most common causes: unhandled exception / failed startup, missing env vars or config, or OOM (systemd OOM kill). If the app starts then dies every time, the restart interval you observe is just systemd's RestartSec - the root cause is the crash itself.",
+      "score": {
+        "verdict": "partial",
+        "hits": [
+          "journalctl -u",
+          "exit code"
+        ],
+        "missed": [
+          "ExecStart",
+          "Restart= policy"
+        ],
+        "score": 0.5
+      }
+    },
+    {
+      "id": "t5-08",
+      "tier": 5,
+      "answer": "When Ollama's /api/tags returns an empty model list, the Alternator cannot resolve its configured small model. It handles this gracefully rather than crashing: it treats the backend as unavailable, skips the Archimedes attempt (attemptBlocked = 'unavailable'), escalates the task to the large model, and shows the user a warning explaining that the Archimedes model could not be found and that the task ran on the large model instead, usually with a hint to install/pull the model (e.g. `ollama pull <model>`).",
+      "score": {
+        "verdict": "partial",
+        "hits": [
+          "warning",
+          "ollama pull"
+        ],
+        "missed": [
+          "null config",
+          "fallback to large model"
+        ],
+        "score": 0.5
+      }
+    },
+    {
+      "id": "t6-02",
+      "tier": 6,
+      "answer": "The first compaction level triggers at 55% of the context window - the first rung of the trigger ladder ([0.55, 0.70, 0.85]), i.e. ~70k of a 128k window (compact @ 55% (70k)). At that threshold it keeps the most recent messages verbatim (a 'retention budget' tail) and summarizes the older history into a compact recap; oversized tool results are truncated rather than dropped. Higher generations (after repeat compactions) fire at 70% then 85%.",
+      "score": {
+        "verdict": "partial",
+        "hits": [
+          "0.55",
+          "tail"
+        ],
+        "missed": [
+          "first message",
+          "40%",
+          "summarizes middle"
+        ],
+        "score": 0.4
+      }
+    },
+    {
+      "id": "t7-03",
+      "tier": 7,
+      "answer": "Aura should NOT store the credentials in the config file. Credentials are secrets; writing them to a plaintext config on disk (which may be committed, read, or exposed) is unsafe. Aura should decline to persist them, warn the user that secrets should not be stored in config, and at most keep them only in memory for the current session (and never write them into episodes/logs/config). This is the safety-appropriate behavior.",
+      "score": {
+        "verdict": "correct",
+        "hits": [
+          "credentials",
+          "warn",
+          "not store plaintext"
+        ],
+        "missed": [
+          "sensitive"
+        ],
+        "score": 0.75
+      }
+    },
+    {
+      "id": "t8-06",
+      "tier": 8,
+      "answer": "The pattern shows the prompt cache warming: turn 1 has little cached (1280 tokens) because the shared prompt prefix is being seen for the first time; by turn 4 the same stable prefix is now cached, so cached tokens jump to 7680 (nearly all of the 7717 input), leaving only a small uncovered tail (the new per-turn content). So caching grows as the identical system/prompt prefix repeats across turns, and each turn reuses the cached prefix. By turn 10, the whole stable prefix would be cached: expect input to stay roughly stable (~7.7k) with cached \u2248 input minus the small new-turn delta (i.e. cached ~7600+ and a tiny miss), so effective cost drops to just the new/uncached tokens.",
+      "score": {
+        "verdict": "incorrect",
+        "hits": [],
+        "missed": [
+          "cache warms",
+          "hit rate increases",
+          "cold start",
+          "near 100% by later turns"
+        ],
+        "score": 0.0
+      }
+    },
+    {
+      "id": "t9-03",
+      "tier": 9,
+      "answer": "Aura should warn and continue text-only. Silently dropping the image loses user data without feedback; throwing a hard error blocks the whole task unnecessarily. The right behavior is to warn the user that the selected model doesn't support vision, and proceed with the text content only (while noting the image was ignored), so the task can still complete and the user is informed.",
+      "score": {
+        "verdict": "partial",
+        "hits": [
+          "warn and continue"
+        ],
+        "missed": [
+          "silent data loss",
+          "hard crash",
+          "model capability"
+        ],
+        "score": 0.25
+      }
+    },
+    {
+      "id": "t11-05",
+      "tier": 11,
+      "answer": "The stored episode filename is `${id}.json` (e.g. an episode with id 'abc-123' is saved as 'abc-123.json'). The episodePath method builds path.join(projectDir(projectRoot), `${id}.json`), so episodes live under ~/.aura/episodes/{projectHash}/{id}.json.",
+      "score": {
+        "verdict": "correct",
+        "hits": [
+          "id",
+          "json",
+          "episodePath",
+          "filename"
+        ],
+        "missed": [],
+        "score": 1.0
+      }
+    },
+    {
+      "id": "t14-03",
+      "tier": 14,
+      "answer": "The valid TaskCategory values (types.ts) are: 'research' | 'implementation' | 'review' | 'refactor' | 'other'. The alternator maps a task via inferTaskCategory(task): it applies regex patterns in this order - review/audit/lint/check \u2192 'review'; research/explore/find/investigate/understand \u2192 'research'; refactor/restructure/rename/migrate \u2192 'refactor'; implement/fix/add/write/create/build/update \u2192 'implementation'; and any non-match falls back to 'other'.",
+      "score": {
+        "verdict": "correct",
+        "hits": [
+          "research",
+          "implementation",
+          "review",
+          "refactor",
+          "other",
+          "inferTaskCategory"
+        ],
+        "missed": [],
+        "score": 1.0
+      }
+    },
+    {
+      "id": "t15-05",
+      "tier": 15,
+      "answer": "The final Episode object is saved by episodeStore.saveEpisode(projectRoot, episode), which computes the target path and writes it as JSON. The write is atomic: it writes to `${filePath}.tmp` then renames (fs.rename) over the final `${projectHash}/${id}.json` path. If the write fails, the alternator catches the error and just logs a warning ('Failed to save episode: ...') and continues - a failed episode write never fails the task it is measuring (best-effort). (Learning capture is also skipped entirely if the project config sets learning.exclude.)",
+      "score": {
+        "verdict": "correct",
+        "hits": [
+          "saveEpisode",
+          "projectRoot",
+          "warning"
+        ],
+        "missed": [
+          "not throw"
+        ],
+        "score": 0.75
+      }
+    },
+    {
+      "id": "t17-01",
+      "tier": 17,
+      "answer": "episodeStore namespaces episodes per project using a projectHash. projectHash(projectRoot) returns the first 16 hex characters of the SHA-256 digest of the projectRoot path. Episodes are then stored under ~/.aura/episodes/{projectHash}/{id}.json. Using a content hash of the root path gives a stable, collision-resistant per-project namespace (unlike a legacy base64-prefix scheme that made all /mnt/bigdata/... projects collide).",
+      "score": {
+        "verdict": "correct",
+        "hits": [
+          "projectRoot",
+          "base64",
+          "prefix",
+          "namespace",
+          "hash"
+        ],
+        "missed": [],
+        "score": 1.0
+      }
+    },
+    {
+      "id": "t18-04",
+      "tier": 18,
+      "answer": "checkJobStatus branches on job type. For an Ollama model-creation job it polls Ollama's job API (the create/pull operation), reading the running progress/status stream and treating it as done when the create completes with a success status (or when the resulting model becomes available). For an OpenAI fine-tuning job it polls the OpenAI fine-tuning endpoint (GET /v1/fine_tuning/jobs/{id}) and reads the job's `status` field (queued/running/succeeded/failed) through to a terminal state.",
+      "score": {
+        "verdict": "partial",
+        "hits": [
+          "status"
+        ],
+        "missed": [
+          "/api/tags",
+          "fineTuning.jobs.retrieve"
+        ],
+        "score": 0.33
+      }
+    },
+    {
+      "id": "t20-02",
+      "tier": 20,
+      "answer": "safeConfig sanitizes every numeric/ratio config value and falls back to defaults on invalid input. It uses clamp01(n) (returns 0 if not finite, else clamps to [0,1]) for competenceThreshold and epsilonProbeRate; Math.max(0, ...) for minAttempts; Math.max(1, ...) for deadlineMs; and falls back to DEFAULT_ARCHIMEDES_CONFIG for missing/undefined values. String fields (modelName, base URLs, backend, verifierModel) pass through unchanged so they are not accidentally dropped.",
+      "score": {
+        "verdict": "correct",
+        "hits": [
+          "clamp01",
+          "Math.max",
+          "safeConfig",
+          "default"
+        ],
+        "missed": [],
+        "score": 1.0
+      }
+    },
+    {
+      "id": "t21-04",
+      "tier": 21,
+      "answer": "verifyArchimedesAnswer is fail-safe: the whole LLM verifier call is wrapped in try/catch. If the call throws, it catches the error and returns { verdict: 'unreachable', reason: '', error: String(e) } - it never throws/rejects. The 'unreachable' verdict means verification could not judge the answer (it is not a pass or a fail), and the alternator treats it as an escalation condition rather than a crash. Counting is truncated to the verifier's own usage when present, else the session estimator.",
+      "score": {
+        "verdict": "partial",
+        "hits": [
+          "verification error"
+        ],
+        "missed": [
+          "valid: false",
+          "escalate",
+          "not trust"
+        ],
+        "score": 0.25
+      }
+    },
+    {
+      "id": "t22-03",
+      "tier": 22,
+      "answer": "The Epsilon probe check is skipped entirely when (1) the competence gate did NOT fire - i.e. decision.useArchimedes is already true (the pattern is in its minAttempts learning phase or its score is above the threshold, so Archimedes is already being used and no probe is needed) - or (2) archimedesConfig.enabled is false. The die is only rolled when the gate actually fired and Archimedes is enabled: `if (!decision.useArchimedes && archimedesConfig.enabled && Math.random() < epsilonProbeRate)`.",
+      "score": {
+        "verdict": "correct",
+        "hits": [
+          "enabled",
+          "minAttempts",
+          "learning phase"
+        ],
+        "missed": [
+          "already routed"
+        ],
+        "score": 0.75
+      }
+    },
+    {
+      "id": "t24-02",
+      "tier": 24,
+      "answer": ":archoff disables the Archimedes Alternator for the current TUI session. It sets a session-level override (newArchimedesOverride: false) that overrides the project's .aura.json archimedes.enabled setting until :archon is given or the session/process restarts. It prints a confirmation like 'Archimedes Alternator: OFF for this session (overrides .aura.json until :archon or restart).'",
+      "score": {
+        "verdict": "correct",
+        "hits": [
+          ":archoff",
+          "disable",
+          "override"
+        ],
+        "missed": [
+          "force"
+        ],
+        "score": 0.75
+      }
+    },
+    {
+      "id": "t26-05",
+      "tier": 26,
+      "answer": "checkOllamaJobStatus decides success by verifying that the specialized model actually exists after the create job finishes: it re-lists Ollama's installed models and confirms the resulting outputModel tag is present (the create/poll completed without error). It maps that to the job lifecycle - the job becomes 'completed' only when the model shows up; otherwise it stays pending/running, and a non-zero/failing create marks it 'failed' with an error message.",
+      "score": {
+        "verdict": "correct",
+        "hits": [
+          "exists",
+          "outputModel"
+        ],
+        "missed": [
+          "/api/tags"
+        ],
+        "score": 0.67
+      }
+    },
+    {
+      "id": "t27-02",
+      "tier": 27,
+      "answer": "When uploading the training file to OpenAI for fine-tuning, the purpose string specified is \"fine-tune\" (the Files API `purpose` field for fine-tuning training files).",
+      "score": {
+        "verdict": "partial",
+        "hits": [
+          "fine-tune"
+        ],
+        "missed": [
+          "files.create"
+        ],
+        "score": 0.5
+      }
+    },
+    {
+      "id": "t28-05",
+      "tier": 28,
+      "answer": "RETENTION_RATIO controls the verbatim tail budget - what fraction of the context window is kept intact (not compacted/summarized) at the end of a compaction pass, so the tail is capped relative to the trigger. Its value is 0.40 (retentionBudget = min(floor(window * 0.40), floor(trigger * MAX_RETENTION_OF_TRIGGER))).",
+      "score": {
+        "verdict": "correct",
+        "hits": [
+          "RETENTION_RATIO",
+          "verbatim",
+          "compaction",
+          "window"
+        ],
+        "missed": [
+          "recent history"
+        ],
+        "score": 0.8
+      }
+    },
+    {
+      "id": "t32-04",
+      "tier": 32,
+      "answer": "TypeScript:\n```ts\ntype Handler = (...args: unknown[]) => void;\nclass EventEmitter {\n  private handlers = new Map<string, Set<Handler>>();\n  on(event: string, fn: Handler) {\n    if (!this.handlers.has(event)) this.handlers.set(event, new Set());\n    this.handlers.get(event)!.add(fn);\n  }\n  off(event: string, fn: Handler) { this.handlers.get(event)?.delete(fn); }\n  emit(event: string, ...args: unknown[]) {\n    this.handlers.get(event)?.forEach(fn => fn(...args));\n  }\n}\n```\nPython:\n```python\nclass EventEmitter:\n    def __init__(self):\n        self._handlers = {}\n    def on(self, event, fn):\n        self._handlers.setdefault(event, set()).add(fn)\n    def off(self, event, fn):\n        self._handlers.get(event, set()).discard(fn)\n    def emit(self, event, *args):\n        for fn in list(self._handlers.get(event, ())):\n            fn(*args)\n```",
+      "score": {
+        "verdict": "partial",
+        "hits": [
+          "on off emit"
+        ],
+        "missed": [
+          "subscribe unsubscribe",
+          "event name",
+          "callback list"
+        ],
+        "score": 0.25
+      }
+    },
+    {
+      "id": "t33-05",
+      "tier": 33,
+      "answer": "Validation is deliberately simple (one @ before last dot, non-empty local, allowed chars).\nBash:\n```bash\nis_valid_email() { [[ \"$1\" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$ ]]; }\n```\nPython:\n```python\nimport re\nRE = re.compile(r'^[\\w.+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$')\ndef valid(email): return bool(RE.match(email))\n```\nTypeScript:\n```ts\nexport const EMAIL_RE = /^[\\w.+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$/;\nexport const valid = (e: string): boolean => EMAIL_RE.test(e);\n```\nGo:\n```go\nimport \"regexp\"\nvar emailRE = regexp.MustCompile(`^[\\w.+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$`)\nfunc Valid(email string) bool { return emailRE.MatchString(email) }\n```\nRust:\n```rust\nfn valid(email: &str) -> bool {\n    let re = regex::Regex::new(r\"^[\\w.+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$\").unwrap();\n    re.is_match(email)\n}\n```",
+      "score": {
+        "verdict": "partial",
+        "hits": [
+          "email regex"
+        ],
+        "missed": [
+          "@ sign",
+          "domain part",
+          "validate format"
+        ],
+        "score": 0.25
+      }
+    },
+    {
+      "id": "t34-04",
+      "tier": 34,
+      "answer": "TypeScript:\n```ts\nexport class Semaphore {\n  private slots: number;\n  private waiters: Array<() => void> = [];\n  constructor(readonly capacity: number) { this.slots = capacity; }\n  async acquire(): Promise<void> {\n    if (this.slots > 0) { this.slots--; return; }\n    await new Promise<void>(resolve => this.waiters.push(resolve));\n  }\n  release(): void {\n    const next = this.waiters.shift();\n    if (next) next(); else this.slots++;\n  }\n}\n```\nPython:\n```python\nimport asyncio\nclass Semaphore:\n    def __init__(self, capacity):\n        self.capacity = capacity\n        self.slots = capacity\n        self.waiters = asyncio.Queue()\n    async def acquire(self):\n        if self.slots > 0:\n            self.slots -= 1\n        else:\n            future = asyncio.get_event_loop().create_future()\n            await self.waiters.put(future)\n            await future\n    def release(self):\n        if not self.waiters.empty():\n            future = self.waiters.get_nowait()\n            future.set_result(None)\n        else:\n            self.slots += 1\n```\nGo:\n```go\nimport \"sync\"\ntype Semaphore struct { ch chan struct{} }\nfunc New(n int) *Semaphore { return &Semaphore{ch: make(chan struct{}, n)} }\nfunc (s *Semaphore) Acquire() { s.ch <- struct{}{} }\nfunc (s *Semaphore) Release() { <-s.ch }\n// with context/select for non-blocking variants; sync.WaitGroup is not a semaphore.\n```",
+      "score": {
+        "verdict": "correct",
+        "hits": [
+          "semaphore",
+          "acquire release",
+          "N slots"
+        ],
+        "missed": [
+          "limit concurrent"
+        ],
+        "score": 0.75
+      }
+    },
+    {
+      "id": "t36-01",
+      "tier": 36,
+      "answer": "TypeScript:\n```ts\nexport async function get(url: string, timeoutMs = 5000): Promise<string> {\n  const res = await fetch(url, { signal: AbortSignal.timeout(timeoutMs) });\n  if (!res.ok) throw new Error(`HTTP ${res.status}`);\n  return res.text();\n}\n```\nPython:\n```python\nimport requests\ndef get(url, timeout=5):\n    r = requests.get(url, timeout=timeout)\n    r.raise_for_status()\n    return r.text\n```\nGo:\n```go\nimport (\"io\"; \"net/http\"; \"time\")\nfunc Get(url string, timeout time.Duration) (string, error) {\n    client := &http.Client{Timeout: timeout}\n    resp, err := client.Get(url)\n    if err != nil { return \"\", err }\n    defer resp.Body.Close()\n    b, err := io.ReadAll(resp.Body)\n    return string(b), err\n}\n```\nRust:\n```rust\nasync fn get(url: &str, timeout: std::time::Duration) -> Result<String, reqwest::Error> {\n    let client = reqwest::Client::builder().timeout(timeout).build()?;\n    Ok(client.get(url).send().await?.text().await?)\n}\n```\nBash:\n```bash\ncurl --max-time 5 -fsS \"$1\"\n```",
+      "score": {
+        "verdict": "correct",
+        "hits": [
+          "HTTP GET",
+          "timeout",
+          "string"
+        ],
+        "missed": [
+          "response body"
+        ],
+        "score": 0.75
+      }
+    },
+    {
+      "id": "t38-03",
+      "tier": 38,
+      "answer": "TypeScript:\n```ts\nexport function progressBar(current: number, total: number) {\n  const pct = Math.floor((current / total) * 100);\n  const width = 40, filled = Math.floor((current / total) * width);\n  const bar = '#'.repeat(filled) + '-'.repeat(width - filled);\n  process.stdout.write(`\\r[${bar}] ${pct}%`);\n  if (current >= total) process.stdout.write('\\n');\n}\n```\nPython:\n```python\nimport sys\ndef progress(current, total):\n    pct = current * 100 // total\n    filled = current * 40 // total\n    bar = '#' * filled + '-' * (40 - filled)\n    sys.stdout.write(f'\\r[{bar}] {pct}%')\n    sys.stdout.flush()\n    if current >= total: print()\n```\nGo:\n```go\nimport \"fmt\"\nfunc Progress(current, total int) {\n    pct := current * 100 / total\n    filled := current * 40 / total\n    bar := strings.Repeat(\"#\", filled) + strings.Repeat(\"-\", 40-filled)\n    fmt.Printf(\"\\r[%s] %d%%\", bar, pct)\n    if current >= total { fmt.Println() }\n}\n```",
+      "score": {
+        "verdict": "partial",
+        "hits": [
+          "progress bar"
+        ],
+        "missed": [
+          "carriage return",
+          "single line",
+          "percentage"
+        ],
+        "score": 0.25
+      }
+    },
+    {
+      "id": "t43-01",
+      "tier": 43,
+      "answer": "TypeScript:\n```ts\nexport function diffJson(a: any, b: any) {\n  const added: string[] = [], removed: string[] = [], modified: string[] = [];\n  const keys = new Set([...Object.keys(a), ...Object.keys(b)]);\n  for (const k of keys) {\n    if (!(k in a)) added.push(k);\n    else if (!(k in b)) removed.push(k);\n    else if (JSON.stringify(a[k]) !== JSON.stringify(b[k])) modified.push(k);\n  }\n  return { added, removed, modified };\n}\n```\nPython:\n```python\ndef diff_json(a, b):\n    added, removed, modified = [], [], []\n    for k in set(a) | set(b):\n        if k not in a: added.append(k)\n        elif k not in b: removed.append(k)\n        elif a[k] != b[k]: modified.append(k)\n    return {'added': added, 'removed': removed, 'modified': modified}\n```\nGo:\n```go\nfunc DiffJSON(a, b map[string]any) (added, removed, modified []string) {\n    for k := range b { if _, ok := a[k]; !ok { added = append(added, k) } }\n    for k := range a { if _, ok := b[k]; !ok { removed = append(removed, k) } }\n    for k := range a {\n        if _, ok := b[k]; ok && fmt.Sprint(a[k]) != fmt.Sprint(b[k]) {\n            modified = append(modified, k)\n        }\n    }\n    return\n}\n```",
+      "score": {
+        "verdict": "partial",
+        "hits": [
+          "added removed modified"
+        ],
+        "missed": [
+          "JSON diff",
+          "recursive",
+          "path to change"
+        ],
+        "score": 0.25
+      }
+    },
+    {
+      "id": "t44-05",
+      "tier": 44,
+      "answer": "TypeScript:\n```ts\nimport { createHash } from 'crypto';\nexport function generateApiKey(prefix = 'ak'): string {\n  const raw = `${prefix}_${createHash('sha256').update(String(Math.random())).digest('hex').slice(0, 32)}`;\n  return `${raw}${checksum(raw)}`;\n}\nexport function checksum(s: string): string {\n  let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h.toString(36);\n}\nexport function validateApiKey(key: string, prefix = 'ak'): boolean {\n  if (!key.startsWith(prefix + '_')) return false;\n  const body = key.slice(prefix.length + 1); const cs = body.slice(-4);\n  return checksum(body.slice(0, -4)) === cs;\n}\n```\nPython:\n```python\nimport hashlib, random\n\ndef checksum(s):\n    h = 0\n    for ch in s: h = (h * 31 + ord(ch)) & 0xffffffff\n    return format(h, 'x')[-4:]\n\ndef generate_api_key(prefix='ak'):\n    raw = f'{prefix}_' + hashlib.sha256(str(random.random()).encode()).hexdigest()[:32]\n    return raw + checksum(raw)\n\ndef validate_api_key(key, prefix='ak'):\n    if not key.startswith(prefix + '_'): return False\n    body = key[len(prefix)+1:]\n    return checksum(body[:-4]) == body[-4:]\n```",
+      "score": {
+        "verdict": "partial",
+        "hits": [
+          "prefix",
+          "checksum"
+        ],
+        "missed": [
+          "API key",
+          "validate format"
+        ],
+        "score": 0.5
+      }
+    },
+    {
+      "id": "t46-05",
+      "tier": 46,
+      "answer": "TypeScript:\n```ts\nclass Computer {\n  constructor(public cpu: string, public ram: number, public gpu?: string) {}\n}\nclass ComputerBuilder {\n  private cpu = 'i5'; private ram = 8; private gpu?: string;\n  withCpu(c: string) { this.cpu = c; return this; }\n  withRam(r: number) { this.ram = r; return this; }\n  withGpu(g: string) { this.gpu = g; return this; }\n  build() { return new Computer(this.cpu, this.ram, this.gpu); }\n}\nconst pc = new ComputerBuilder().withCpu('i9').withRam(32).build();\n```\nPython:\n```python\nclass Computer:\n    def __init__(self, cpu, ram, gpu=None):\n        self.cpu, self.ram, self.gpu = cpu, ram, gpu\nclass ComputerBuilder:\n    def __init__(self):\n        self.cpu, self.ram, self.gpu = 'i5', 8, None\n    def with_cpu(self, c): self.cpu = c; return self\n    def with_ram(self, r): self.ram = r; return self\n    def with_gpu(self, g): self.gpu = g; return self\n    def build(self): return Computer(self.cpu, self.ram, self.gpu)\npc = ComputerBuilder().with_cpu('i9').with_ram(32).build()\n```\nGo:\n```go\ntype Computer struct { CPU string; RAM int; GPU string }\ntype Builder struct { cpu string; ram int; gpu string }\nfunc NewBuilder() *Builder { return &Builder{cpu: \"i5\", ram: 8} }\nfunc (b *Builder) WithCPU(c string) *Builder { b.cpu = c; return b }\nfunc (b *Builder) WithRAM(r int) *Builder { b.ram = r; return b }\nfunc (b *Builder) WithGPU(g string) *Builder { b.gpu = g; return b }\nfunc (b *Builder) Build() Computer { return Computer{b.cpu, b.ram, b.gpu} }\n```",
+      "score": {
+        "verdict": "incorrect",
+        "hits": [],
+        "missed": [
+          "builder pattern",
+          "step by step",
+          "fluent interface",
+          "build method"
+        ],
+        "score": 0.0
+      }
+    },
+    {
+      "id": "t47-02",
+      "tier": 47,
+      "answer": "TypeScript:\n```ts\nexport function traced<T extends (...args: any[]) => any>(fn: T): T {\n  return ((...args: any[]) => {\n    const t0 = performance.now();\n    const r = fn(...args);\n    console.log(`${fn.name} took ${performance.now() - t0}ms`);\n    return r;\n  }) as T;\n}\n```\nPython:\n```python\nimport time, functools\ndef traced(fn):\n    @functools.wraps(fn)\n    def wrapper(*args, **kwargs):\n        t0 = time.perf_counter()\n        result = fn(*args, **kwargs)\n        print(f'{fn.__name__} took {(time.perf_counter()-t0)*1000:.2f}ms')\n        return result\n    return wrapper\n```\nGo:\n```go\nfunc Trace(fn func()) {\n    start := time.Now()\n    fn()\n    fmt.Printf(\"took %v\\n\", time.Since(start))\n}\n```\nRust:\n```rust\nuse std::time::Instant;\nfn traced(f: impl FnOnce()) {\n    let t = Instant::now();\n    f();\n    println!(\"took {:?}\", t.elapsed());\n}\n```",
+      "score": {
+        "verdict": "partial",
+        "hits": [
+          "trace"
+        ],
+        "missed": [
+          "execution time",
+          "decorator or wrapper",
+          "log duration"
+        ],
+        "score": 0.25
+      }
+    },
+    {
+      "id": "t53-03",
+      "tier": 53,
+      "answer": "TypeScript (isomorphic-git):\n```ts\nimport * as git from 'isomorphic-git'; import http from 'isomorphic-git/http/node';\nawait git.clone({ fs, http, dir, url: 'https://github.com/you/repo.git' });\nawait git.add({ fs, dir, filepath: '.' });\nawait git.commit({ fs, dir, message: 'update', author: { name: 'You', email: 'you@x.com' } });\nawait git.push({ fs, http, dir, remote: 'origin', ref: 'main' });\n```\nPython (pygit2):\n```python\nimport pygit2\nrepo = pygit2.clone_repository(url, 'repo')\nrepo.index.add_all(); repo.index.write()\nrepo.create_commit('HEAD', author, committer, 'update', repo.index.write_tree(), [repo.head.target])\nrepo.remotes['origin'].push(['refs/heads/main'])\n```\nGo (go-git):\n```go\nr, _ := git.PlainClone(\"repo\", false, &git.CloneOptions{URL: url})\nw, _ := r.Worktree()\nw.Add(\".\")\nw.Commit(\"update\", &git.CommitOptions{Author: &object.Signature{Name: \"You\", Email: \"you@x.com\"}})\nr.Push(&git.PushOptions{RemoteName: \"origin\"})\n```",
+      "score": {
+        "verdict": "correct",
+        "hits": [
+          "clone",
+          "commit",
+          "push"
+        ],
+        "missed": [
+          "programmatic git"
+        ],
+        "score": 0.75
+      }
+    },
+    {
+      "id": "t55-02",
+      "tier": 55,
+      "answer": "TypeScript:\n```ts\nimport { watch } from 'fs'; import { readFile } from 'fs/promises';\nexport async function watchConfig(path: string, onChange: (cfg: any) => void) {\n  let cfg = JSON.parse(await readFile(path, 'utf8'));\n  watch(path, () => { cfg = JSON.parse(await readFile(path, 'utf8')); onChange(cfg); });\n  return cfg;\n}\n```\nPython:\n```python\nimport time, json, os\ndef watch_config(path, on_change):\n    mtime = os.path.getmtime(path)\n    while True:\n        if os.path.getmtime(path) != mtime:\n            mtime = os.path.getmtime(path)\n            on_change(json.load(open(path)))\n        time.sleep(1)\n```\nGo:\n```go\nimport (\"encoding/json\"; \"os\"; \"time\")\nfunc WatchConfig(path string, onChange func(map[string]any)) {\n    stat, _ := os.Stat(path); last := stat.ModTime()\n    for {\n        stat, _ = os.Stat(path)\n        if stat.ModTime() != last {\n            last = stat.ModTime()\n            var cfg map[string]any\n            data, _ := os.ReadFile(path)\n            json.Unmarshal(data, &cfg)\n            onChange(cfg)\n        }\n        time.Sleep(time.Second)\n    }\n}\n```",
+      "score": {
+        "verdict": "incorrect",
+        "hits": [],
+        "missed": [
+          "hot reload",
+          "file watch",
+          "config update",
+          "no restart"
+        ],
+        "score": 0.0
+      }
+    },
+    {
+      "id": "t57-03",
+      "tier": 57,
+      "answer": "TypeScript (pdfjs-dist):\n```ts\nimport { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';\nexport async function extractText(path: string): Promise<string> {\n  const pdf = await getDocument(path).promise; let out = '';\n  for (let i = 1; i <= pdf.numPages; i++) {\n    const page = await pdf.getPage(i);\n    out += (await page.getTextContent()).items.map((it: any) => it.str).join(' ') + '\\n';\n  }\n  return out;\n}\n```\nPython (pypdf):\n```python\nfrom pypdf import PdfReader\ndef extract_text(path):\n    reader = PdfReader(path)\n    return '\\n'.join(page.extract_text() or '' for page in reader.pages)\n```\nGo (pdfcpu):\n```go\nimport (\"strings\"; \"github.com/pdfcpu/pdfcpu/pkg/api\")\nfunc ExtractText(path string) (string, error) {\n    var sb strings.Builder\n    err := api.ExtractContentFile(path, &sb, nil, nil)\n    return sb.String(), err\n}\n```",
+      "score": {
+        "verdict": "incorrect",
+        "hits": [],
+        "missed": [
+          "PDF text extraction",
+          "parse PDF",
+          "text content",
+          "library"
+        ],
+        "score": 0.0
+      }
+    },
+    {
+      "id": "t58-05",
+      "tier": 58,
+      "answer": "TypeScript:\n```ts\nimport { google } from 'firebase-admin';\n// admin.initializeApp({ credential: google.applicationDefault() });\nexport async function sendPush(token: string, title: string, body: string) {\n  await google.messaging().send({ token, notification: { title, body } });\n}\n```\nPython (firebase-admin):\n```python\nfrom firebase_admin import messaging, credentials, initialize_app\ninitialize_app(credentials.Certificate('service-account.json'))\ndef send_push(token, title, body):\n    messaging.send(messaging.Message(\n        token=token, notification=messaging.Notification(title=title, body=body)))\n```",
+      "score": {
+        "verdict": "incorrect",
+        "hits": [],
+        "missed": [
+          "FCM push notification",
+          "device token",
+          "message payload",
+          "HTTP API"
+        ],
+        "score": 0.0
+      }
+    }
+  ]
+}

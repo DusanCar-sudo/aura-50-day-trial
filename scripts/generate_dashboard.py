@@ -144,6 +144,61 @@ def load_ruby() -> list[dict]:
     return out
 
 
+SAMPLE_NOTES = {
+    11005: "answers pasted in by hand, not a live Aura run",
+    11007: "broken setup: source code outside the project folder",
+    11008: "clean setup",
+    11009: "stopped at 21/32: machine ran out of memory",
+}
+
+
+def load_projections() -> list[dict]:
+    """10%-sample runs (scripts/sample10.py) projected back to all 320 questions."""
+    from live import layer  # same "who answered" rules as the live view
+    from sample10 import SAMPLE_FILE, project
+
+    if not SAMPLE_FILE.exists():
+        return []
+    sample = json.loads(SAMPLE_FILE.read_text())
+    ids = set(sample["ids"])
+    out = []
+    for path in sorted(RESULTS.glob("session_*.json")):
+        try:
+            data = json.loads(path.read_text())
+            sid = int(data.get("session"))
+        except Exception:  # noqa: BLE001
+            continue
+        qs = [q for q in data.get("questions") or [] if q.get("score")]
+        # shortcut: under 20 answers is too few to project, e.g. aborted 11006
+        if len(qs) < 20 or not {q["id"] for q in qs} <= ids:
+            continue
+        r = project(data, sample)
+        # bands with no answers yet would count as 0%, so scale to the bands covered
+        covered = sum(nb for _, _, nb, _ in r["rows"]) / r["total"]
+        layers = defaultdict(int)
+        for q in qs:
+            layers[layer(q.get("answer", "") + q.get("stderr", ""))] += 1
+        verdicts = [q["score"]["verdict"] for q in qs]
+        out.append({
+            "id": sid,
+            "date": (data.get("timestamp") or "")[:10],
+            "arch": data.get("archimedes") or "—",
+            "model": short_model(data.get("model")) or "—",
+            "answered": len(qs),
+            "planned": len(ids),
+            "correct": verdicts.count("correct"),
+            "partial": verdicts.count("partial"),
+            "incorrect": verdicts.count("incorrect"),
+            "projected": round(r["correct_pct"] / covered, 1),
+            "margin": round(r["margin_pct"] / covered, 1),
+            "avgScore": round(r["avg_score_pct"] / covered, 1),
+            "of320": round(r["correct_pct"] / covered * r["total"] / 100),
+            "layers": dict(layers),
+            "note": SAMPLE_NOTES.get(sid, ""),
+        })
+    return out
+
+
 def build_payload() -> dict:
     sessions = load_sessions()
     ruby = load_ruby()
@@ -189,6 +244,7 @@ def build_payload() -> dict:
         "ruby": ruby,
         "maxTier": max_tier,
         "kpi": kpi,
+        "projections": load_projections(),
     }
 
 
@@ -348,6 +404,16 @@ footer code{color:var(--muted)}
 <main class="grid">
   <section class="kpis" id="kpis"></section>
 
+  <section class="cell c12">
+    <div class="tbl-tools">
+      <h3 style="margin:0">10% sample runs <small>32 questions across all 60 tiers · projected to 320</small></h3>
+    </div>
+    <div style="overflow:auto">
+      <table id="projTable"><thead></thead><tbody></tbody></table>
+    </div>
+    <p style="margin:8px 0 0;font-size:12px;color:var(--muted)">Projected = each 5-tier band's correct rate × its share of the 320 questions, ±95% margin. "Local alone" = the local Archimedes model's answer was accepted with no escalation; otherwise the escalation model answered after the local model timed out, was rejected, or crashed.</p>
+  </section>
+
   <section class="cell c8">
     <h3>Full-run pass rate <small>apples-to-apples · 320 questions</small></h3>
     <div style="position:relative"><svg id="trend" viewBox="0 0 1000 320" style="width:100%;height:auto"></svg></div>
@@ -447,6 +513,7 @@ const $ = (id) => document.getElementById(id);
 const PALETTE = ["#5cd6c0","#7aa2ff","#f472b6","#fbbf24","#a78bfa","#34d399","#fb923c","#38bdf8","#e879f9","#a3e635"];
 const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const rateColor = (r) => r>=.5?css("--good"):r>=.25?css("--warn"):css("--bad");
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);
 const pct = (r,d=1)=>(r*100).toFixed(d)+"%";
 const fmt = (n)=>n.toLocaleString();
 const E = (tag,cls,txt)=>{const e=document.createElementNS("http://www.w3.org/2000/svg",tag);if(cls)e.setAttribute("class",cls);if(txt!=null)e.textContent=txt;return e;};
@@ -906,12 +973,30 @@ function renderTable(){
   $("rowCount").textContent=rows.length===DATA.sessions.length?`${rows.length} runs`:`${rows.length} / ${DATA.sessions.length}`;
 }
 
+function renderProjections(){
+  const tb=$("projTable"),rows=DATA.projections||[];
+  tb.querySelector("thead").innerHTML="<tr><th>Session</th><th>Date</th><th>Local model</th><th>Answered</th><th>✓ / ~ / ✗</th><th>Projected (320)</th><th>Local alone</th><th>Timed out</th><th>Rejected</th><th>Crashed</th><th>Note</th></tr>";
+  const L=(p,k)=>p.layers[k]||0;
+  tb.querySelector("tbody").innerHTML=rows.length?rows.slice().reverse().map(p=>{const r=p.projected/100;
+    return `<tr><td><b style="font:12px var(--mono)">S${p.id}</b></td>
+    <td style="font:11.5px var(--mono);color:var(--muted)">${p.date}</td>
+    <td>${esc(p.arch)} <span style="color:var(--faint);font-size:10.5px">→ ${esc(p.model)}</span></td>
+    <td>${p.answered}/${p.planned}</td>
+    <td style="font:11.5px var(--mono)"><span style="color:var(--good)">${p.correct}</span> / <span style="color:var(--warn)">${p.partial}</span> / <span style="color:var(--bad)">${p.incorrect}</span></td>
+    <td><span class="bar-mini"><i style="width:${p.projected.toFixed(0)}%;background:${rateColor(r)}"></i></span>
+      <b style="font:11.5px var(--mono);color:${rateColor(r)}">${p.projected.toFixed(1)}%</b>
+      <span style="color:var(--faint);font:10.5px var(--mono)">±${p.margin.toFixed(1)} · ~${p.of320}/320</span></td>
+    <td><b>${L(p,"LOCAL answered")}</b></td><td>${L(p,"BIG (local timed out)")}</td><td>${L(p,"BIG (local rejected)")}</td><td>${L(p,"BIG (local crashed)")}</td>
+    <td style="color:var(--muted);white-space:normal;min-width:180px">${esc(p.note)}</td></tr>`;}).join("")
+    :'<tr><td colspan="11" class="empty">No sample runs yet.</td></tr>';
+}
+
 /* ── wiring ── */
 function rerenderAll(){renderTicker();renderKPIs();renderTrend();renderOverlay();renderHeat();
   renderDifficulty();renderCompetence();renderCatch();renderArc();renderChord();renderFlow();renderRadial();}
 function init(){
   initTheme();renderTicker();renderKPIs();seedDefault();
-  renderExplorer();renderChips();renderTable();
+  renderExplorer();renderChips();renderTable();renderProjections();
   $("bFull").onclick=()=>{seedDefault();sync();};
   $("bRecent").onclick=()=>{selected=new Set(DATA.sessions.slice(-12).map(s=>s.id));sync();};
   $("bClear").onclick=()=>{selected.clear();sync();};

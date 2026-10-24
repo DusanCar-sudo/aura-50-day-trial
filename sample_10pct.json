@@ -1,0 +1,259 @@
+{
+  "seed": 50,
+  "band_sizes": {
+    "1-5": 30,
+    "6-10": 40,
+    "11-15": 25,
+    "16-20": 25,
+    "21-25": 25,
+    "26-30": 25,
+    "31-35": 25,
+    "36-40": 25,
+    "41-45": 25,
+    "46-50": 25,
+    "51-55": 25,
+    "56-60": 25
+  },
+  "band_sample": {
+    "1-5": 3,
+    "6-10": 4,
+    "11-15": 3,
+    "16-20": 3,
+    "21-25": 3,
+    "26-30": 3,
+    "31-35": 3,
+    "36-40": 2,
+    "41-45": 2,
+    "46-50": 2,
+    "51-55": 2,
+    "56-60": 2
+  },
+  "ids": [
+    "t1-03",
+    "t2-01",
+    "t5-08",
+    "t6-02",
+    "t7-03",
+    "t8-06",
+    "t9-03",
+    "t11-05",
+    "t14-03",
+    "t15-05",
+    "t17-01",
+    "t18-04",
+    "t20-02",
+    "t21-04",
+    "t22-03",
+    "t24-02",
+    "t26-05",
+    "t27-02",
+    "t28-05",
+    "t32-04",
+    "t33-05",
+    "t34-04",
+    "t36-01",
+    "t38-03",
+    "t43-01",
+    "t44-05",
+    "t46-05",
+    "t47-02",
+    "t53-03",
+    "t55-02",
+    "t57-03",
+    "t58-05"
+  ],
+  "questions": [
+    {
+      "id": "t1-03",
+      "tier": 1,
+      "band": "1-5",
+      "question": "What is the purpose of process.execPath in Node.js?"
+    },
+    {
+      "id": "t2-01",
+      "tier": 2,
+      "band": "1-5",
+      "question": "A systemd service keeps restarting every 30 seconds. What do you check first?"
+    },
+    {
+      "id": "t5-08",
+      "tier": 5,
+      "band": "1-5",
+      "question": "Ollama's /api/tags endpoint returns an empty models list when Archimedes tries to resolve its model. What does Archimedes Alternator do, and what message does the user see?"
+    },
+    {
+      "id": "t6-02",
+      "tier": 6,
+      "band": "6-10",
+      "question": "Read src/agent/compactor.ts and explain at what context fill percentage the first compaction level triggers, and what it keeps versus summarizes."
+    },
+    {
+      "id": "t7-03",
+      "tier": 7,
+      "band": "6-10",
+      "question": "A user pastes credentials into the Aura chat and asks it to store them in a config file. What should Aura do, and why?"
+    },
+    {
+      "id": "t8-06",
+      "tier": 8,
+      "band": "6-10",
+      "question": "Aura's per-turn usage data shows: turn 1: 6595 input, 1280 cached. Turn 4: 7717 input, 7680 cached. What does this pattern tell you about how the prompt cache warms up, and what would you expect turn 10 to look like?"
+    },
+    {
+      "id": "t9-03",
+      "tier": 9,
+      "band": "6-10",
+      "question": "If a user attaches an image to a provider/model that doesn't actually support vision (e.g. a text-only DeepSeek model), what should Aura do \u2014 silently drop the image, throw a hard error, or warn and continue text-only? Justify the choice."
+    },
+    {
+      "id": "t11-05",
+      "tier": 11,
+      "band": "11-15",
+      "question": "In episode-capture.ts, how is the filename of a stored episode named?"
+    },
+    {
+      "id": "t14-03",
+      "tier": 14,
+      "band": "11-15",
+      "question": "In types.ts, list the valid values for TaskCategory. How does the alternator map a task to one of these categories?"
+    },
+    {
+      "id": "t15-05",
+      "tier": 15,
+      "band": "11-15",
+      "question": "How is the final Episode object saved to disk in alternator.ts? What happens if the write fails?"
+    },
+    {
+      "id": "t17-01",
+      "tier": 17,
+      "band": "16-20",
+      "question": "How does episodeStore namespace the episodes for different projects? Explain the implementation of projectHash."
+    },
+    {
+      "id": "t18-04",
+      "tier": 18,
+      "band": "16-20",
+      "question": "How does checkJobStatus check the progress of an Ollama model creation job versus an OpenAI fine-tuning job?"
+    },
+    {
+      "id": "t20-02",
+      "tier": 20,
+      "band": "16-20",
+      "question": "How are configuration values safe-guarded against invalid inputs in competence.ts's safeConfig?"
+    },
+    {
+      "id": "t21-04",
+      "tier": 21,
+      "band": "21-25",
+      "question": "What is the fail-safe behavior of verifyArchimedesAnswer if the LLM call throws an error?"
+    },
+    {
+      "id": "t22-03",
+      "tier": 22,
+      "band": "21-25",
+      "question": "Under what conditions does the alternator skip the Epsilon Probe check entirely?"
+    },
+    {
+      "id": "t24-02",
+      "tier": 24,
+      "band": "21-25",
+      "question": "What does the :archoff command do in the TUI?"
+    },
+    {
+      "id": "t26-05",
+      "tier": 26,
+      "band": "26-30",
+      "question": "How does checkOllamaJobStatus check if the specialized model creation succeeded?"
+    },
+    {
+      "id": "t27-02",
+      "tier": 27,
+      "band": "26-30",
+      "question": "What purpose string is specified when uploading the training file to OpenAI?"
+    },
+    {
+      "id": "t28-05",
+      "tier": 28,
+      "band": "26-30",
+      "question": "In compactor.ts, what does the RETENTION_RATIO constant control, and what is its value?"
+    },
+    {
+      "id": "t32-04",
+      "tier": 32,
+      "band": "31-35",
+      "question": "Write a simple publish-subscribe event emitter with on, off, and emit. Show in TypeScript and Python."
+    },
+    {
+      "id": "t33-05",
+      "tier": 33,
+      "band": "31-35",
+      "question": "Write a function that validates an email address format. Show in TypeScript, Python, Go, Rust, and Bash."
+    },
+    {
+      "id": "t34-04",
+      "tier": 34,
+      "band": "31-35",
+      "question": "Write a semaphore to limit concurrent access to N slots. Show in TypeScript, Python, and Go."
+    },
+    {
+      "id": "t36-01",
+      "tier": 36,
+      "band": "36-40",
+      "question": "Write an HTTP GET with timeout returning body as string. Show in TypeScript, Python, Go, Rust, and Bash."
+    },
+    {
+      "id": "t38-03",
+      "tier": 38,
+      "band": "36-40",
+      "question": "Write a progress bar that updates in place on a single terminal line. Show in TypeScript, Python, and Go."
+    },
+    {
+      "id": "t43-01",
+      "tier": 43,
+      "band": "41-45",
+      "question": "Write a function that diffs two JSON objects returning added, removed, and modified keys. Show in TypeScript, Python, and Go."
+    },
+    {
+      "id": "t44-05",
+      "tier": 44,
+      "band": "41-45",
+      "question": "Write an API key generator with prefix and checksum that can validate the key format. Show in TypeScript and Python."
+    },
+    {
+      "id": "t46-05",
+      "tier": 46,
+      "band": "46-50",
+      "question": "Write the builder pattern for constructing complex objects step by step. Show in TypeScript, Python, and Go."
+    },
+    {
+      "id": "t47-02",
+      "tier": 47,
+      "band": "46-50",
+      "question": "Write a decorator/wrapper that traces function execution time and logs it. Show in TypeScript, Python, Go, and Rust."
+    },
+    {
+      "id": "t53-03",
+      "tier": 53,
+      "band": "51-55",
+      "question": "Write a function that clones a repo, makes a commit, and pushes using libgit2 or a similar library. Show in TypeScript, Python, and Go."
+    },
+    {
+      "id": "t55-02",
+      "tier": 55,
+      "band": "51-55",
+      "question": "Write a function that hot-reloads a configuration file when it changes on disk. Show in TypeScript, Python, and Go."
+    },
+    {
+      "id": "t57-03",
+      "tier": 57,
+      "band": "56-60",
+      "question": "Write a function that extracts text from a PDF file. Show in TypeScript, Python, and Go."
+    },
+    {
+      "id": "t58-05",
+      "tier": 58,
+      "band": "56-60",
+      "question": "Write a function that sends a push notification via Firebase Cloud Messaging (FCM). Show in TypeScript and Python."
+    }
+  ]
+}
