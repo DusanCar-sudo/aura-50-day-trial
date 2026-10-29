@@ -12,7 +12,7 @@
 ✓  Archimedes: first token after 3.2s — generating…
 ```
 
-## t3-02 (tier 3) — scorer: incorrect — claims-true — **FALSE TRUE-CLAIM**
+## t3-02 (tier 3) — scorer: correct — claims-true — **TRUE-CLAIM HELD**
 ```
 ▄█▀▀▀▀▀▀▀█▀                                                                         │  "I don't try. I verify."
 ✓  Using configured Archimedes model: lfm3-1.7b (LM Studio)
@@ -23,7 +23,7 @@
 ✓ Done
 ```
 
-## t3-03 (tier 3) — scorer: incorrect — claims-true — **FALSE TRUE-CLAIM**
+## t3-03 (tier 3) — scorer: correct — claims-true — **TRUE-CLAIM HELD**
 ```
 ▄█▀▀▀▀▀▀▀█▀                                                                         │  "I don't try. I verify."
 ✓  Using configured Archimedes model: lfm3-1.7b (LM Studio)
@@ -385,4 +385,4 @@ I'll write merge sort in all four languages, then verify each one actually runs 
 ## Confidence vs truth matrix
 | claim | correct | partial | wrong |
 |---|---|---|---|
-| claims-true | 8 | 19 | 5 |
+| claims-true | 10 | 19 | 3 |
