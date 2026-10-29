@@ -1,9 +1,14 @@
 {
   "ruby": {
     "enabled": true,
-    "modelName": "granite4.1:3b",
-    "ollamaBaseUrl": "http://localhost:11434/v1",
+    "modelName": "ibm-granite-4-1-3b",
+    "ollamaBaseUrl": "http://localhost:1234/v1",
     "competenceThreshold": 0.7,
     "minAttempts": 3
+  },
+  "archimedes": {
+    "enabled": true,
+    "provider": "lmstudio",
+    "modelName": "lfm3-1.7b"
   }
 }
