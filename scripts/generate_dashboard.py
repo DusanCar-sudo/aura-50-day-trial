@@ -118,7 +118,7 @@ def load_sessions() -> list[dict]:
 
 def load_ruby() -> list[dict]:
     out: list[dict] = []
-    for path in sorted(RESULTS.glob("ruby-stats-*.json")):
+    for path in sorted([*RESULTS.glob("ruby-stats-*.json"), *RESULTS.glob("archimedes-stats-*.json")]):
         try:
             d = json.loads(path.read_text())
         except Exception:  # noqa: BLE001
