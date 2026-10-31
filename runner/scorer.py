@@ -34,10 +34,24 @@ def _load_question(question_id: str) -> dict:
     raise ValueError(f"Unknown question id: {question_id}")
 
 
+# Box-drawing/banner glyphs: the PTY transcript embeds Aura's ASCII banner,
+# which contains ``` sequences and would otherwise be extracted as "code".
+_BANNER_CHARS = set("│┌┐└┘├┤▄▀█░┊─")
+
+
 def _extract_code_block(answer: str) -> str:
-    """Pull the first fenced code block out of a markdown-style answer."""
-    m = re.search(r"```(?:\w+)?\n(.*?)```", answer, re.DOTALL)
-    return m.group(1) if m else answer
+    """Pull the first clean fenced code block out of a PTY transcript answer.
+
+    Skips fenced blocks that contain banner/UI glyphs (Aura's ASCII banner
+    inside the transcript also contains ``` runs) and empty blocks, so the
+    snippet that actually gets executed is the model's code, not UI art.
+    """
+    answer = answer.replace("\r\n", "\n").replace("\r", "\n")  # PTY CRLF breaks bash args like "-1440\r"
+    for m in re.finditer(r"```(?:\w+)?\n(.*?)```", answer, re.DOTALL):
+        block = m.group(1)
+        if block.strip() and not (_BANNER_CHARS & set(block)):
+            return block
+    return answer
 
 
 def _keyword_present(kp: str, answer_lower: str) -> bool:

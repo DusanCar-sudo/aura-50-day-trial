@@ -24,6 +24,8 @@ import fcntl
 import termios
 import struct
 import threading
+import shutil
+import tempfile
 from datetime import datetime
 from pathlib import Path
 
@@ -245,7 +247,19 @@ def build_command(question: dict, zero_memory: bool) -> list:
     return cmd
 
 
-def run_question(question: dict, zero_memory: bool, trace: bool = False) -> dict:
+def make_workdir(session_number: int, question: dict) -> Path:
+    """Fresh per-question folder holding only what the questions need, so one
+    answer's files (or Aura's per-project episode store) can't leak into the next.
+    Kept after the run for inspection; /tmp clears on reboot."""
+    wd = Path(tempfile.gettempdir()) / "aura-bench" / f"session_{session_number}" / question["id"]
+    shutil.rmtree(wd, ignore_errors=True)
+    wd.mkdir(parents=True)
+    shutil.copy2(ROOT / ".aura.json", wd / ".aura.json")
+    shutil.copytree(ROOT / "aura-code-src", wd / "aura-code-src")
+    return wd
+
+
+def run_question(question: dict, zero_memory: bool, trace: bool = False, workdir: Path = ROOT) -> dict:
     """
     Spawns Aura through a real PTY, not a plain pipe. Aura's terminal-aware
     renderer produces literal '?' placeholder characters for streamed
@@ -269,7 +283,7 @@ def run_question(question: dict, zero_memory: bool, trace: bool = False) -> dict
         stdin=slave_fd,
         stdout=slave_fd,
         stderr=slave_fd,
-        cwd=str(ROOT),
+        cwd=str(workdir),
         close_fds=True,
         env=env,
     )
@@ -371,13 +385,15 @@ def run_question(question: dict, zero_memory: bool, trace: bool = False) -> dict
 
 
 def run_benchmark(session_number: int, tier=None, question_id=None, zero_memory=False,
-                  trace=False, resume=False, keep_going=False):
+                  trace=False, resume=False, keep_going=False, isolate=False):
     all_questions = load_questions(tier=tier, question_id=question_id)
     if not all_questions:
         print("No questions found.")
         return None
 
     mode = "ZERO MEMORY (--new-session)" if zero_memory else "accumulated memory"
+    if isolate:
+        mode += ", isolated workdir per question"
     print(f"Running {len(all_questions)} questions for session {session_number} [{mode}] against {MODEL} (escalation target; Ruby's local model comes from .aura.json)...")
 
     results = {
@@ -385,6 +401,7 @@ def run_benchmark(session_number: int, tier=None, question_id=None, zero_memory=
         "model": MODEL,
         "archimedes": _archimedes_model(),
         "zero_memory": zero_memory,
+        "isolated": isolate,
         "timestamp": datetime.utcnow().isoformat(),
         "questions": [],
     }
@@ -430,7 +447,8 @@ def run_benchmark(session_number: int, tier=None, question_id=None, zero_memory=
         live_state["current"] = q
         print(f"[{i}/{len(questions)}] {q['id']}: {q['question'][:60]}...")
         try:
-            result = run_question(q, zero_memory, trace=trace)
+            workdir = make_workdir(session_number, q) if isolate else ROOT
+            result = run_question(q, zero_memory, trace=trace, workdir=workdir)
         except subprocess.TimeoutExpired as e:
             partial = strip_ansi((e.output or b"").decode("utf-8", errors="replace")).strip()
             result = {
@@ -508,8 +526,9 @@ if __name__ == "__main__":
     ap.add_argument("--trace", action="store_true", help="Log PTY bytes/sec windows (stall detection with /proc dumps is always on)")
     ap.add_argument("--resume", action="store_true", help="Skip questions already answered in results/session_NNN.json (finished an interrupted run)")
     ap.add_argument("--keep-going", action="store_true", help="Do not abort on consecutive provider errors (default: abort after 5)")
+    ap.add_argument("--isolate", action="store_true", help="Run each question in its own fresh /tmp/aura-bench folder instead of the repo root")
     args = ap.parse_args()
 
     run_benchmark(args.session, tier=args.tier, question_id=args.question,
                   zero_memory=args.zero_memory, trace=args.trace,
-                  resume=args.resume, keep_going=args.keep_going)
+                  resume=args.resume, keep_going=args.keep_going, isolate=args.isolate)
