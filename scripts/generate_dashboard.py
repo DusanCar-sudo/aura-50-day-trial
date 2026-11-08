@@ -99,6 +99,8 @@ def load_sessions() -> list[dict]:
         sessions.append(
             {
                 "id": sid,
+                "source": path.name,
+                "preview": str(questions[0].get("question") or questions[0].get("prompt") or "")[:220],
                 "interrupted": interrupted,
                 "date": timestamp[:10],
                 "model": short_model(data.get("model")),
@@ -387,23 +389,26 @@ footer code{color:var(--muted)}
 @media(max-width:1180px){.kpis{grid-template-columns:repeat(4,1fr)}.c8,.c4{grid-column:span 12}.g-three{grid-template-columns:1fr}}
 @media(max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}.ticker{display:none}.c6{grid-column:span 12}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@@EXPLORER_CSS@@
 </style>
 </head>
-<body>
+<body id="top">
 <header class="bar">
   <div class="brand">
-    <span class="mark">A</span>
+    <a class="mark" href="#top" aria-label="Aura dashboard home">A</a>
     <div><b>Aura Benchmark</b><i>Archimedes Alternator · daily · unedited</i></div>
   </div>
   <div class="ticker" id="ticker"></div>
   <div class="bar-right">
     <span class="stamp">updated @@GENERATED@@</span>
     <a class="stamp" href="https://github.com/dusancar-sudo/aura-50-day-trial" target="_blank" rel="noopener">GitHub ↗</a>
-    <button class="theme-btn" id="themeBtn" title="Toggle theme (t)">◐</button>
+    <button class="theme-btn" id="themeBtn" title="Toggle theme (t)" aria-label="Toggle color theme">◐</button>
   </div>
 </header>
 
-<main class="grid">
+<main id="content">
+@@EXPLORER_HTML@@
+<div class="grid" id="analytics">
   <section class="kpis" id="kpis"></section>
 
   <section class="cell c12">
@@ -499,6 +504,7 @@ footer code{color:var(--muted)}
       <table id="table"><thead></thead><tbody></tbody></table>
     </div>
   </section>
+</div>
 </main>
 
 <footer>
@@ -533,15 +539,15 @@ function sparks(vals,w,h,col){const mn=Math.min(...vals),mx=Math.max(...vals),sp
 
 /* ── theme ── */
 function initTheme(){
-  const saved=localStorage.getItem("aura-theme");
+  let saved; try { saved=localStorage.getItem("aura-theme"); } catch {}
   const theme=saved||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");
   document.documentElement.setAttribute("data-theme",theme);
   $("themeBtn").onclick=()=>{const cur=document.documentElement.getAttribute("data-theme");const nx=cur==="dark"?"light":"dark";
-    document.documentElement.setAttribute("data-theme",nx);localStorage.setItem("aura-theme",nx);rerenderAll();};
-  addEventListener("keydown",e=>{const t=e.target;
+    document.documentElement.setAttribute("data-theme",nx);try { localStorage.setItem("aura-theme",nx); } catch {}rerenderAll();};
+  addEventListener("keydown",e=>{if(document.querySelector("dialog[open]"))return;const t=e.target;
     const typing=t&&(t.tagName==="INPUT"||t.tagName==="SELECT");
     if((e.key==="t"||e.key==="T")&&!typing)$("themeBtn").click();
-    if(e.key==="/"&&!typing){e.preventDefault();$("search").focus();}});
+    if(e.key==="/"&&!typing){e.preventDefault();$("runSearch").focus();}});
 }
 
 /* ── chart frame ── */
@@ -1026,6 +1032,7 @@ function init(){
   rerenderAll();
 }
 init();
+@@EXPLORER_JS@@
 </script>
 </body>
 </html>
@@ -1037,7 +1044,11 @@ def main() -> None:
     data_json = json.dumps(payload, separators=(",", ":"))
     # Neutralise any "</script>" sequences so the inline JSON blob is safe.
     data_json = data_json.replace("</", "<\\/")
-    page = PAGE.replace("@@DATA@@", data_json).replace(
+    template = PAGE
+    for kind in ("css", "html", "js"):
+        template = template.replace("@@EXPLORER_" + kind.upper() + "@@",
+                                    (ROOT / "scripts" / ("dashboard_explorer." + kind)).read_text())
+    page = template.replace("@@DATA@@", data_json).replace(
         "@@GENERATED@@", html.escape(payload["generated"])
     ).replace("@@MAXTIER@@", str(payload["maxTier"]))
     (ROOT / "dashboard").mkdir(exist_ok=True)

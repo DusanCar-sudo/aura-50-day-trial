@@ -1,0 +1,27 @@
+<div class="workbench">
+  <section class="intro" aria-labelledby="pageTitle">
+    <div><p class="eyebrow">THE OPEN BENCHMARK NOTEBOOK</p><h1 id="pageTitle">Every run has a story.</h1><p class="intro-copy">Explore the answers behind the scores. Follow Aura’s progress, one recorded run at a time.</p></div>
+    <div class="intro-actions"><a class="action" href="#analytics">Explore analytics ↓</a><span class="archive-stamp" id="archiveStamp"></span></div>
+  </section>
+  <section class="overview" aria-label="Benchmark overview" id="overview"></section>
+  <section class="run-workspace" aria-labelledby="runsHeading">
+    <div class="section-heading"><div><p class="eyebrow">01 / RUN NOTEBOOK</p><h2 id="runsHeading">Look inside a run</h2></div><p class="helper">Select a run to preview. Pin two to compare.</p></div>
+    <div class="run-toolbar">
+      <label class="run-search">Search runs<input id="runSearch" type="search" placeholder="Session, model, or date…" autocomplete="off"><kbd>/</kbd></label>
+      <label>Run scope<select id="runScope"><option value="all">All runs</option><option value="full">Full runs</option><option value="slice">Samples & slices</option><option value="interrupted">Interrupted runs</option></select></label>
+      <label>Sort by<select id="runSort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="rate">Highest strict rate</option><option value="size">Most questions</option></select></label>
+      <button class="action quiet" id="resetRuns">Reset filters</button>
+    </div>
+    <div class="run-split">
+      <div class="run-library"><div class="library-heading"><span id="runCount" role="status"></span><span>STRICT RATE</span></div><div class="run-cards" id="runCards"></div><button class="action show-more" id="moreRuns">Show more runs</button></div>
+      <section class="run-detail" aria-label="Selected run preview" id="runDetail"><div class="empty">Select a run to inspect its recorded answers.</div></section>
+    </div>
+  </section>
+  <section class="comparison" id="comparison" aria-labelledby="compareHeading" hidden>
+    <div class="section-heading"><div><p class="eyebrow">02 / SIDE BY SIDE</p><h2 id="compareHeading">Compare recorded runs</h2></div><button class="action quiet" id="clearCompare">Clear comparison</button></div>
+    <div id="compareContent"></div>
+  </section>
+  <div class="section-heading analytics-heading"><div><p class="eyebrow">THE BIGGER PICTURE</p><h2>Patterns across the archive</h2></div><p class="helper">Full runs, sample projections, tier coverage, and verification.</p></div>
+</div>
+<dialog class="transcript-dialog" id="transcriptDialog" aria-labelledby="transcriptTitle"><div class="dialog-heading"><div><p class="eyebrow">RECORDED OUTPUT</p><h2 id="transcriptTitle">Answer transcript</h2></div><form method="dialog"><button class="action" aria-label="Close transcript">Close ×</button></form></div><pre id="transcriptText" tabindex="0"></pre></dialog>
+<div class="notice" id="notice" role="status"></div>
