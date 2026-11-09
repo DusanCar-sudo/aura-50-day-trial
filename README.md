@@ -17,14 +17,16 @@ measurably better over 50 days of real use?
 
 ## 📊 Live Dashboard
 **[View live charts →](https://dusancar-sudo.github.io/aura-50-day-trial/)**
+**[View radial mission control →](https://dusancar-sudo.github.io/aura-50-day-trial/orbit.html)**
 
 Pass rate trend, verification catch rate, and Archimedes competence by category —
 updated automatically every day. No download needed.
 
-**Radial companion view:** `orbit.html` (built by `scripts/build_orbit_dashboard.py`)
-renders the same data as circular instruments — orbital gauges, a polar tier ring,
-an Archimedean spiral timeline with history replay, radar comparison, a zoomable
-sunburst, and a Nightingale rose of daily Archimedes stats.
+**Radial companion view:** [`orbit.html`](https://dusancar-sudo.github.io/aura-50-day-trial/orbit.html)
+(built by `scripts/build_orbit_dashboard.py`) renders the same data as circular
+instruments — orbital gauges, a polar tier ring, an Archimedean spiral timeline with
+history replay, radar comparison, a zoomable sunburst, and a Nightingale rose of
+daily Archimedes stats.
 
 ## Setup
 - **Large model (cloud):** DeepSeek Chat (`deepseek/deepseek-chat`) — the escalation target the benchmark runs against (`runner/run.py`)
