@@ -1,0 +1,1477 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aura Benchmark · Archimedes Orbital — Radial Mission Control</title>
+<meta name="description" content="A radial mission-control view of the Aura Archimedes Alternator benchmark: orbital gauges, a polar tier ring, an Archimedean spiral timeline, radar comparison, a zoomable sunburst and a Nightingale rose.">
+<style>
+:root{
+  --bg0:#04060c; --bg1:#090d16; --pan:rgba(11,16,26,.86); --line:#1c2637; --line2:#131b29;
+  --tx:#e8eef9; --mut:#8ea0ba; --dim:#5a6981;
+  --acc:#3cd6ff; --acc2:#a78bfa; --ok:#3ddc97; --mid:#fbbf24; --bad:#ff6e88;
+  --grid:rgba(120,150,190,.10); --gridline:rgba(120,150,190,.055);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  --shadow:0 18px 50px rgba(0,0,0,.5);
+}
+[data-theme=light]{
+  --bg0:#eef0ee; --bg1:#f7f8f6; --pan:rgba(255,255,255,.88); --line:#d5dae2; --line2:#e4e8ee;
+  --tx:#131a27; --mut:#49576f; --dim:#8b98ac;
+  --acc:#0779a8; --acc2:#6d3bd6; --ok:#0d9d6a; --mid:#a75f06; --bad:#d61f4b;
+  --grid:rgba(19,26,39,.08); --gridline:rgba(19,26,39,.05);
+  --shadow:0 14px 40px rgba(30,40,60,.14);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;color:var(--tx);font:13.5px/1.5 var(--sans);-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(1100px 700px at 50% 38%, var(--bg1), var(--bg0) 75%);
+  display:grid;
+  grid-template:"hud hud" 50px "rail stage" 1fr "transport transport" 46px / 218px 1fr;
+  height:100vh; overflow:hidden;
+}
+body::before{ /* faint concentric observatory rings */
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:repeating-radial-gradient(circle at 50% 40%, transparent 0 89px, var(--gridline) 89px 90px);
+  mask-image:radial-gradient(circle at 50% 40%, #000 0%, transparent 72%);
+  -webkit-mask-image:radial-gradient(circle at 50% 40%, #000 0%, transparent 72%);
+}
+svg{display:block}
+svg text{user-select:none; pointer-events:none}
+a{color:var(--acc);text-decoration:none}
+button{font-family:inherit}
+
+/* ── HUD ─────────────────────────────────────────── */
+#hud{grid-area:hud;display:flex;align-items:center;gap:16px;padding:0 16px;z-index:20;
+  border-bottom:1px solid var(--line);background:color-mix(in srgb, var(--bg0) 82%, transparent);backdrop-filter:blur(8px)}
+.hud-left{display:flex;align-items:center;gap:12px;min-width:230px}
+#liveDialWrap{position:relative;width:36px;height:36px;flex:0 0 36px;cursor:default}
+#liveDialWrap .lpulse{position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--acc);opacity:0}
+#liveDialWrap.running .lpulse{animation:pulse 2.2s infinite}
+@keyframes pulse{0%{transform:scale(.6);opacity:.8}100%{transform:scale(1.35);opacity:0}}
+.hud-left b{display:block;font:800 13.5px/1.2 var(--sans);letter-spacing:.02em}
+.hud-left span{font:10px var(--mono);color:var(--dim);letter-spacing:.07em;text-transform:uppercase}
+#liveText.is-running{color:var(--ok)}
+.hud-ticker{flex:1;display:flex;justify-content:center;gap:0;flex-wrap:wrap;font:11px var(--mono);color:var(--mut);overflow:hidden;max-height:50px}
+.hud-ticker span{padding:2px 12px;border-left:1px solid var(--line)}
+.hud-ticker span:first-child{border-left:none}
+.hud-ticker b{color:var(--tx);font-weight:700}
+.hud-right{display:flex;align-items:center;gap:10px}
+.stamp{font:10px var(--mono);letter-spacing:.06em;color:var(--dim);border:1px solid var(--line);padding:5px 8px;border-radius:7px}
+.iconbtn{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:none;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.iconbtn:hover{color:var(--tx);border-color:var(--dim)}
+
+/* ── RAIL ────────────────────────────────────────── */
+#rail{grid-area:rail;border-right:1px solid var(--line);padding:14px 12px;overflow-y:auto;z-index:10;
+  background:color-mix(in srgb, var(--bg0) 65%, transparent)}
+.brand{display:flex;gap:10px;align-items:center;margin:2px 2px 14px}
+.brand .mark{width:34px;height:34px;flex:0 0 34px}
+.brand b{display:block;font:800 13px/1.2 var(--sans);letter-spacing:.03em}
+.brand i{font:9.5px var(--mono);font-style:normal;color:var(--dim);letter-spacing:.09em;text-transform:uppercase}
+.rail-h{font:9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:16px 2px 7px}
+#nav{display:flex;flex-direction:column;gap:3px}
+.navbtn{display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:9px;border:1px solid transparent;
+  background:none;color:var(--mut);cursor:pointer;font:600 12px var(--sans);letter-spacing:.02em;text-align:left;width:100%}
+.navbtn svg{width:20px;height:20px;flex:0 0 20px;opacity:.85}
+.navbtn kbd{margin-left:auto;font:9px var(--mono);color:var(--dim);border:1px solid var(--line);border-radius:4px;padding:1px 4px}
+.navbtn:hover{color:var(--tx);border-color:var(--line)}
+.navbtn.on{color:var(--tx);background:color-mix(in srgb, var(--acc) 12%, transparent);border-color:color-mix(in srgb, var(--acc) 38%, transparent)}
+.navbtn.on svg{opacity:1}
+select,.search{width:100%;font:11.5px var(--mono);color:var(--tx);background:var(--bg1);border:1px solid var(--line);border-radius:7px;padding:6px 8px}
+.search:focus,select:focus{outline:none;border-color:var(--acc)}
+.frow{margin-bottom:8px}
+.rail-legend .scale{height:8px;border-radius:4px;background:linear-gradient(90deg,var(--bad),var(--mid),var(--ok))}
+.rail-legend .lbl{display:flex;justify-content:space-between;font:9.5px var(--mono);color:var(--dim);margin-top:3px}
+.vleg{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
+.vleg span{display:inline-flex;align-items:center;gap:5px;font:10px var(--mono);color:var(--mut)}
+.vleg i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.rail-foot{margin-top:18px;display:flex;flex-direction:column;gap:6px}
+.rail-foot a{font:10.5px var(--mono);color:var(--mut)}
+.rail-foot a:hover{color:var(--acc)}
+
+/* ── STAGE ───────────────────────────────────────── */
+#stage{grid-area:stage;position:relative;overflow:hidden;z-index:5}
+.view{position:absolute;inset:0;display:none;padding:12px;gap:12px}
+.view.on{display:flex}
+.stage-wrap{position:relative;flex:1;min-width:0;background:var(--pan);border:1px solid var(--line);border-radius:14px;
+  box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}
+.stage-wrap svg{width:100%;height:100%;min-height:0}
+.side{width:305px;flex:0 0 305px;background:var(--pan);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
+  padding:14px;overflow-y:auto}
+.side h3{margin:0 0 8px;font:9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--dim)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;padding:10px 12px 2px}
+.chip{border:1px solid var(--line);background:var(--bg1);color:var(--mut);padding:4px 10px;border-radius:999px;cursor:pointer;
+  font:10.5px var(--mono);display:inline-flex;align-items:center;gap:6px;transition:.13s}
+.chip:hover{border-color:var(--acc);color:var(--tx)}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#03222d;font-weight:700}
+[data-theme=light] .chip.on{color:#023}
+.chip i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.overlay{position:absolute;font:10.5px var(--mono);color:var(--mut)}
+
+/* stat readouts */
+.stat{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:7px 2px;border-bottom:1px dashed var(--line2)}
+.stat span{font:10.5px var(--mono);color:var(--mut)}
+.stat b{font:800 15px var(--sans);font-variant-numeric:tabular-nums}
+.stat small{display:block;font:9.5px var(--mono);color:var(--dim)}
+.panelnote{font:10.5px var(--mono);color:var(--dim);line-height:1.6;margin-top:10}
+.trow{display:grid;grid-template-columns:44px 1fr 44px;gap:8px;align-items:center;padding:5px 4px;border-radius:7px;cursor:pointer}
+.trow:hover{background:var(--bg1)}
+.trow.sel{outline:1px solid var(--acc)}
+.trow span{font:10.5px var(--mono);color:var(--mut)}
+.trow b{font:700 11px var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.mini{height:7px;border-radius:4px;background:var(--line2);overflow:hidden;display:flex}
+.mini i{height:100%}
+
+/* ── TRANSPORT ───────────────────────────────────── */
+#transport{grid-area:transport;display:flex;align-items:center;gap:12px;padding:0 16px;z-index:20;
+  border-top:1px solid var(--line);background:color-mix(in srgb, var(--bg0) 82%, transparent);backdrop-filter:blur(8px)}
+#transport .tbtn{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--bg1);color:var(--tx);
+  cursor:pointer;display:grid;place-items:center;font-size:12px}
+#transport .tbtn:hover{border-color:var(--acc)}
+#timeSlider{flex:1;max-width:640px;accent-color:var(--acc);height:4px;cursor:pointer}
+#speedSel{width:64px;font:10.5px var(--mono);color:var(--tx);background:var(--bg1);border:1px solid var(--line);border-radius:6px;padding:4px}
+#transportText{font:10.5px var(--mono);color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge{font:9.5px var(--mono);letter-spacing:.1em;border-radius:6px;padding:4px 8px;border:1px solid var(--line);color:var(--dim)}
+.badge.scope{color:var(--mid);border-color:color-mix(in srgb, var(--mid) 45%, transparent)}
+
+/* ── tooltip / drawer ────────────────────────────── */
+#tip{position:fixed;z-index:60;pointer-events:none;opacity:0;transition:opacity .12s;max-width:290px;
+  background:var(--pan);border:1px solid var(--line);border-radius:10px;padding:9px 11px;box-shadow:var(--shadow);
+  font:11px/1.55 var(--mono);color:var(--tx);backdrop-filter:blur(6px)}
+#tip b{color:var(--acc)}
+#tip .tq{color:var(--mut);display:block;margin-top:3px}
+#drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,94vw);z-index:50;background:var(--bg1);border-left:1px solid var(--line);
+  transform:translateX(102%);transition:transform .28s cubic-bezier(.2,.8,.25,1);display:flex;flex-direction:column;box-shadow:var(--shadow)}
+#drawer.open{transform:none}
+#drawer header{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--line)}
+#drawer header b{font:800 15px var(--sans);flex:1}
+#drawerBody{padding:14px 16px;overflow-y:auto;flex:1}
+#scrim{position:fixed;inset:0;z-index:45;background:rgba(2,4,8,.45);opacity:0;pointer-events:none;transition:.25s}
+#scrim.on{opacity:1;pointer-events:auto}
+.scope-badge{font:9px var(--mono);letter-spacing:.08em;text-transform:uppercase;border-radius:5px;padding:2px 6px}
+.scope-badge.full{background:color-mix(in srgb, var(--ok) 18%, transparent);color:var(--ok)}
+.scope-badge.slice{background:color-mix(in srgb, var(--acc2) 16%, transparent);color:var(--acc2)}
+.scope-badge.int{background:color-mix(in srgb, var(--bad) 16%, transparent);color:var(--bad)}
+
+/* ── svg classes ─────────────────────────────────── */
+.gtrack{fill:none;stroke:var(--line);stroke-width:9;stroke-linecap:round}
+.gval{fill:none;stroke-width:9;stroke-linecap:round}
+.gtick{stroke:var(--line);stroke-width:1.4}
+.gcap{opacity:.95}
+.gv{fill:var(--tx);font-family:var(--mono);font-weight:700;text-anchor:middle}
+.gl{fill:var(--mut);font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-anchor:middle;text-transform:uppercase}
+.gs{fill:var(--dim);font-family:var(--mono);font-size:8.5px;text-anchor:middle}
+.axl{fill:var(--mut);font-family:var(--mono);font-size:9.5px;text-anchor:middle}
+.ring-lab{fill:var(--dim);font-family:var(--mono);font-size:8.5px;text-anchor:middle}
+.tsec{cursor:pointer;transition:fill .45s, opacity .3s;stroke:var(--bg0);stroke-width:.6}
+.tsec:hover{filter:brightness(1.35)}
+.tsec.miss{fill:none;stroke:var(--line);stroke-dasharray:2 3;cursor:default}
+.gridline{stroke:var(--grid);fill:none}
+.axisline{stroke:var(--grid)}
+.sdot{cursor:pointer;transition:opacity .25s}
+.sdot .core{transition:r .2s}
+.moon{cursor:pointer}
+.moon:hover circle{filter:brightness(1.3)}
+.playhead{stroke:var(--acc);stroke-width:1.6;stroke-dasharray:5 4;opacity:.9}
+.sp-spiral{fill:none;stroke:var(--grid);stroke-width:1}
+.rbar{cursor:pointer;transition:opacity .2s}
+.rbar:hover{filter:brightness(1.35)}
+.rgridlab{fill:var(--dim);font-family:var(--mono);font-size:8.5px;text-anchor:middle}
+.rose-petal{cursor:pointer;stroke:var(--bg0);stroke-width:1;transition:opacity .2s}
+.rose-petal:hover{filter:brightness(1.25)}
+.rose-petal.sel{stroke:var(--acc);stroke-width:2.4}
+.bsec{cursor:pointer;transition:opacity .2s}
+.bsec:hover{filter:brightness(1.3)}
+.centerbtn{cursor:pointer}
+.centerbtn:hover circle{filter:brightness(1.25)}
+.fadein{animation:fadein .45s ease}
+@keyframes fadein{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:5px}
+@media (max-width:1020px){
+  body{grid-template:"hud" 50px "stage" 1fr "transport" 46px / 1fr;overflow:auto}
+  #rail{position:fixed;left:0;top:50px;bottom:46px;width:218px;transform:translateX(-102%);transition:.25s;z-index:40;background:var(--bg0)}
+  #rail.open{transform:none;box-shadow:var(--shadow)}
+  .view{flex-direction:column;overflow-y:auto}
+  .side{width:auto;flex:0 0 auto}
+  #menuBtn{display:grid!important}
+}
+#menuBtn{display:none}
+</style>
+</head>
+<body>
+
+<header id="hud">
+  <button id="menuBtn" class="iconbtn" title="Menu" aria-label="Toggle menu">
+    <svg width="14" height="14" viewBox="0 0 14 14"><path d="M1 3h12M1 7h12M1 11h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+  </button>
+  <div class="hud-left">
+    <div id="liveDialWrap" title="Live run status">
+      <svg id="liveDial" viewBox="0 0 36 36" width="36" height="36"></svg>
+      <div class="lpulse"></div>
+    </div>
+    <div>
+      <b id="viewTitle">Orbit — mission pulse</b>
+      <span id="liveText">live channel idle</span>
+    </div>
+  </div>
+  <div class="hud-ticker" id="ticker"></div>
+  <div class="hud-right">
+    <span class="stamp" id="stamp"></span>
+    <button id="themeBtn" class="iconbtn" title="Theme (t)" aria-label="Toggle theme">
+      <svg width="13" height="13" viewBox="0 0 14 14"><path d="M7 1a6 6 0 1 0 3.6 10.8A6.6 6.6 0 0 1 7 1z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<aside id="rail">
+  <div class="brand">
+    <svg class="mark" viewBox="0 0 34 34" aria-hidden="true">
+      <circle cx="17" cy="17" r="14.5" fill="none" stroke="var(--acc)" stroke-width="1" opacity=".35"/>
+      <circle cx="17" cy="17" r="9" fill="none" stroke="var(--acc2)" stroke-width="1" opacity=".5"/>
+      <ellipse cx="17" cy="17" rx="15" ry="6" fill="none" stroke="var(--acc)" stroke-width="1.1" transform="rotate(-24 17 17)"/>
+      <circle cx="17" cy="17" r="3.2" fill="var(--acc)"/>
+      <circle cx="28.5" cy="10.5" r="1.7" fill="var(--ok)"/>
+    </svg>
+    <div><b>ARCHIMEDES<br>ORBITAL</b><i>radial mission control</i></div>
+  </div>
+
+  <div class="rail-h">Views</div>
+  <nav id="nav" role="tablist" aria-label="Dashboard views"></nav>
+
+  <div class="rail-h">Filters</div>
+  <div class="frow"><select id="scopeSel" aria-label="Run scope">
+    <option value="all">all runs</option>
+    <option value="full">full runs only</option>
+    <option value="slice">samples / slices</option>
+  </select></div>
+  <div class="frow"><select id="modelSel" aria-label="Model"></select></div>
+  <div class="frow"><input id="search" class="search" type="search" placeholder="search id / question / date…" aria-label="Search runs"></div>
+
+  <div class="rail-h">Legend</div>
+  <div class="rail-legend">
+    <div class="scale"></div>
+    <div class="lbl"><span>0%</span><span>pass rate</span><span>100%</span></div>
+    <div class="vleg">
+      <span><i style="background:var(--ok)"></i>correct</span>
+      <span><i style="background:var(--mid)"></i>partial</span>
+      <span><i style="background:var(--bad)"></i>incorrect</span>
+    </div>
+  </div>
+
+  <div class="rail-foot">
+    <a id="classicLink" target="_blank" rel="noopener">classic mission dashboard ↗</a>
+    <span class="panelnote" id="railMeta"></span>
+  </div>
+</aside>
+
+<main id="stage">
+
+  <section class="view on" id="v-orbit" role="tabpanel">
+    <div class="stage-wrap"><svg id="orbitSvg" viewBox="0 0 980 680" role="img" aria-label="Orbital gauge cluster"></svg></div>
+    <aside class="side" id="orbitSide"></aside>
+  </section>
+
+  <section class="view" id="v-tiers" role="tabpanel">
+    <div class="stage-wrap">
+      <div class="chips" id="runChips"></div>
+      <svg id="tierSvg" viewBox="0 0 800 690" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Polar tier heatmap"></svg>
+    </div>
+    <aside class="side" id="tierSide"></aside>
+  </section>
+
+  <section class="view" id="v-spiral" role="tabpanel">
+    <div class="stage-wrap">
+      <svg id="spiralSvg" viewBox="0 0 960 740" role="img" aria-label="Archimedean spiral of run history"></svg>
+      <div class="overlay" id="spiralLegend" style="left:14px;bottom:12px"></div>
+      <div class="overlay" id="spiralHint" style="right:14px;top:10px;color:var(--dim)"></div>
+    </div>
+  </section>
+
+  <section class="view" id="v-compare" role="tabpanel">
+    <div class="stage-wrap">
+      <div class="chips" id="cmpChips"></div>
+      <svg id="radarSvg" viewBox="0 0 640 640" role="img" aria-label="Radar comparison across tier bands"></svg>
+    </div>
+    <div class="stage-wrap">
+      <div class="chips" id="raceChips"></div>
+      <svg id="raceSvg" viewBox="0 0 640 640" role="img" aria-label="Radial bar track of runs"></svg>
+    </div>
+  </section>
+
+  <section class="view" id="v-burst" role="tabpanel">
+    <div class="stage-wrap">
+      <div class="chips" id="burstChips"></div>
+      <svg id="burstSvg" viewBox="0 0 680 680" role="img" aria-label="Sunburst of verdict composition"></svg>
+    </div>
+    <aside class="side" id="burstSide"></aside>
+  </section>
+
+  <section class="view" id="v-rose" role="tabpanel">
+    <div class="stage-wrap"><svg id="roseSvg" viewBox="0 0 680 680" role="img" aria-label="Nightingale rose of daily Archimedes stats"></svg></div>
+    <aside class="side" id="roseSide"></aside>
+  </section>
+
+</main>
+
+<footer id="transport">
+  <button id="playBtn" class="tbtn" title="Replay history (space)" aria-label="Play or pause history replay">
+    <svg id="playIcon" width="11" height="11" viewBox="0 0 12 12"><path d="M2.5 1.5l8 4.5-8 4.5z" fill="currentColor"/></svg>
+  </button>
+  <button id="resetBtn" class="tbtn" title="Return to live scope" aria-label="Reset time scope">
+    <svg width="13" height="13" viewBox="0 0 14 14"><path d="M12 7A5 5 0 1 1 7 2c1.8 0 3.4 1 4.3 2.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M11.6 1.6v3h-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <input type="range" id="timeSlider" min="0" value="0" step="1" aria-label="Time scope through run history">
+  <select id="speedSel" aria-label="Replay speed">
+    <option value="0.5">0.5×</option>
+    <option value="1" selected>1×</option>
+    <option value="2">2×</option>
+    <option value="4">4×</option>
+  </select>
+  <div id="transportText"></div>
+  <div class="badge scope" id="scopeBadge" style="display:none">TIME SCOPE</div>
+</footer>
+
+<div id="tip" role="tooltip"></div>
+<div id="scrim"></div>
+<aside id="drawer" aria-label="Run detail">
+  <header>
+    <b id="drawerTitle">Run</b>
+    <button id="drawerClose" class="iconbtn" title="Close (esc)" aria-label="Close run detail">
+      <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </header>
+  <div id="drawerBody"></div>
+</aside>
+
+<script id="orbit-data" type="application/json">@@DATA@@</script>
+<script id="orbit-live" type="application/json">@@LIVE@@</script>
+<script>
+(() => {
+"use strict";
+
+/* ── embedded data ─────────────────────────────────── */
+const DATA = JSON.parse(document.getElementById("orbit-data").textContent);
+let LIVE = null;
+try { LIVE = JSON.parse(document.getElementById("orbit-live").textContent); } catch (e) { LIVE = null; }
+
+const $ = s => document.querySelector(s);
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const SVGNS = "http://www.w3.org/2000/svg";
+const TAU = Math.PI * 2;
+
+/* ── tiny helpers ──────────────────────────────────── */
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const clamp01 = v => clamp(v, 0, 1);
+const pct = v => (v == null || isNaN(v)) ? "—" : (100 * v).toFixed(1) + "%";
+const pct0 = v => (v == null || isNaN(v)) ? "—" : Math.round(100 * v) + "%";
+const fmtN = v => (v == null) ? "—" : v.toLocaleString("en-US");
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function svgEl(name, attrs, parent) {
+  const el = document.createElementNS(SVGNS, name);
+  if (attrs) for (const k in attrs) el.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(el);
+  return el;
+}
+function txt(parent, x, y, str, cls, attrs) {
+  const t = svgEl("text", Object.assign({ x, y, "class": cls }, attrs || {}), parent);
+  t.textContent = str;
+  return t;
+}
+/* polar: degrees clockwise from 12 o'clock */
+function PP(cx, cy, r, deg) {
+  const a = (deg - 90) * Math.PI / 180;
+  return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+}
+function arcLine(cx, cy, r, a0, a1) {
+  const [x0, y0] = PP(cx, cy, r, a0), [x1, y1] = PP(cx, cy, r, a1);
+  const large = (a1 - a0) > 180 ? 1 : 0;
+  return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${r} ${r} 0 ${large} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+}
+function sectorPath(cx, cy, r0, r1, a0, a1) {
+  const [x0, y0] = PP(cx, cy, r1, a0), [x1, y1] = PP(cx, cy, r1, a1);
+  const [x2, y2] = PP(cx, cy, r0, a1), [x3, y3] = PP(cx, cy, r0, a0);
+  const large = (a1 - a0) > 180 ? 1 : 0;
+  return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${r1} ${r1} 0 ${large} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}` +
+         `L${x2.toFixed(2)} ${y2.toFixed(2)}A${r0} ${r0} 0 ${large} 0 ${x3.toFixed(2)} ${y3.toFixed(2)}Z`;
+}
+/* red → amber → mint rate scale */
+function colorRate(t) {
+  t = clamp01(t);
+  const stops = [
+    [255, 110, 136], [251, 191, 36], [61, 220, 151]
+  ];
+  const seg = t < .5 ? 0 : 1, f = t < .5 ? t / .5 : (t - .5) / .5;
+  const a = stops[seg], b = stops[seg + 1];
+  return `rgb(${Math.round(a[0] + (b[0] - a[0]) * f)},${Math.round(a[1] + (b[1] - a[1]) * f)},${Math.round(a[2] + (b[2] - a[2]) * f)})`;
+}
+const VERDICT_COLOR = { correct: "var(--ok)", partial: "var(--mid)", incorrect: "var(--bad)" };
+const SERIES_COLORS = ["var(--acc)", "var(--acc2)", "var(--mid)", "var(--ok)", "var(--bad)", "#60a5fa"];
+
+/* tween + single rAF loop ─────────────────────────── */
+const tweens = new Set();
+function tween(from, to, dur, step, done) {
+  if (reduceMotion || dur <= 0) { step(to); done && done(); return; }
+  const o = { dead: false };
+  o.tick = now => {
+    if (o.dead) return;
+    let k = clamp01((now - o.t0) / dur);
+    const e = 1 - Math.pow(1 - k, 3);
+    step(from + (to - from) * e);
+    if (k >= 1) { tweens.delete(o); done && done(); }
+  };
+  o.t0 = performance.now();
+  o.stop = () => { o.dead = true; tweens.delete(o); };
+  tweens.add(o);
+  return o;
+}
+
+/* ── derived data ──────────────────────────────────── */
+const chrono = DATA.sessions
+  .map(s => Object.assign({}, s))
+  .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")) || (a.id - b.id));
+const byId = new Map(chrono.map(s => [s.id, s]));
+const fullChrono = chrono.filter(s => s.full);
+const maxTier = DATA.maxTier || 60;
+const N_BANDS = Math.ceil(maxTier / 4);
+const bandOf = t => Math.floor((t - 1) / 4);
+const bandLabel = b => `T${b * 4 + 1}–${b * 4 + 4}`;
+const tierStat = (s, t) => (s.tiers ? s.tiers[String(t)] : null) || null;
+function bandStat(s, b) {
+  let c = 0, p = 0, i = 0, n = 0;
+  for (let t = b * 4 + 1; t <= b * 4 + 4 && t <= maxTier; t++) {
+    const st = tierStat(s, t);
+    if (st) { c += st.c; p += st.p; i += st.i; n += st.n; }
+  }
+  return n ? { c, p, i, n, rate: (c + .5 * p) / n } : null;
+}
+const modelKey = s => (s.arch && s.arch !== "unknown") ? `${s.model} · ${s.arch}` : (s.model || "unknown");
+const runTitle = s => `S${s.id}${s.full ? " · full" : ""}`;
+
+const projections = new Map((DATA.projections || []).map(p => [p.id, p]));
+const rubyDays = (DATA.ruby || []).slice().sort((a, b) => String(a.date).localeCompare(String(b.date)));
+
+/* ── state ─────────────────────────────────────────── */
+const S = {
+  view: "orbit",
+  scope: "all", model: "all", q: "",
+  run: DATA.kpi && DATA.kpi.latestId != null ? DATA.kpi.latestId : (fullChrono.length ? fullChrono[fullChrono.length - 1].id : (chrono.length ? chrono[chrono.length - 1].id : null)),
+  compare: [],
+  tier: null,
+  zoomBand: null,
+  day: rubyDays.length ? rubyDays[rubyDays.length - 1].date : null,
+  raceSort: "date",
+  pi: null,           /* time-scope index into chrono, null = all */
+  piF: 0, playing: false, speed: 1,
+};
+
+function visibleRuns(source) {
+  const list = source || chrono;
+  return list.filter(s =>
+    (S.scope === "all" || (S.scope === "full" ? s.full : !s.full)) &&
+    (S.model === "all" || modelKey(s) === S.model) &&
+    (!S.q || (`#${s.id} ${s.preview || ""} ${s.date || ""} ${s.model || ""} ${s.arch || ""}`).toLowerCase().includes(S.q))
+  );
+}
+function scopedChrono() { return S.pi == null ? visibleRuns(chrono) : visibleRuns(chrono).filter(s => chrono.indexOf(s) <= S.pi); }
+function effRun(pool) {
+  const list = pool || scopedChrono();
+  if (!list.length) return null;
+  if (S.run != null && list.some(s => s.id === S.run)) return byId.get(S.run);
+  const f = list.filter(s => s.full);
+  return f.length ? f[f.length - 1] : list[list.length - 1];
+}
+
+/* ── tooltip ───────────────────────────────────────── */
+const tip = $("#tip");
+function tipShow(html, ev) {
+  tip.innerHTML = html;
+  tip.style.opacity = 1;
+  tipMove(ev);
+}
+function tipMove(ev) {
+  const pad = 14, r = tip.getBoundingClientRect();
+  let x = ev.clientX + pad, y = ev.clientY + pad;
+  if (x + r.width > innerWidth - 8) x = ev.clientX - r.width - pad;
+  if (y + r.height > innerHeight - 8) y = ev.clientY - r.height - pad;
+  tip.style.left = x + "px"; tip.style.top = y + "px";
+}
+function tipHide() { tip.style.opacity = 0; }
+function bindTip(el, htmlFn) {
+  el.addEventListener("mouseenter", ev => tipShow(htmlFn(), ev));
+  el.addEventListener("mousemove", tipMove);
+  el.addEventListener("mouseleave", tipHide);
+}
+
+/* ── gauge factory ─────────────────────────────────── */
+function makeGauge(parent, cx, cy, r, opt) {
+  const A0 = -135, SW = 270;
+  const lo = opt.min || 0, hi = opt.max == null ? 1 : opt.max;
+  const g = svgEl("g", { transform: `translate(${cx},${cy})`, "class": "gauge fadein" }, parent);
+  svgEl("path", { d: arcLine(0, 0, r, A0, A0 + SW), "class": "gtrack", "stroke-width": opt.thick || 9 }, g);
+  for (let i = 0; i <= 10; i++) {
+    const a = A0 + SW * i / 10, p1 = PP(0, 0, r + 4, a), p2 = PP(0, 0, r + 9, a);
+    svgEl("line", { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], "class": "gtick" }, g);
+  }
+  const color = opt.color || "var(--acc)";
+  const vpath = svgEl("path", { d: "", "class": "gval", style: `stroke:${color}`, "stroke-width": opt.thick || 9 }, g);
+  const cap = svgEl("circle", { r: (opt.thick || 9) * .42, cx: 0, cy: -r, fill: color }, g);
+  const big = r >= 84;
+  const vt = txt(g, 0, r * (big ? .22 : .26), "", "gv", { "font-size": big ? 30 : 15 });
+  const lt = txt(g, 0, r * (big ? .22 : .26) + (big ? 17 : 11), opt.label || "", "gl", { "font-size": big ? 9.5 : 7.5 });
+  let sub2 = null;
+  if (opt.sub) sub2 = txt(g, 0, r * (big ? .22 : .26) + (big ? 30 : 21), opt.sub, "gs");
+  let cur = lo;
+  function paint(v) {
+    const frac = clamp01((v - lo) / (hi - lo || 1));
+    const a = A0 + .8 + (SW - .8) * frac;
+    vpath.setAttribute("d", arcLine(0, 0, r, A0, Math.max(a, A0 + 1)));
+    const cp = PP(0, 0, r, Math.max(a, A0 + 1));
+    cap.setAttribute("cx", cp[0]); cap.setAttribute("cy", cp[1]);
+    vt.textContent = opt.fmt ? opt.fmt(v) : pct(v);
+  }
+  paint(cur);
+  if (opt.sub) sub2.textContent = opt.sub;
+  lt.textContent = opt.label || "";
+  return { set(v, instant) { const from = cur; cur = v; if (instant) paint(v); else tween(from, v, 750, paint); }, g };
+}
+
+/* verdict donut ────────────────────────────────────── */
+function makeDonut(parent, cx, cy, r, thick) {
+  const g = svgEl("g", { transform: `translate(${cx},${cy})` }, parent);
+  svgEl("circle", { r, fill: "none", stroke: "var(--line)", "stroke-width": thick }, g);
+  const arcs = ["correct", "partial", "incorrect"].map(v =>
+    svgEl("path", { fill: "none", stroke: VERDICT_COLOR[v], "stroke-width": thick }, g));
+  const vt = txt(g, 0, 2, "", "gv", { "font-size": Math.max(11, r * .38) });
+  const lt = txt(g, 0, 2 + Math.max(11, r * .38) * .95, "pass", "gl", { "font-size": 8 });
+  let cur = { correct: 0, partial: 0, incorrect: 0 };
+  function paint(mix) {
+    const tot = Math.max(1, mix.correct + mix.partial + mix.incorrect);
+    let a0 = 0;
+    const parts = [["correct", arcs[0]], ["partial", arcs[1]], ["incorrect", arcs[2]]];
+    for (const [k, el] of parts) {
+      const frac = mix[k] / tot;
+      if (frac > 0.0015) el.setAttribute("d", arcLine(0, 0, r, a0, a0 + 360 * frac - Math.min(3, 360 * frac * .5)));
+      else el.setAttribute("d", "");
+      a0 += 360 * frac;
+    }
+    vt.textContent = pct0((mix.correct + .5 * mix.partial) / tot);
+    vt.setAttribute("fill", colorRate((mix.correct + .5 * mix.partial) / tot));
+  }
+  paint(cur);
+  return { set(mix, rate) { cur = mix; paint(mix); if (rate != null) { vt.textContent = pct0(rate); vt.setAttribute("fill", colorRate(rate)); } }, g };
+}
+
+/* ── live channel ──────────────────────────────────── */
+function renderLive() {
+  const wrap = $("#liveDialWrap"), svg = $("#liveDial");
+  svg.innerHTML = "";
+  const running = LIVE && LIVE.status === "running";
+  wrap.classList.toggle("running", running);
+  const done = (LIVE && LIVE.done) || 0, tot = (LIVE && LIVE.total) || 1;
+  svgEl("circle", { cx: 18, cy: 18, r: 13, fill: "none", stroke: "var(--line)", "stroke-width": 3.4 }, svg);
+  if (running) {
+    svgEl("path", { d: arcLine(18, 18, 13, 0, Math.max(2, 360 * clamp01(done / tot))), fill: "none", stroke: "var(--ok)", "stroke-width": 3.4, "stroke-linecap": "round" }, svg);
+    svgEl("circle", { cx: 18, cy: 18, r: 4, fill: "var(--ok)" }, svg);
+  } else {
+    svgEl("circle", { cx: 18, cy: 18, r: 4, fill: "var(--dim)" }, svg);
+  }
+  const lt = $("#liveText");
+  if (running) {
+    lt.textContent = `live · S${LIVE.session} · q ${done}/${tot} · ${esc(LIVE.archimedes || "")}`;
+    lt.className = "is-running";
+  } else {
+    lt.textContent = LIVE && LIVE.updated_at ? `last live update ${esc(LIVE.updated_at.slice(0, 16).replace("T", " "))}` : "live channel idle";
+    lt.className = "";
+  }
+  const w = wrap;
+  w.onmouseenter = ev => {
+    if (!LIVE) return tipShow("No live run recorded.", ev);
+    const q = LIVE.current ? `<span class="tq">now: ${esc(LIVE.current.question || LIVE.current.id)}</span>` : "";
+    const tiers = LIVE.tiers ? Object.keys(LIVE.tiers).map(t => `T${t}:${LIVE.tiers[t].correct}✓`).join(" ") : "";
+    tipShow(`<b>Live session S${LIVE.session}</b><br>${esc(LIVE.model || "")} → ${esc(LIVE.archimedes || "")}` +
+      `<br>done ${LIVE.done}/${LIVE.total} · pass ${pct(LIVE.pass_rate)} · elapsed ${Math.round((LIVE.elapsed_seconds || 0) / 60)}m` +
+      (LIVE.eta_seconds ? ` · eta ${Math.round(LIVE.eta_seconds / 60)}m` : "") + q +
+      (tiers ? `<span class="tq">${esc(tiers)}</span>` : ""), ev);
+  };
+  w.onmousemove = tipMove;
+  w.onmouseleave = tipHide;
+}
+async function pollLive() {
+  if (!/^https?:$/.test(location.protocol)) return;
+  for (const p of ["results/live.json", "../results/live.json", "live.json"]) {
+    try {
+      const r = await fetch(p, { cache: "no-store" });
+      if (!r.ok) continue;
+      const j = await r.json();
+      if (j && j.status) { LIVE = j; renderLive(); return; }
+    } catch (e) { /* try next path */ }
+  }
+}
+
+/* ── ticker / rail meta ────────────────────────────── */
+function renderTicker() {
+  const k = DATA.kpi || {};
+  const best = k.bestId != null ? byId.get(k.bestId) : null;
+  $("#ticker").innerHTML = [
+    `<span>sessions <b>${fmtN(k.sessions)}</b></span>`,
+    `<span>graded <b>${fmtN(k.graded)}</b></span>`,
+    `<span>full runs <b>${fmtN(k.fullRuns)}</b></span>`,
+    `<span>best <b style="color:${colorRate(k.bestRate || 0)}">${pct(k.bestRate)}</b>${best ? ` S${best.id}` : ""}</span>`,
+    `<span>verifier catch <b>${pct(k.catch)}</b></span>`,
+    `<span>gain <b style="color:var(--ok)">+${pct(k.delta)}</b> since S${k.firstId}</span>`,
+  ].join("");
+  $("#railMeta").textContent = `${fmtN(k.sessions)} recorded runs · ${N_BANDS} tier bands · data through ${DATA.generated || ""}`;
+  $("#stamp").textContent = `${DATA.generated || ""} · radial v1`;
+}
+
+/* ═══ VIEW 1 · ORBIT ═════════════════════════════════ */
+const orbitGauges = {};
+let orbitDonut = null;
+function renderOrbit() {
+  const svg = $("#orbitSvg");
+  svg.innerHTML = "";
+  const list = scopedChrono();
+  const fulls = list.filter(s => s.full);
+  const run = effRun(list);
+  const hero = svgEl("g", {}, svg);
+
+  if (!run) {
+    txt(svg, 490, 340, "no runs match the current filters", "axl", { "font-size": 14 });
+    return;
+  }
+
+  /* hero dial — strict pass rate of effective run */
+  const heroR = 118;
+  svgEl("circle", { cx: 490, cy: 330, r: heroR + 26, fill: "none", stroke: "var(--grid)", "stroke-dasharray": "1 6" }, hero);
+  orbitGauges.hero = makeGauge(hero, 490, 330, heroR, {
+    label: "strict pass rate", max: 1, color: colorRate(run.rate), fmt: pct,
+    sub: `${runTitle(run)} · ${esc(run.date || "undated")}`, thick: 13
+  });
+  orbitGauges.hero.set(run.rate, true);
+
+  /* satellites */
+  const sats = [
+    { a: 225, opt: { label: "weighted", max: 1, color: "var(--acc2)", fmt: pct, sub: "partial = ½" } },
+    { a: 135, opt: { label: "verifier catch", max: 1, color: "var(--ok)", fmt: pct, sub: "archimedes" } },
+    { a: 315, opt: { label: "gain vs first", min: -0.3, max: .6, color: "var(--mid)", fmt: v => (v >= 0 ? "+" : "") + pct(v), sub: `since S${(DATA.kpi || {}).firstId ?? "—"}` } },
+    { a: 45,  opt: { label: "graded", min: 0, max: Math.max(5000, DATA.kpi.graded || 5000), color: "var(--acc)", fmt: fmtN, sub: "questions" } },
+  ];
+  const satVals = () => {
+    const list2 = scopedChrono();
+    const f2 = list2.filter(s => s.full);
+    const k = DATA.kpi || {};
+    return [
+      run.weighted,
+      k.catch,
+      f2.length >= 2 ? f2[f2.length - 1].rate - f2[0].rate : (k.delta || 0),
+      list2.reduce((a, s) => a + s.n, 0)
+    ];
+  };
+  sats.forEach((sat, idx) => {
+    const [sx, sy] = PP(490, 330, 218, sat.a);
+    orbitGauges["sat" + idx] = makeGauge(hero, sx, sy, 46, Object.assign({ thick: 6 }, sat.opt));
+  });
+  const vals = satVals();
+  sats.forEach((_, i) => orbitGauges["sat" + i].set(vals[i], true));
+
+  /* moon ring — last 14 in-scope runs as verdict mini-donuts */
+  const moonsG = svgEl("g", {}, svg);
+  const moons = list.slice(-14);
+  const mr0 = 328;
+  moons.forEach((s, i) => {
+    const a = -90 + i * (360 / 14);
+    const [mx, my] = PP(490, 330, mr0, a);
+    const g = svgEl("g", { "class": "moon fadein", transform: `translate(${mx},${my})` }, moonsG);
+    svgEl("circle", { r: 17, fill: "none", stroke: "var(--grid)" }, g);
+    const tot = Math.max(1, s.n);
+    let a0 = 0;
+    [["correct", "ok"], ["partial", "mid"], ["incorrect", "bad"]].forEach(([v, c]) => {
+      const frac = (s[v] || 0) / tot;
+      if (frac > 0.002) svgEl("path", { d: arcLine(0, 0, 17, a0, a0 + 360 * frac - .6), fill: "none", stroke: `var(--${c})`, "stroke-width": 5 }, g);
+      a0 += 360 * frac;
+    });
+    if (s.full) svgEl("circle", { r: 22.5, fill: "none", stroke: "var(--acc)", "stroke-width": 1, "stroke-dasharray": "3 3", opacity: .85 }, g);
+    txt(g, 0, 33, "S" + s.id, "ring-lab");
+    g.addEventListener("click", () => openRun(s.id));
+    bindTip(g, () => `<b>S${s.id}</b> ${s.full ? "full run" : s.interrupted ? "interrupted" : "sample"}<br>${esc(modelKey(s))}` +
+      `<br>${s.n} questions · pass <b style="color:${colorRate(s.rate)}">${pct(s.rate)}</b> · weighted ${pct(s.weighted)}<br><span class="tq">${esc((s.preview || "").slice(0, 110))}…</span><span class="tq">click to open run</span>`);
+  });
+  txt(svg, 490, 662, "outer ring · last 14 in-scope runs · dashed halo = full 320-question run", "ring-lab");
+
+  /* side readouts */
+  const mix = list.reduce((a, s) => ({ correct: a.correct + s.correct, partial: a.partial + s.partial, incorrect: a.incorrect + s.incorrect }), { correct: 0, partial: 0, incorrect: 0 });
+  const side = $("#orbitSide");
+  side.innerHTML = `<h3>Scope readout</h3><div id="orbitDonutWrap" style="display:grid;place-items:center;margin:4px 0 10px"></div>
+    <div id="orbitStats"></div>
+    <p class="panelnote">Every instrument recomputes when the time scope or filters change. Drag the transport below to replay the trial day by day.</p>`;
+  const dw = $("#orbitDonutWrap");
+  const dsvg = svgEl("svg", { viewBox: "-70 -70 140 140", width: 150, height: 150 }, dw);
+  orbitDonut = makeDonut(dsvg, 0, 0, 56, 17);
+  orbitDonut.set(mix, mix.correct / Math.max(1, mix.correct + mix.partial + mix.incorrect));
+  const best = fulls.length ? fulls.reduce((a, b) => b.rate > a.rate ? b : a) : null;
+  const stats = [
+    ["in scope", fmtN(list.length), `${fulls.length} full · ${list.length - fulls.length} sample/slice`],
+    ["graded", fmtN(list.reduce((a, s) => a + s.n, 0)), "questions under current scope"],
+    ["best full run", best ? pct(best.rate) : "—", best ? `S${best.id} · ${best.date}` : "none in scope"],
+    ["focus run", `S${run.id}`, `${run.date || "undated"} · ${esc(modelKey(run))}`],
+    ["archimedes days", String(rubyDays.length), rubyDays.length ? `latest ${rubyDays[rubyDays.length - 1].date}` : "—"],
+    ["local-model trials", String((DATA.projections || []).length), "32-question projection runs"],
+  ];
+  $("#orbitStats").innerHTML = stats.map(([k, v, n]) => `<div class="stat"><span>${esc(k)}</span><span><b>${esc(v)}</b><small>${esc(n)}</small></span></div>`).join("");
+}
+
+/* ═══ VIEW 2 · TIER RING ═════════════════════════════ */
+let tierVsBest = false;
+function renderRunChips(containerId, activeId, onPick, pool) {
+  const el = $(containerId);
+  el.innerHTML = "";
+  const runs = (pool || fullChrono).slice();
+  if (!runs.length) { el.innerHTML = '<span class="panelnote">no full runs in scope</span>'; return; }
+  runs.forEach(s => {
+    const c = document.createElement("button");
+    c.className = "chip" + (s.id === activeId ? " on" : "");
+    c.innerHTML = `<i style="background:${colorRate(s.rate)}"></i>S${s.id} · ${pct0(s.rate)}`;
+    c.onclick = () => onPick(s.id);
+    el.appendChild(c);
+  });
+}
+function renderTiers() {
+  const svg = $("#tierSvg");
+  svg.innerHTML = "";
+  const list = scopedChrono();
+  const run = effRun(list);
+  if (!run) { txt(svg, 400, 345, "no runs in scope", "axl", { "font-size": 14 }); return; }
+  const CX = 400, CY = 352;
+  const best = (DATA.kpi || {}).bestId != null ? byId.get(DATA.kpi.bestId) : null;
+
+  renderRunChips("#runChips", run.id, id => { S.run = id; S.tier = null; renderTiers(); }, list.filter(s => s.full).concat(list.filter(s => !s.full).slice(-4)));
+
+  const g = svgEl("g", { "class": "fadein" }, svg);
+  /* radial grid */
+  [130, 190, 250].forEach(r => svgEl("circle", { cx: CX, cy: CY, r, "class": "gridline" }, g));
+
+  const maxN = Math.max(1, ...Array.from({ length: maxTier }, (_, i) => (tierStat(run, i + 1) || { n: 0 }).n));
+  const A = 360 / maxTier, GAP = Math.min(1.6, A * .22);
+
+  for (let t = 1; t <= maxTier; t++) {
+    const st = tierStat(run, t);
+    const a0 = (t - 1) * A + GAP / 2, a1 = t * A - GAP / 2;
+    if (!st || !st.n) {
+      svgEl("path", { d: sectorPath(CX, CY, 185, 245, a0, a1), "class": "tsec miss" }, g);
+      continue;
+    }
+    const rate = (st.c + .5 * st.p) / st.n;
+    const p = svgEl("path", {
+      d: sectorPath(CX, CY, 185, 245, a0, a1), "class": "tsec",
+      fill: colorRate(rate), opacity: .34 + .62 * clamp01(st.c / st.n)
+    }, g);
+    const vol = svgEl("path", {
+      d: sectorPath(CX, CY, 148, 166, a0, a1),
+      fill: "var(--acc)", opacity: .12 + .78 * (st.n / maxN)
+    }, g);
+    const on = el => {
+      el.addEventListener("click", () => { S.tier = t; renderTiers(); });
+      bindTip(el, () => `<b>Tier ${t}</b> · ${runTitle(run)}<br>${st.c} correct · ${st.p} partial · ${st.i} incorrect` +
+        `<br>pass <b style="color:${colorRate(st.c / st.n)}">${pct(st.c / st.n)}</b> · weighted ${pct(rate)}` +
+        (S.tier === t ? `<span class="tq">selected</span>` : `<span class="tq">click to inspect tier</span>`));
+    };
+    on(p); on(vol);
+    if (S.tier === t) {
+      svgEl("path", { d: sectorPath(CX, CY, 140, 252, a0, a1), fill: "none", stroke: "var(--acc)", "stroke-width": 2.2 }, g);
+    }
+  }
+
+  /* vs-best inner ring */
+  if (tierVsBest && best && best.id !== run.id) {
+    for (let t = 1; t <= maxTier; t++) {
+      const st = tierStat(best, t);
+      if (!st || !st.n) continue;
+      const a0 = (t - 1) * A + GAP / 2, a1 = t * A - GAP / 2;
+      const rate = st.c / st.n;
+      svgEl("path", {
+        d: sectorPath(CX, CY, 112, 134, a0, a1),
+        fill: colorRate(rate), opacity: .5
+      }, g);
+    }
+    txt(svg, CX, CY - 40, "inner ring · best run S" + best.id, "ring-lab");
+  }
+
+  /* band separators + labels */
+  for (let b = 0; b <= N_BANDS; b++) {
+    const t = b * 4;
+    if (t === 0 || t > maxTier) continue;
+    const ang = t * A - 180;
+    const p1 = PP(CX, CY, 130, ang), p2 = PP(CX, CY, 258, ang);
+    svgEl("line", { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: "var(--grid)", "stroke-width": b % 2 ? 1 : 1.6, "stroke-dasharray": b % 2 ? "2 4" : "none" }, g);
+  }
+  for (let t = 4; t <= maxTier; t += 4) {
+    const ang = t * A - A / 2;
+    const [lx, ly] = PP(CX, CY, 268, ang);
+    txt(svg, lx, ly, "T" + t, "ring-lab", { "font-size": 8 });
+  }
+  const [t1x, t1y] = PP(CX, CY, 268, -A / 2);
+  txt(svg, t1x, t1y, "T1", "ring-lab", { "font-size": 8 });
+
+  /* hub */
+  svgEl("circle", { cx: CX, cy: CY, r: 92, fill: "var(--bg1)", stroke: "var(--line)" }, svg);
+  const hub = makeDonut(svg, CX, CY, 62, 14);
+  hub.set({ correct: run.correct, partial: run.partial, incorrect: run.incorrect }, run.rate);
+  txt(svg, CX, CY + 82, `${runTitle(run)} · ${esc(run.date || "")} · ${run.n}q`, "ring-lab");
+  const hb = svgEl("g", { "class": "centerbtn" }, svg);
+  txt(hb, CX, CY - 92, tierVsBest ? "hide best-run ring" : "overlay best-run ring", "ring-lab", { fill: "var(--acc)" });
+  hb.addEventListener("click", () => { tierVsBest = !tierVsBest; renderTiers(); });
+
+  /* tier detail side */
+  const side = $("#tierSide");
+  if (S.tier != null) {
+    const st = tierStat(run, S.tier);
+    const hist = fullChrono.filter(s => tierStat(s, S.tier) && tierStat(s, S.tier).n)
+      .map(s => ({ s, st: tierStat(s, S.tier) }));
+    side.innerHTML = `<h3>Tier ${S.tier} · inspector</h3>
+      ${st ? `<div class="stat"><span>focus run</span><span><b>${st.c}/${st.n} correct</b><small>weighted ${pct((st.c + .5 * st.p) / st.n)}</small></span></div>` : `<p class="panelnote">Not tested in S${run.id}.</p>`}
+      <h3 style="margin-top:14px">Full-run history · T${S.tier}</h3>
+      ${hist.length ? hist.map(({ s, st }) => `
+        <div class="trow" data-run="${s.id}">
+          <span>S${s.id}</span>
+          <span class="mini"><i style="width:${100 * st.c / st.n}%;background:var(--ok)"></i><i style="width:${100 * st.p / st.n}%;background:var(--mid)"></i><i style="width:${100 * st.i / st.n}%;background:var(--bad)"></i></span>
+          <b>${pct0(st.c / st.n)}</b>
+        </div>`).join("") : `<p class="panelnote">No full run tested this tier.</p>`}`;
+    side.querySelectorAll(".trow").forEach(r => r.addEventListener("click", () => openRun(+r.dataset.run)));
+  } else {
+    side.innerHTML = `<h3>Tier inspector</h3>
+      <p class="panelnote">Click any sector to inspect that tier across every full run.<br><br>
+      Outer band — pass rate per tier (color) with intensity by strict-correct share.<br>
+      Inner band — questions asked per tier (volume).<br>
+      Dashed sectors — tier not reached in this run.</p>
+      <h3>Focus run</h3>
+      <div class="stat"><span>run</span><span><b>S${run.id}</b><small>${esc(run.date || "undated")} · ${esc(modelKey(run))}</small></span></div>
+      <div class="stat"><span>strict / weighted</span><span><b>${pct(run.rate)} · ${pct(run.weighted)}</b></span></div>
+      <div class="stat"><span>coverage</span><span><b>${Object.keys(run.tiers || {}).length}/${maxTier}</b><small>tiers reached</small></span></div>`;
+  }
+}
+
+/* ═══ VIEW 3 · SPIRAL ════════════════════════════════ */
+let spiralDots = [];
+function renderSpiral() {
+  const svg = $("#spiralSvg");
+  svg.innerHTML = "";
+  spiralDots = [];
+  const list = visibleRuns(chrono);
+  const N = list.length;
+  if (!N) { txt(svg, 480, 370, "no runs in scope", "axl", { "font-size": 14 }); return; }
+  const CX = 480, CY = 368, R0 = 58, R1 = 300;
+  const TURNS = Math.min(6.5, Math.max(2.5, N / 26));
+  const dTheta = TURNS * TAU / Math.max(1, N - 1);
+
+  /* spiral guide */
+  let d = "";
+  for (let k = 0; k < N; k++) {
+    const r = R0 + (R1 - R0) * k / Math.max(1, N - 1), th = k * dTheta;
+    const [x, y] = [CX + r * Math.cos(th), CY + r * Math.sin(th)];
+    d += (k ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1) + " ";
+  }
+  svgEl("path", { d, "class": "sp-spiral" }, svg);
+  for (let rr = R0; rr <= R1 + 1; rr += (R1 - R0) / TURNS) svgEl("circle", { cx: CX, cy: CY, r: rr, "class": "gridline" }, svg);
+
+  const maxNN = Math.max(1, ...list.map(s => s.n));
+  /* month labels at first run of each month */
+  const seenMonths = new Set();
+  list.forEach((s, k) => {
+    const m = (s.date || "").slice(0, 7);
+    if (!m || seenMonths.has(m)) return;
+    seenMonths.add(m);
+    const r = R0 + (R1 - R0) * k / Math.max(1, N - 1) + 20, th = k * dTheta;
+    const [x, y] = [CX + (r) * Math.cos(th), CY + r * Math.sin(th)];
+    txt(svg, x, y, m, "ring-lab", { fill: "var(--dim)" });
+  });
+
+  const dotsG = svgEl("g", {}, svg);
+  const playG = svgEl("g", {}, svg);
+  const playLine = svgEl("line", { "class": "playhead", x1: CX, y1: CY, x2: CX, y2: CY - R1 - 16 }, playG);
+
+  list.forEach((s, k) => {
+    const r = R0 + (R1 - R0) * k / Math.max(1, N - 1), th = k * dTheta;
+    const x = CX + r * Math.cos(th), y = CY + r * Math.sin(th);
+    const rad = 3.5 + 8 * Math.sqrt(s.n / maxNN);
+    const g = svgEl("g", { "class": "sdot", transform: `translate(${x},${y})` }, dotsG);
+    svgEl("circle", { r: rad + 3.5, class: "halo", fill: "transparent" }, g);
+    svgEl("circle", { r: rad, fill: colorRate(s.rate) }, g);
+    if (s.full) svgEl("circle", { r: rad + 3.2, fill: "none", stroke: "var(--acc)", "stroke-width": 1.1, "stroke-dasharray": "2.5 2.5" }, g);
+    if (s.interrupted) { /* small notch */
+      const p1 = [rad * .71, -rad * .71];
+      svgEl("line", { x1: -p1[0], y1: p1[1], x2: p1[0], y2: -p1[1], stroke: "var(--bg0)", "stroke-width": 1.4 }, g);
+    }
+    g.dataset.idx = k;
+    g.addEventListener("click", () => { if (!S.playing) { S.pi = k; syncTransport(); renderTimeScoped(); } openRun(s.id); });
+    bindTip(g, () => `<b>S${s.id}</b> ${s.full ? "full run" : s.interrupted ? "interrupted" : "sample"} · ${esc(s.date || "undated")}` +
+      `<br>${esc(modelKey(s))}<br>${s.n}q · pass <b style="color:${colorRate(s.rate)}">${pct(s.rate)}</b> · weighted ${pct(s.weighted)}` +
+      `<br><span class="tq">${esc((s.preview || "").slice(0, 110))}…</span><span class="tq">click = scope here + open run</span>`);
+    spiralDots.push({ g, s });
+  });
+
+  /* hub readout */
+  svgEl("circle", { cx: CX, cy: CY, r: 46, fill: "var(--bg1)", stroke: "var(--line)" }, svg);
+  txt(svg, CX, CY - 8, "", "gv", { "font-size": 17, id: "spCount" });
+  txt(svg, CX, CY + 8, "runs lit", "gl");
+  txt(svg, CX, CY + 22, "", "gs", { id: "spBest" });
+
+  $("#spiralLegend").innerHTML =
+    `dot size ∝ questions · color = pass rate<br>dashed halo = full run · slash = interrupted<br>` +
+    `<span style="display:inline-block;width:110px;height:7px;border-radius:4px;background:linear-gradient(90deg,var(--bad),var(--mid),var(--ok));vertical-align:middle"></span>`;
+
+  $("#spiralHint").innerHTML = "transport below sweeps the spiral — replaying the whole trial";
+
+  spiral.spiralCtx = { CX, CY, R0, R1, dTheta, N, list, playLine };
+  updateSpiralLighting();
+  updateSpiralHub();
+}
+const spiral = {};
+function updateSpiralLighting() {
+  const idxLimit = S.pi; /* null = all */
+  spiralDots.forEach(({ g, s }, k) => {
+    const lit = idxLimit == null || chrono.indexOf(s) <= idxLimit;
+    g.style.opacity = lit ? 1 : .14;
+    g.style.filter = lit ? "none" : "grayscale(.7)";
+  });
+  if (spiral.spiralCtx) {
+    const { CX, CY, R1, playLine } = spiral.spiralCtx;
+    if (idxLimit == null) { playLine.setAttribute("opacity", 0); }
+    else {
+      const list = spiral.spiralCtx.list;
+      const visIdx = list.map(s => chrono.indexOf(s)).indexOf(idxLimit);
+      const k = visIdx >= 0 ? visIdx : list.length - 1;
+      const { dTheta, R0, N } = spiral.spiralCtx;
+      const r = R0 + (R1 - R0) * k / Math.max(1, N - 1), th = k * dTheta;
+      playLine.setAttribute("x2", CX + (R1 + 18) * Math.cos(th));
+      playLine.setAttribute("y2", CY + (R1 + 18) * Math.sin(th));
+      playLine.setAttribute("opacity", .9);
+    }
+  }
+}
+function updateSpiralHub() {
+  const list = scopedChrono();
+  const fulls = list.filter(s => s.full);
+  const best = fulls.length ? fulls.reduce((a, b) => b.rate > a.rate ? b : a) : null;
+  const c1 = document.getElementById("spCount"), c2 = document.getElementById("spBest");
+  if (c1) c1.textContent = String(list.length);
+  if (c2) c2.textContent = best ? `best ${pct0(best.rate)} S${best.id}` : "no full runs";
+}
+
+/* ═══ VIEW 4 · COMPARE (radar + racetrack) ═══════════ */
+function renderCompare() {
+  renderRadar();
+  renderRace();
+}
+function renderRadar() {
+  const svg = $("#radarSvg");
+  svg.innerHTML = "";
+  const pool = fullChrono.filter(s => scopedChrono().some(x => x.id === s.id));
+  if (S.compare.length === 0) {
+    const latest = pool.length ? pool[pool.length - 1] : null;
+    const bestId = (DATA.kpi || {}).bestId;
+    const first = pool[0];
+    S.compare = [first ? first.id : null, bestId != null && byId.get(bestId) && pool.some(s => s.id === bestId) ? bestId : null, latest ? latest.id : null]
+      .filter((v, i, a) => v != null && a.indexOf(v) === i);
+    if (!S.compare.length) { txt(svg, 320, 320, "no full runs in scope", "axl", { "font-size": 14 }); return; }
+  }
+  const CX = 320, CY = 330, R = 200;
+  const axes = Array.from({ length: N_BANDS }, (_, b) => bandLabel(b));
+
+  /* grid */
+  for (let lv = 1; lv <= 4; lv++) {
+    const pts = axes.map((_, i) => PP(CX, CY, R * lv / 4, i * 360 / N_BANDS));
+    svgEl("polygon", { points: pts.map(p => p.join(",")).join(" "), "class": "gridline" }, svg);
+    txt(svg, ...PP(CX, CY, R * lv / 4 + 2, 0), (25 * lv) + "", "rgridlab", { fill: "var(--dim)" });
+  }
+  axes.forEach((lab, i) => {
+    const a = i * 360 / N_BANDS, p = PP(CX, CY, R, a);
+    svgEl("line", { x1: CX, y1: CY, x2: p[0], y2: p[1], "class": "axisline" }, svg);
+    const [lx, ly] = PP(CX, CY, R + 24, a);
+    txt(svg, lx, ly, lab.replace("T", ""), "axl", { transform: `rotate(${a > 90 && a < 270 ? a + 180 : a} ${lx} ${ly})` });
+  });
+
+  /* series */
+  S.compare.forEach((id, si) => {
+    const s = byId.get(id);
+    if (!s) return;
+    const color = SERIES_COLORS[si % SERIES_COLORS.length];
+    const pts = [], marks = [];
+    for (let b = 0; b < N_BANDS; b++) {
+      const st = bandStat(s, b);
+      const a = b * 360 / N_BANDS;
+      const v = st ? st.rate : null;
+      const p = PP(CX, CY, R * (v == null ? 0 : v), a);
+      pts.push(p);
+      if (v != null) marks.push({ p, tested: true });
+    }
+    svgEl("polygon", {
+      points: pts.map(p => p.join(",")).join(" "),
+      fill: color, opacity: .13, stroke: color, "stroke-width": 2, "stroke-linejoin": "round"
+    }, svg);
+    marks.forEach(m => svgEl("circle", { cx: m.p[0], cy: m.p[1], r: 3, fill: "var(--bg0)", stroke: color, "stroke-width": 1.6 }, svg));
+  });
+
+  txt(svg, CX, CY + 4, "tier bands → difficulty", "gs");
+
+  /* legend chips */
+  const el = $("#cmpChips");
+  el.innerHTML = "";
+  S.compare.forEach((id, si) => {
+    const s = byId.get(id);
+    if (!s) return;
+    const color = SERIES_COLORS[si % SERIES_COLORS.length];
+    const c = document.createElement("button");
+    c.className = "chip on";
+    c.innerHTML = `<i style="background:${color}"></i>S${id} · ${pct0(s.rate)}`;
+    c.onclick = () => { S.compare = S.compare.filter(x => x !== id); renderCompare(); };
+    el.appendChild(c);
+  });
+  const selWrap = document.createElement("label");
+  selWrap.style.cssText = "display:inline-flex;align-items:center;gap:6px;font:10.5px var(--mono);color:var(--mut)";
+  selWrap.innerHTML = "+ add run";
+  const sel = document.createElement("select");
+  sel.style.cssText = "font:10.5px var(--mono);color:var(--tx);background:var(--bg1);border:1px solid var(--line);border-radius:6px;padding:3px 6px";
+  pool.filter(s => !S.compare.includes(s.id)).forEach(s => {
+    const o = document.createElement("option");
+    o.value = s.id; o.textContent = `S${s.id} · ${pct0(s.rate)} · ${s.date || ""}`;
+    sel.appendChild(o);
+  });
+  if (!sel.options.length) selWrap.textContent = "all full runs shown";
+  else { sel.onchange = () => { if (sel.value) { S.compare.push(+sel.value); renderCompare(); } }; selWrap.appendChild(sel); }
+  el.appendChild(selWrap);
+}
+function renderRace() {
+  const svg = $("#raceSvg");
+  svg.innerHTML = "";
+  let list = scopedChrono();
+  if (!list.length) { txt(svg, 320, 320, "no runs in scope", "axl", { "font-size": 14 }); return; }
+  list = list.slice().sort((a, b) => S.raceSort === "rate" ? b.rate - a.rate : 0);
+  const CX = 320, CY = 325, R0 = 84, RL = 210;
+  [0.25, 0.5, 0.75, 1].forEach(v => {
+    svgEl("circle", { cx: CX, cy: CY, r: R0 + RL * v, "class": "gridline" }, svg);
+    txt(svg, CX, CY - R0 - RL * v - 3, pct0(v), "rgridlab");
+  });
+  const N = list.length, A = 360 / N, gap = Math.min(2.2, A * .3);
+  const g = svgEl("g", { "class": "fadein" }, svg);
+  list.forEach((s, k) => {
+    const a0 = k * A + gap / 2, a1 = (k + 1) * A - gap / 2;
+    const len = Math.max(2, RL * clamp01(s.rate));
+    const bar = svgEl("path", { d: sectorPath(CX, CY, R0, R0 + len, a0, a1), "class": "rbar", fill: colorRate(s.rate), opacity: .88 }, g);
+    if (s.full) {
+      const p1 = PP(CX, CY, R0 + len + 3, (a0 + a1) / 2), p2 = PP(CX, CY, R0 + len + 10, (a0 + a1) / 2);
+      svgEl("line", { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: "var(--acc)", "stroke-width": 1.2 }, g);
+    }
+    bar.addEventListener("click", () => openRun(s.id));
+    bindTip(bar, () => `<b>S${s.id}</b> · ${esc(s.date || "undated")}<br>${esc(modelKey(s))}<br>${s.n}q · pass <b style="color:${colorRate(s.rate)}">${pct(s.rate)}</b> · weighted ${pct(s.weighted)}<br><span class="tq">${esc((s.preview || "").slice(0, 100))}…</span>`);
+  });
+  svgEl("circle", { cx: CX, cy: CY, r: R0 - 10, fill: "var(--bg1)", stroke: "var(--line)" }, svg);
+  txt(svg, CX, CY - 4, String(list.length), "gv", { "font-size": 19 });
+  txt(svg, CX, CY + 12, "runs", "gl");
+  const best = list.reduce((a, b) => b.rate > a.rate ? b : a);
+  txt(svg, CX, CY + 27, `best ${pct0(best.rate)} · S${best.id}`, "gs");
+
+  const rc = $("#raceChips");
+  rc.innerHTML = "";
+  [["date", "sort · time"], ["rate", "sort · pass rate"]].forEach(([v, lab]) => {
+    const b = document.createElement("button");
+    b.className = "chip" + (S.raceSort === v ? " on" : "");
+    b.textContent = lab;
+    b.onclick = () => { S.raceSort = v; renderRace(); };
+    rc.appendChild(b);
+  });
+}
+
+/* ═══ VIEW 5 · BURST (sunburst) ══════════════════════ */
+function renderBurst() {
+  const svg = $("#burstSvg");
+  svg.innerHTML = "";
+  const list = scopedChrono();
+  const run = effRun(list);
+  if (!run) { txt(svg, 340, 340, "no runs in scope", "axl", { "font-size": 14 }); return; }
+  renderRunChips("#burstChips", run.id, id => { S.run = id; S.zoomBand = null; renderBurst(); }, list.filter(s => s.full).concat(list.filter(s => !s.full).slice(-4)));
+
+  const CX = 340, CY = 348;
+  const bandStats = Array.from({ length: N_BANDS }, (_, b) => bandStat(run, b));
+  const zoom = S.zoomBand;
+
+  svgEl("circle", { cx: CX, cy: CY, r: 262, "class": "gridline" }, svg);
+
+  if (zoom == null) {
+    const totN = Math.max(1, run.n);
+    let a0 = 0;
+    bandStats.forEach((st, b) => {
+      if (!st) return;
+      const span = 360 * st.n / totN - Math.min(1.2, 360 * st.n / totN * .2);
+      const p = svgEl("path", {
+        d: sectorPath(CX, CY, 108, 186, a0 + .6, a0 + span), "class": "bsec",
+        fill: colorRate(st.rate), opacity: .42 + .4 * st.rate
+      }, svg);
+      p.addEventListener("click", () => { S.zoomBand = b; renderBurst(); });
+      bindTip(p, () => `<b>${bandLabel(b)}</b> · ${runTitle(run)}<br>${st.c}✓ · ${st.p}~ · ${st.i}✗ of ${st.n}<br>weighted <b style="color:${colorRate(st.rate)}">${pct(st.rate)}</b><br><span class="tq">click to zoom band</span>`);
+      /* verdict arcs */
+      let va = a0;
+      const vspan = 360 * st.n / totN;
+      [["correct", "ok", st.c], ["partial", "mid", st.p], ["incorrect", "bad", st.i]].forEach(([v, c, count]) => {
+        const f = count / st.n;
+        if (f > 0.004) {
+          const vp = svgEl("path", {
+            d: sectorPath(CX, CY, 192, 258, va + .5, va + vspan * f - .5), "class": "bsec",
+            fill: `var(--${c})`, opacity: .85
+          }, svg);
+          bindTip(vp, () => `<b>${bandLabel(b)} · ${v}</b><br>${count} of ${st.n} questions`);
+          va += vspan * f;
+        }
+      });
+      a0 += 360 * st.n / totN;
+    });
+  } else {
+    const st = bandStats[zoom];
+    if (!st) { S.zoomBand = null; renderBurst(); return; }
+    let va = 0;
+    const parts = [["correct", "ok", st.c], ["partial", "mid", st.p], ["incorrect", "bad", st.i]].filter(x => x[2] > 0);
+    parts.forEach(([v, c, count]) => {
+      const span = 360 * count / st.n - 1.4;
+      const p = svgEl("path", {
+        d: sectorPath(CX, CY, 110, 258, va + .7, va + span + .7), "class": "bsec",
+        fill: `var(--${c})`, opacity: .85
+      }, svg);
+      bindTip(p, () => `<b>${bandLabel(zoom)} · ${v}</b><br>${count} of ${st.n} questions<br>${pct(count / st.n)} of the band`);
+      va += 360 * count / st.n;
+    });
+    /* inner ring shows rate */
+    svgEl("path", { d: sectorPath(CX, CY, 88, 104, 2, 358), fill: colorRate(st.rate), opacity: .8 }, svg);
+    txt(svg, CX, CY + 150, `${bandLabel(zoom)} · weighted ${pct(st.rate)}`, "ring-lab");
+  }
+
+  /* hub */
+  const hub = svgEl("g", { "class": "centerbtn" }, svg);
+  svgEl("circle", { cx: CX, cy: CY, r: 84, fill: "var(--bg1)", stroke: "var(--line)" }, hub);
+  const donut = makeDonut(hub, CX, CY, 58, 13);
+  donut.set({ correct: run.correct, partial: run.partial, incorrect: run.incorrect }, run.rate);
+  txt(hub, CX, CY - 96, zoom == null ? "center = run overview" : "⌂ back to run", "ring-lab", { fill: "var(--acc)" });
+  hub.addEventListener("click", () => { if (zoom != null) { S.zoomBand = null; renderBurst(); } else openRun(run.id); });
+  txt(svg, CX, 664, `${runTitle(run)} · ${esc(run.date || "")} · ${run.n}q ${zoom != null ? "· zoomed" : ""}`, "ring-lab");
+
+  /* side: band table */
+  const side = $("#burstSide");
+  side.innerHTML = `<h3>Composition · ${runTitle(run)}</h3>` + bandStats.map((st, b) => st ? `
+    <div class="trow ${zoom === b ? "sel" : ""}" data-band="${b}">
+      <span>${bandLabel(b)}</span>
+      <span class="mini"><i style="width:${100 * st.c / st.n}%;background:var(--ok)"></i><i style="width:${100 * st.p / st.n}%;background:var(--mid)"></i><i style="width:${100 * st.i / st.n}%;background:var(--bad)"></i></span>
+      <b>${pct0(st.rate)}</b>
+    </div>` : `<div class="trow"><span>${bandLabel(b)}</span><span style="color:var(--dim)">not tested</span><b>—</b></div>`).join("") +
+    `<p class="panelnote">Angle ∝ questions · inner band color = band pass rate · outer arcs = verdict split. Click a band (or a row) to zoom; click the hub to return.</p>`;
+  side.querySelectorAll(".trow[data-band]").forEach(r => r.addEventListener("click", () => { S.zoomBand = +r.dataset.band; renderBurst(); }));
+}
+
+/* ═══ VIEW 6 · ROSE ══════════════════════════════════ */
+function renderRose() {
+  const svg = $("#roseSvg");
+  svg.innerHTML = "";
+  if (!rubyDays.length) { txt(svg, 340, 340, "no archimedes snapshots", "axl", { "font-size": 14 }); return; }
+  const CX = 340, CY = 348, R1 = 250, R0 = 44;
+  const maxTot = Math.max(...rubyDays.map(d => d.total || 0));
+  const N = rubyDays.length, A = 360 / N;
+  svgEl("circle", { cx: CX, cy: CY, r: R1 + 8, "class": "gridline" }, svg);
+  rubyDays.forEach((d, k) => {
+    const r = R0 + (R1 - R0) * Math.sqrt((d.total || 1) / maxTot);
+    const a0 = k * A + 2, a1 = (k + 1) * A - 2;
+    const p = svgEl("path", {
+      d: sectorPath(CX, CY, R0, r, a0, a1), "class": "rose-petal" + (S.day === d.date ? " sel" : ""),
+      fill: colorRate(d.catch || 0), opacity: .82
+    }, svg);
+    p.addEventListener("click", () => { S.day = d.date; renderRose(); });
+    bindTip(p, () => `<b>${esc(d.date)}</b> — archimedes day<br>episodes <b>${fmtN(d.total)}</b> · escalations ${fmtN(d.escalations)}<br>` +
+      `ruby pass ${fmtN(d.rubyPass)} · fail ${fmtN(d.rubyFail)}<br>catch rate <b style="color:${colorRate(d.catch || 0)}">${pct(d.catch)}</b>`);
+    const [lx, ly] = PP(CX, CY, R1 + 24, k * A + A / 2);
+    txt(svg, lx, ly, d.date.slice(5), "axl", { "font-size": 9 });
+  });
+  svgEl("circle", { cx: CX, cy: CY, r: R0 - 9, fill: "var(--bg1)", stroke: "var(--line)" }, svg);
+  const lastCatch = (rubyDays.find(d => d.date === S.day) || rubyDays[rubyDays.length - 1]).catch || 0;
+  txt(svg, CX, CY - 2, pct0(lastCatch), "gv", { "font-size": 18, fill: colorRate(lastCatch) });
+  txt(svg, CX, CY + 14, "catch", "gl");
+  txt(svg, CX, 664, "petal area ∝ episodes that day · color = catch rate", "ring-lab");
+
+  /* side */
+  const d = rubyDays.find(x => x.date === S.day) || rubyDays[rubyDays.length - 1];
+  const side = $("#roseSide");
+  const cats = (d.competence || []);
+  side.innerHTML = `<h3>Archimedes day · ${esc(d.date)}</h3>
+    <div class="stat"><span>episodes</span><span><b>${fmtN(d.total)}</b></span></div>
+    <div class="stat"><span>escalations</span><span><b>${fmtN(d.escalations)}</b><small>${pct0(d.escalations / Math.max(1, d.total))} of episodes</small></span></div>
+    <div class="stat"><span>ruby pass / fail</span><span><b>${fmtN(d.rubyPass)} / ${fmtN(d.rubyFail)}</b></span></div>
+    <div class="stat"><span>catch rate</span><span><b style="color:${colorRate(d.catch || 0)}">${pct(d.catch)}</b><small>failures caught by the verifier</small></span></div>
+    <h3 style="margin-top:14px">Competence radar</h3>
+    <div id="roseRadar" style="display:grid;place-items:center;margin:6px 0"></div>
+    <div>${cats.length ? cats.map(c => `<div class="stat"><span>${esc(c.cat)}</span><span><b>${pct0(c.rate)}</b><small>${fmtN(c.count)} episodes</small></span></div>`).join("") : `<p class="panelnote">No category breakdown recorded.</p>`}</div>`;
+  const wrap = $("#roseRadar");
+  if (cats.length) {
+    const rr = svgEl("svg", { viewBox: "-150 -150 300 300", width: 280, height: 280 }, wrap);
+    radarMini(rr, 0, 0, 118, cats.map(c => c.cat), [{ color: "var(--acc2)", values: cats.map(c => c.rate) }]);
+  }
+}
+function radarMini(parent, cx, cy, R, labels, series) {
+  const n = labels.length;
+  for (let lv = 1; lv <= 4; lv++) {
+    const pts = Array.from({ length: n }, (_, i) => PP(cx, cy, R * lv / 4, i * 360 / n));
+    svgEl("polygon", { points: pts.map(p => p.join(",")).join(" "), "class": "gridline" }, parent);
+  }
+  labels.forEach((lab, i) => {
+    const a = i * 360 / n, p = PP(cx, cy, R, a);
+    svgEl("line", { x1: cx, y1: cy, x2: p[0], y2: p[1], "class": "axisline" }, parent);
+    const [lx, ly] = PP(cx, cy, R + 17, a);
+    txt(parent, lx, ly, lab, "axl", { "font-size": 9 });
+  });
+  series.forEach(sr => {
+    const pts = sr.values.map((v, i) => PP(cx, cy, R * clamp01(v), i * 360 / n));
+    svgEl("polygon", { points: pts.map(p => p.join(",")).join(" "), fill: sr.color, opacity: .16, stroke: sr.color, "stroke-width": 2 }, parent);
+  });
+}
+
+/* ── run drawer ────────────────────────────────────── */
+function openRun(id) {
+  const s = byId.get(id);
+  if (!s) return;
+  const body = $("#drawerBody");
+  const scopeCls = s.full ? "full" : s.interrupted ? "int" : "slice";
+  const scopeTxt = s.full ? "full run" : s.interrupted ? "interrupted" : "sample / slice";
+  const proj = projections.get(id);
+  const bandCells = Array.from({ length: N_BANDS }, (_, b) => {
+    const st = bandStat(s, b);
+    return `<i title="${bandLabel(b)}: ${st ? pct0(st.rate) : "not tested"}" style="${st ? `background:${colorRate(st.rate)}` : "background:var(--line)"}"></i>`;
+  }).join("");
+  const tiersList = Object.entries(s.tiers || {}).map(([t, v]) => ({ t: +t, v }))
+    .sort((a, b) => (b.v.c / Math.max(1, b.v.n)) - (a.v.c / Math.max(1, a.v.n)));
+  const top = tiersList.slice(0, 5), bot = tiersList.filter(x => x.v.n > 0).slice(-5).reverse();
+  body.innerHTML = `
+    <p style="margin:0 0 6px"><span class="scope-badge ${scopeCls}">${scopeTxt}</span> <span class="panelnote" style="display:inline">${esc(s.date || "undated")}</span></p>
+    <p style="margin:0 0 10px;font:11px var(--mono);color:var(--mut)">${esc(modelKey(s))}</p>
+    <div style="display:grid;place-items:center;margin-bottom:8px"><svg id="drDonut" viewBox="-80 -80 160 160" width="190" height="190"></svg></div>
+    <div class="stat"><span>strict pass</span><span><b style="color:${colorRate(s.rate)}">${pct(s.rate)}</b></span></div>
+    <div class="stat"><span>weighted</span><span><b>${pct(s.weighted)}</b><small>${s.correct}✓ · ${s.partial}~ · ${s.incorrect}✗ of ${s.n}</small></span></div>
+    <h3 style="margin-top:14px">Tier band strip</h3>
+    <div style="display:flex;gap:2px;flex-wrap:wrap">${bandCells}</div>
+    <div style="display:flex;justify-content:space-between;font:9px var(--mono);color:var(--dim)"><span>T1–4</span><span>T57–60</span></div>
+    ${top.length ? `<h3 style="margin-top:14px">Strongest tiers</h3>${top.map(x => `<div class="trow"><span>T${x.t}</span><span class="mini"><i style="width:${100 * x.v.c / x.v.n}%;background:var(--ok)"></i><i style="width:${100 * x.v.p / x.v.n}%;background:var(--mid)"></i></span><b>${pct0(x.v.c / x.v.n)}</b></div>`).join("")}` : ""}
+    ${bot.length ? `<h3 style="margin-top:14px">Weakest tiers</h3>${bot.map(x => `<div class="trow"><span>T${x.t}</span><span class="mini"><i style="width:${100 * x.v.c / x.v.n}%;background:var(--ok)"></i><i style="width:${100 * x.v.i / x.v.n}%;background:var(--bad)"></i></span><b>${pct0(x.v.c / x.v.n)}</b></div>`).join("")}` : ""}
+    ${proj ? `<h3 style="margin-top:14px">Local-model trial</h3>
+      <div class="stat"><span>projected /320</span><span><b>${proj.of320}</b><small>${pct0(proj.projected / 100)} ± ${proj.margin}</small></span></div>
+      ${Object.entries(proj.layers || {}).map(([k, v]) => `<div class="trow" style="cursor:default"><span style="color:var(--dim)">${esc(k)}</span><span class="mini"><i style="width:${100 * v / proj.planned}%;background:var(--acc2)"></i></span><b>${v}</b></div>`).join("")}
+      ${proj.note ? `<p class="panelnote">${esc(proj.note)}</p>` : ""}` : ""}
+    <p style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+      <a href="${sourceURL(s)}" target="_blank" rel="noopener">source JSON ↗</a>
+      <a href="${explorerURL(s)}" target="_blank" rel="noopener">open in explorer ↗</a>
+    </p>`;
+  $("#drawerTitle").textContent = "Session " + s.id;
+  const target = body.querySelector("#drDonut");
+  if (target) {
+    const dn = makeDonut(target, 0, 0, 62, 17);
+    dn.set({ correct: s.correct, partial: s.partial, incorrect: s.incorrect }, s.rate);
+  }
+  $("#drawer").classList.add("open");
+  $("#scrim").classList.add("on");
+  S.drawerRun = id;
+  history.replaceState(null, "", `#${S.view}/run/${s.id}`);
+}
+function closeDrawer() {
+  $("#drawer").classList.remove("open");
+  $("#scrim").classList.remove("on");
+  S.drawerRun = null;
+  history.replaceState(null, "", `#${S.view}`);
+}
+const pageBase = () => new URL(/\/dashboard\/(?:index\.html|orbit\.html)?$/.test(location.pathname) ? "../" : "./", location.href);
+const sourceURL = s => new URL("results/" + encodeURIComponent(s.source || `session_${s.id}.json`), pageBase()).href;
+const explorerURL = s => {
+  const classic = /\/dashboard\//.test(location.pathname) ? "./index.html" : "./dashboard.html";
+  return new URL(`${classic}?run=${s.id}`, location.href).href;
+};
+
+/* ── transport / playback ──────────────────────────── */
+const slider = $("#timeSlider");
+const VISIBLE = () => visibleRuns(chrono);
+function syncTransport() {
+  const vis = VISIBLE();
+  const nAll = chrono.length;
+  slider.max = String(nAll);
+  /* pi indexes chrono; show position of latest in-scope run */
+  slider.value = String(S.pi == null ? nAll : S.pi + 1);
+  const el = $("#transportText"), badge = $("#scopeBadge");
+  if (S.pi == null) {
+    el.textContent = `live scope · all ${nAll} recorded runs · ${vis.length} match filters`;
+    badge.style.display = "none";
+  } else {
+    const s = chrono[S.pi];
+    el.textContent = `through S${s.id} · ${esc(s.date || "undated")} · run ${S.pi + 1}/${nAll}`;
+    badge.style.display = "";
+    badge.textContent = `TIME SCOPE · S${s.id}`;
+  }
+  $("#playIcon").innerHTML = S.playing
+    ? '<path d="M2.5 1.5h2.6v9H2.5zM6.9 1.5h2.6v9H6.9z" fill="currentColor"/>'
+    : '<path d="M2.5 1.5l8 4.5-8 4.5z" fill="currentColor"/>';
+}
+function renderTimeScoped() {
+  syncTransport();
+  updateSpiralLighting();
+  updateSpiralHub();
+  if (S.view === "orbit") renderOrbit();
+  if (S.view === "tiers") renderTiers();
+  if (S.view === "compare") renderCompare();
+  if (S.view === "burst") renderBurst();
+  if (S.view === "rose") { /* rose is daily archimedes data — unaffected */ }
+}
+slider.addEventListener("input", () => {
+  const v = +slider.value;
+  S.pi = v >= chrono.length ? null : clamp(v, 0, chrono.length - 1);
+  renderTimeScoped();
+});
+$("#playBtn").addEventListener("click", togglePlay);
+$("#resetBtn").addEventListener("click", () => { stopPlay(); S.pi = null; renderTimeScoped(); });
+$("#speedSel").addEventListener("change", e => { S.speed = +e.target.value; });
+function togglePlay() {
+  if (S.playing) { stopPlay(); return; }
+  S.playing = true;
+  if (S.pi == null) S.pi = 0;
+  syncTransport();
+}
+function stopPlay() {
+  S.playing = false;
+  syncTransport();
+}
+/* master animation loop: tweens + replay */
+let lastT = performance.now();
+function frame(now) {
+  const dt = Math.min(.1, (now - lastT) / 1000);
+  lastT = now;
+  for (const o of [...tweens]) o.tick(now);
+  if (S.playing) {
+    S.piF += dt * S.speed * 4.5; /* runs per second */
+    const next = Math.floor(S.piF);
+    if (next >= chrono.length - 1) {
+      S.pi = null; S.piF = 0; stopPlay(); renderTimeScoped();
+    } else if (next !== S.pi) {
+      S.pi = next; renderTimeScoped();
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ── nav / views ───────────────────────────────────── */
+const VIEWS = [
+  { id: "orbit",  key: "1", label: "Orbit",     sub: "mission pulse",    icon: '<circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor"/><ellipse cx="10" cy="10" rx="9" ry="3.6" fill="none" stroke="currentColor" transform="rotate(-24 10 10)"/><circle cx="10" cy="10" r="2" fill="currentColor"/>' },
+  { id: "tiers",  key: "2", label: "Tier ring", sub: "polar heatmap",    icon: '<circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-dasharray="3.4 2.4"/><circle cx="10" cy="10" r="3.2" fill="none" stroke="currentColor"/>' },
+  { id: "spiral", key: "3", label: "Spiral",    sub: "history replay",   icon: '<path d="M10 10.2c0-1.8 1.6-3.2 3.4-3.2s3.6 1.5 3.6 3.7c0 2.9-2.6 5.2-5.8 5.2C7.2 15.9 4 12.8 4 8.9 4 5 7.3 2 11.2 2" fill="none" stroke="currentColor" stroke-width="1.4"/>' },
+  { id: "compare",key: "4", label: "Compare",   sub: "radar + racetrack",icon: '<path d="M10 3l6.5 4.2L14 15H6L3.5 7.2z" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="10" cy="3" r="1.3" fill="currentColor"/><circle cx="16.5" cy="7.2" r="1.3" fill="currentColor"/><circle cx="14" cy="15" r="1.3" fill="currentColor"/><circle cx="6" cy="15" r="1.3" fill="currentColor"/><circle cx="3.5" cy="7.2" r="1.3" fill="currentColor"/>' },
+  { id: "burst",  key: "5", label: "Burst",     sub: "verdict sunburst", icon: '<path d="M10 10L10 2a8 8 0 0 1 7 5.2z" fill="none" stroke="currentColor"/><path d="M10 10l7 3a8 8 0 0 1-4.6 4.3z" fill="none" stroke="currentColor"/><path d="M10 10l-1.6 8a8 8 0 0 1-5.5-3.7z" fill="none" stroke="currentColor"/><circle cx="10" cy="10" r="2.2" fill="currentColor"/>' },
+  { id: "rose",   key: "6", label: "Rose",      sub: "archimedes days",  icon: '<circle cx="10" cy="10" r="2" fill="currentColor"/><path d="M10 8a2.6 2.6 0 0 1 2.6 2.6M12 11a2.6 2.6 0 0 1-2.9 1.4M9 12a2.6 2.6 0 0 1-1.5-2.9M10 8a2.6 2.6 0 0 0-2.4 1.9" fill="none" stroke="currentColor"/>' },
+];
+function buildNav() {
+  const nav = $("#nav");
+  VIEWS.forEach(v => {
+    const b = document.createElement("button");
+    b.className = "navbtn" + (S.view === v.id ? " on" : "");
+    b.setAttribute("role", "tab");
+    b.dataset.view = v.id;
+    b.innerHTML = `<svg viewBox="0 0 20 20" aria-hidden="true">${v.icon}</svg><span>${v.label}<br><i style="font:8.5px var(--mono);color:var(--dim);letter-spacing:.06em;text-transform:uppercase;font-style:normal">${v.sub}</i></span><kbd>${v.key}</kbd>`;
+    b.addEventListener("click", () => setView(v.id));
+    nav.appendChild(b);
+  });
+}
+function setView(id) {
+  S.view = id;
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "v-" + id));
+  document.querySelectorAll(".navbtn").forEach(b => b.classList.toggle("on", b.dataset.view === id));
+  const v = VIEWS.find(x => x.id === id);
+  $("#viewTitle").textContent = v ? `${v.label} — ${v.sub}` : id;
+  $("#rail").classList.remove("open");
+  renderActive();
+  history.replaceState(null, "", `#${id}${S.drawerRun != null ? "/run/" + S.drawerRun : ""}`);
+}
+/* in-page hash navigation (manual URL edits, same-document links) */
+addEventListener("hashchange", () => {
+  const h = location.hash || "";
+  const vm = h.match(/^#([a-z]+)/);
+  if (vm && vm[1] !== S.view && VIEWS.some(x => x.id === vm[1])) setView(vm[1]);
+  const rm = h.match(/run\/(\d+)/);
+  if (rm) { const id = +rm[1]; if (S.drawerRun !== id && byId.has(id)) openRun(id); }
+  else if (S.drawerRun != null) closeDrawer();
+});
+function renderActive() {
+  if (S.view === "orbit") renderOrbit();
+  else if (S.view === "tiers") renderTiers();
+  else if (S.view === "spiral") renderSpiral();
+  else if (S.view === "compare") renderCompare();
+  else if (S.view === "burst") renderBurst();
+  else if (S.view === "rose") renderRose();
+}
+
+/* ── filters ───────────────────────────────────────── */
+function buildFilters() {
+  const models = [...new Set(chrono.map(modelKey))].sort();
+  const sel = $("#modelSel");
+  sel.innerHTML = `<option value="all">all models (${models.length})</option>` + models.map(m => `<option value="${esc(m)}">${esc(m)}</option>`).join("");
+  sel.addEventListener("change", () => { S.model = sel.value; renderTimeScoped(); renderActive(); });
+  $("#scopeSel").addEventListener("change", e => { S.scope = e.target.value; renderTimeScoped(); renderActive(); });
+  let deb;
+  $("#search").addEventListener("input", e => {
+    clearTimeout(deb);
+    deb = setTimeout(() => { S.q = e.target.value.trim().toLowerCase(); renderTimeScoped(); renderActive(); }, 160);
+  });
+}
+
+/* ── theme / keys / boot ───────────────────────────── */
+function setTheme(t) {
+  document.documentElement.dataset.theme = t;
+  try { localStorage.setItem("orbit-theme", t); } catch (e) {}
+}
+function toggleTheme() {
+  setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+  renderActive(); renderLive();
+}
+$("#themeBtn").addEventListener("click", toggleTheme);
+$("#drawerClose").addEventListener("click", closeDrawer);
+$("#scrim").addEventListener("click", closeDrawer);
+$("#menuBtn").addEventListener("click", () => $("#rail").classList.toggle("open"));
+$("#classicLink").href = /\/dashboard\//.test(location.pathname) ? "./index.html" : "./dashboard.html";
+
+document.addEventListener("keydown", e => {
+  const tag = (e.target.tagName || "").toLowerCase();
+  if (tag === "input" || tag === "select" || tag === "textarea") return;
+  if (e.key === " ") { e.preventDefault(); togglePlay(); }
+  else if (e.key === "ArrowRight") { S.pi = S.pi == null ? chrono.length - 1 : clamp(S.pi + 1, 0, chrono.length - 1); renderTimeScoped(); }
+  else if (e.key === "ArrowLeft") { S.pi = clamp((S.pi == null ? chrono.length : S.pi) - 1, 0, chrono.length - 1); renderTimeScoped(); }
+  else if (e.key === "Escape") closeDrawer();
+  else if (e.key === "t") toggleTheme();
+  else if (/^[1-6]$/.test(e.key)) { const v = VIEWS[+e.key - 1]; if (v) setView(v.id); }
+});
+
+function boot() {
+  try { const t = localStorage.getItem("orbit-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  if (!chrono.length) {
+    $("#stage").innerHTML = '<p style="padding:40px;font:13px var(--mono);color:var(--mut)">No benchmark sessions recorded yet — run the harness and rebuild.</p>';
+    return;
+  }
+  buildNav();
+  buildFilters();
+  renderTicker();
+  renderLive();
+  /* deep link: #view or #run/123 */
+  const m = location.hash.match(/^#([a-z]+)/);
+  if (m && VIEWS.some(v => v.id === m[1])) S.view = m[1];
+  const rm = location.hash.match(/run\/(\d+)/);
+  setView(S.view);
+  syncTransport();
+  if (rm) openRun(+rm[1]);
+  requestAnimationFrame(frame);
+  pollLive();
+  setInterval(pollLive, 15000);
+}
+boot();
+})();
+</script>
+</body>
+</html>
